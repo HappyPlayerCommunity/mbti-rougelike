@@ -1,0 +1,66 @@
+# Ignore hidden meta files
+*.pidb
+*.suo
+*.user
+*.userprefs
+*.csproj
+*.unityproj
+*.sln
+*.sln.docstates
+
+# Unity generated folders
+/MBTI RougeLike/[Ll]ibrary/
+/MBTI RougeLike/[Tt]emp/
+/MBTI RougeLike/[Oo]bj/
+/MBTI RougeLike/[Bb]uild
+/MBTI RougeLike/[Bb]uilds
+/MBTI RougeLike/[Ll]ogs/
+/MBTI RougeLike/[Mm]emoryCaptures/
+/MBTI RougeLike/[AssetBundles]
+
+# Auto-generated VS/MD/Consulo solution and project files
+ExportedObj/
+/.consulo/
+/*.csproj
+/*.unityproj
+/*.sln
+/*.sln.*
+/*.suo
+/*.tmp
+/*.user
+/*.userprefs
+/*.pidb
+/*.booproj
+/*.svd
+
+# Unity3D generated meta files
+*.pidb.meta
+*.svd.meta
+
+# Unity3D Generated File On Crash Reports
+sysinfo.txt
+
+# Builds
+*.apk
+*.aab
+*.unitypackage
+
+# Asset meta data should only be ignored when the corresponding asset is also ignored
+!*.png.meta
+!*.jpg.meta
+!*.prefab.meta
+!*.mat.meta
+!*.fbx.meta
+!*.controller.meta
+!*.anim.meta
+!*.wav.meta
+!*.mp3.meta
+!*.ogg.meta
+!*.shader.meta
+
+# Uncomment this line if you wish to ignore the asset store tools plugin
+# /[Aa]ssets/[Aa]sset[Ss]toreTools*
+
+# Unity Addressables
+/MBTI RougeLike/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata
+/MBTI RougeLike/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata.meta
