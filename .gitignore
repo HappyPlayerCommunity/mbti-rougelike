@@ -8,6 +8,9 @@
 *.sln
 *.sln.docstates
 
+# Ignore Visual Studio specific files
+/.vs/
+
 # Unity generated folders
 /MBTI RougeLike/[Ll]ibrary/
 /MBTI RougeLike/[Tt]emp/
@@ -64,3 +67,4 @@ sysinfo.txt
 # Unity Addressables
 /MBTI RougeLike/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata
 /MBTI RougeLike/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata.meta
+*.lock
