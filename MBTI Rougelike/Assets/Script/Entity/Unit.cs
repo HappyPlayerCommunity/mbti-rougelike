@@ -55,4 +55,9 @@ public class Unit : BaseEntity
         get { return isActioning; }
         set { isActioning = value; }
     }
+
+    public override bool CanTakeDamageFrom(GameObject collider)
+    {
+        return base.CanTakeDamageFrom(collider) && !statusManager.IsInvincible();
+    }
 }

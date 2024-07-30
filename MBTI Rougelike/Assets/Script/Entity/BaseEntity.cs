@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +35,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     public Transform canvasTransform;
 
     private Dictionary<GameObject, float> damageTimers = new Dictionary<GameObject, float>();
+
+    public event Action OnDeath;
 
     protected virtual void Start()
     {
@@ -140,7 +143,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     protected virtual void Die()
     {
-        Destroy(gameObject); // for now
+        //Destroy(gameObject); // for now
+        gameObject.SetActive(false);
+        OnDeath?.Invoke();
     }
 
     public float blowSpeedReduceUpdate(float speed)
@@ -159,8 +164,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         return speed;
     }
 
-
-    public bool CanTakeDamageFrom(GameObject collider)
+    public virtual bool CanTakeDamageFrom(GameObject collider)
     {
         return !damageTimers.ContainsKey(collider);
     }

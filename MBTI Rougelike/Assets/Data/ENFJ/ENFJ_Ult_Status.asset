@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: ENFJ_Ult_Status
   m_EditorClassIdentifier: 
   duration: 5
-  timer: -0.004543635
+  timer: -0.0009954504
   root: 0
-  ultChargeBan: 0
+  ultChargeBan: 1
+  invincible: 1
+  silence: 1

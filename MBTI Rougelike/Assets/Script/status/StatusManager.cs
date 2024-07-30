@@ -13,6 +13,12 @@ public class StatusManager : MonoBehaviour
     [SerializeField, Tooltip("禁止充能标识数。如果此数值大于0，则玩家无法充能。")]
     int chargeBanCount = 0;
 
+    [SerializeField, Tooltip("无敌标识数。如果此数值大于0，则玩家会受到任何伤害。")]
+    int invincibleCount = 0;
+
+    [SerializeField, Tooltip("沉默标识数。如果此数值大于0，则玩家无法释放任何技能。")]
+    int silenceCount = 0;
+
     void Update()
     {
         float deltaTime = Time.deltaTime;
@@ -58,7 +64,17 @@ public class StatusManager : MonoBehaviour
 
     public bool IsChargeBanned()
     {
-        return chargeBanCount> 0;
+        return chargeBanCount > 0;
+    }
+
+    public bool IsInvincible()
+    {
+        return invincibleCount > 0;
+    }
+
+    public bool IsSlienced()
+    {
+        return silenceCount > 0;
     }
 
     public void AddFlagUpdate(Status status)
@@ -68,6 +84,12 @@ public class StatusManager : MonoBehaviour
 
         if (status.ultChargeBan)
             chargeBanCount += 1;
+
+        if (status.invincible)
+            invincibleCount += 1;
+
+        if (status.silence)
+            silenceCount += 1;
     }
 
     public void RemoveFlagUpdate(Status status)
@@ -77,5 +99,11 @@ public class StatusManager : MonoBehaviour
 
         if (status.ultChargeBan)
             chargeBanCount -= 1;
+
+        if (status.invincible)
+            invincibleCount -= 1;
+
+        if (status.silence)
+            silenceCount -= 1;
     }
 }

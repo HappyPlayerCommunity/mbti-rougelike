@@ -23,10 +23,29 @@ public class EnemyManager : MonoBehaviour
     private int currentWave = 0;
 
     private List<GameObject> currentWaveEnemies = new List<GameObject>();
+    private Coroutine spawnWaveCoroutine;
 
     void Start()
     {
-        StartCoroutine(SpawnWave());
+        spawnWaveCoroutine = StartCoroutine(SpawnWave());
+    }
+
+    public void ResetTesting()
+    {
+        foreach (var obj in currentWaveEnemies)
+        {
+            Destroy(obj);
+        }
+
+        currentWaveEnemies.Clear();
+        currentWave = 0;
+
+        if (spawnWaveCoroutine != null)
+        {
+            StopCoroutine(spawnWaveCoroutine);
+        }
+
+        spawnWaveCoroutine = StartCoroutine(SpawnWave());
     }
 
     IEnumerator SpawnWave()

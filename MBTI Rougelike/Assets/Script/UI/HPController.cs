@@ -17,6 +17,11 @@ public class HPController : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         HP = GetComponent<Slider>();
+
+        if (baseEntity != null)
+        {
+            baseEntity.OnDeath += HandleDeath; // 订阅 OnDeath 事件
+        }
     }
 
     private void Update()
@@ -27,9 +32,27 @@ public class HPController : MonoBehaviour
             return;
         }
 
+        if (!baseEntity.isActiveAndEnabled)
+        {
+            gameObject.SetActive(false);
+        }
+
         HP.value = (float)baseEntity.HP / (float)baseEntity.MaxHP;
 
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(baseEntity.transform.position + offset);
         rectTransform.position = screenPosition;
+    }
+
+    private void HandleDeath()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        if (baseEntity != null)
+        {
+            baseEntity.OnDeath -= HandleDeath;
+        }
     }
 }

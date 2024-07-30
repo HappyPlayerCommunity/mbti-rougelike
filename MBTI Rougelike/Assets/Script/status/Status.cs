@@ -19,6 +19,12 @@ public abstract class Status : ScriptableObject
     [Tooltip("此状态是否会禁止玩家充能。")]
     public bool ultChargeBan = false;
 
+    [Tooltip("此状态是否会进入无敌状态。")]
+    public bool invincible = false;
+
+    [Tooltip("此状态是否会禁止玩家释放技能。")]
+    public bool silence = false;
+
     public virtual void OnApply(GameObject target)
     {
         timer = duration;

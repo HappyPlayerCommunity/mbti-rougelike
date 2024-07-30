@@ -82,10 +82,13 @@ public class Personality : MonoBehaviour
     {
         player.IsActioning = false;
 
-        SkillUpdate(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, Input.GetMouseButton(0), true); //左键
-        SkillUpdate(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, Input.GetMouseButton(1), false); //右键
+        if (!statusManager.IsSlienced())
+        {
+            SkillUpdate(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, Input.GetMouseButton(0), true); //左键
+            SkillUpdate(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, Input.GetMouseButton(1), false); //右键
 
-        UltimateSkillUpdate();
+            UltimateSkillUpdate();
+        }
     }
 
     protected virtual void SkillUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto)
