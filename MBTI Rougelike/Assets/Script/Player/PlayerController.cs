@@ -8,26 +8,35 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Player player;
+    public StatusManager statusManager;
 
     [SerializeField, Tooltip("当前玩家的速度向量值。")]
     private Vector3 velocity;
 
-    [SerializeField, Tooltip("玩家的移动速度，后面改为由PlayerData中读取。")]
-    private float movementSpeed = 5.0f;
+    //[SerializeField, Tooltip("玩家的移动速度，后面改为由PlayerData中读取。")]
+    //private float movementSpeed = 5.0f;
 
-    [SerializeField, Tooltip("玩家的移动速度，后面改为由PlayerData中读取。")]
-    private float movementSpeedDuringActioning = 3.0f;
+    [SerializeField, Tooltip("玩家攻击时的移动速度，后面改为由PlayerData中读取。")]
+    private float movementSpeedReduceRate = 0.6f;
 
     void Start()
     {
         player = GetComponent<Player>();
+        statusManager = GetComponent<StatusManager>();
     }
 
     void Update()
     {
+        if (statusManager.IsRooted())
+        {
+            player.Velocity = Vector3.zero;
+            return;
+        }
+
         Vector3 direction = new Vector3(0.0f, 0.0f, 0.0f);
 
-        float finalMovementSpeed = player.IsActioning ? movementSpeedDuringActioning : movementSpeed;
+        float finalMovementSpeed = player.IsActioning ? 
+            player.stats.Calculate_MovementSpeed() * movementSpeedReduceRate : player.stats.Calculate_MovementSpeed();
 
         // 后续将绑定到专门的按键类，为了改键。
         if (Input.GetKey(KeyCode.W))

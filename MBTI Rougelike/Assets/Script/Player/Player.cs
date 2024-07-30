@@ -18,6 +18,17 @@ public class Player : Unit
     [Tooltip("武器Art的Transform。")]
     public Personality personality;
 
+    [Tooltip("人格八维数据。")]
+    public Preference preference;
+
+    [Tooltip("能力值数据")]
+    public Stats stats;
+
+    protected override void Start()
+    {
+        base.Start();
+        stats.Initialize();
+    }
 
     public override void TakeDamage(int damage, float stuntime)
     {

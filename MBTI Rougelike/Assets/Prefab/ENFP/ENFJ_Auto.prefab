@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 912740701663401300}
   - component: {fileID: 7944975080907566182}
   m_Layer: 0
-  m_Name: ENFJ_Damage_Collider_1
+  m_Name: ENFJ_Auto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +54,6 @@ MonoBehaviour:
   isAttachedPos: 0
   stunTime: 0
   blowForceSpeed: 10
-  animationPrefab: {fileID: 0}
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
   hitEffectPlayMode: 1
   damageType: 2
@@ -68,9 +67,10 @@ MonoBehaviour:
   hitted: 0
   didDamage: 0
   awaked: 0
-  collider2D: {fileID: 0}
+  damageCollider2D: {fileID: 0}
   initSource: {fileID: 0}
   damageMovementType: 0
+  spriteRenderer: {fileID: 0}
 --- !u!1001 &4644545258837461845
 PrefabInstance:
   m_ObjectHideFlags: 0

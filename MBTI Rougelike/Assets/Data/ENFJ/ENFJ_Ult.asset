@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f327d7c8417428439099d04d2214334, type: 3}
+  m_Name: ENFJ_Ult
+  m_EditorClassIdentifier: 
+  damageCollider: {fileID: 4086102873319361651, guid: 41c6e485c5cf2b64584778e2063266fa, type: 3}
+  reloadingTime: 0
+  scatterAngle: 0
+  damageColliderSpeed: 0
+  maxChargeCount: 0
+  selfBlowForce: 0
+  controlScheme: 0
+  renderMode: 2
+  selfStatus: {fileID: 11400000, guid: 1756d18434f554644ae252efaec31d31, type: 2}

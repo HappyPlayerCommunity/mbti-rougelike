@@ -19,6 +19,7 @@ public class Skill : ScriptableObject
     {
         HorizontalFlip,
         AllFlip,
+        NoneFlip
     }
 
     [SerializeField, Tooltip("该技能生成的伤害块。")]
@@ -44,6 +45,10 @@ public class Skill : ScriptableObject
 
     [SerializeField, Tooltip("伤害块的渲染模式，是水平翻转，或完全翻转。")]
     private RenderMode renderMode;
+
+    [SerializeField, Tooltip("此技能会为自己添加的状态。")]
+    private Status selfStatus;
+
 
     public DamageCollider DamageCollider
     {
@@ -85,5 +90,11 @@ public class Skill : ScriptableObject
     {
         get { return selfBlowForce; }
         set { selfBlowForce = value; }
+    }
+
+    public Status SelfStatus
+    {
+        get { return selfStatus; }
+        //set { selfStatus = value; }
     }
 }

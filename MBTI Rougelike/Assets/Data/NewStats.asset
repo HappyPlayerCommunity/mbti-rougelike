@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: NewStats
+  m_EditorClassIdentifier: Assembly-CSharp::Stats
+  fireDamage: 0
+  movementSpeed: 5
+  toughness: 0
+  bondMovementSpeed: 0
+  attackRange: 0
+  attackEnergeChargeRate: 100
+  iceDamage: 0
+  maxShield: 0
+  shieldRegen: 0
+  buildingDurability: 0
+  knockback: 0
+  injuryChargeRate: 0
+  earthDamage: 0
+  maxHealth: 0
+  healthRegen: 0
+  experienceMultiplier: 0
+  attackSpeed: 1
+  physicalAttackPower: 0
+  windDamage: 0
+  dodgeRate: 0
+  autoChargeRate: 0
+  luck: 0
+  specialCooldown: 1
+  abstractAttackPower: 0
+  thunderDamage: 0
+  globalAttackPower: 0
+  waterDamage: 0
+  healingPower: 0
+  critRate: 0
+  critDamage: 0
+  buildingPower: 0
+  bondPower: 0
+  buffPower: 0
+  buffDuration: 0
+  buffImpact: 0
+  anomalyResistance: 0

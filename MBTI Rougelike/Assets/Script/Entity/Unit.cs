@@ -31,8 +31,24 @@ public class Unit : BaseEntity
     [SerializeField, Tooltip("此单位是否正在释放某项技能。")]
     protected bool isActioning;
 
+    [SerializeField, Tooltip("此单位的状态管理器，用来结算各种状态。")]
+    protected StatusManager statusManager;
 
     //或许应该攻击技能动作剥离出去，单开一个类。
+
+    public StatusManager StatusManager
+    {
+        get
+        {
+            return statusManager;
+        }
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        statusManager = GetComponent<StatusManager>();
+    }
 
     public bool IsActioning
     {

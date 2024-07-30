@@ -38,6 +38,7 @@ public class DamageCollider : MonoBehaviour
     [SerializeField, Tooltip("决定了击中特效的播放类型。")]
     HitEffectPlayMode hitEffectPlayMode;
 
+
     public enum HitEffectPlayMode
     {
         HitPoint,  //在【伤害块】与【击中目标】的中间播放
@@ -91,9 +92,10 @@ public class DamageCollider : MonoBehaviour
 
 
     [Header("互动组件")]
-    public Collider2D collider;
+    public Collider2D damageCollider2D;
     public AudioSource initSource;
     public DamageMovementType damageMovementType;
+    public SpriteRenderer spriteRenderer;
 
     public enum DamageMovementType
     {
@@ -156,14 +158,16 @@ public class DamageCollider : MonoBehaviour
 
     private void Awake()
     {
-        collider = GetComponent<Collider2D>();
+        damageCollider2D = GetComponent<Collider2D>();
 
-        if (collider == null)
+        if (damageCollider2D == null)
         {
-            collider = GetComponentInChildren<Collider2D>();
+            damageCollider2D = GetComponentInChildren<Collider2D>();
         }
 
-        collider.isTrigger = true;
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        damageCollider2D.isTrigger = true;
         awaked = true;
     }
 
@@ -205,7 +209,6 @@ public class DamageCollider : MonoBehaviour
 
     void FixedUpdate()
     {
-        // ## Virtual Void ##
         if (!isAttachedPos)
         {
             transform.Translate(velocity * Time.fixedDeltaTime);
@@ -227,16 +230,20 @@ public class DamageCollider : MonoBehaviour
     /// </summary>
     protected void CollisionCheck()
     {
-        if (!collider)
+        if (!damageCollider2D)
             return;
 
-        switch (collider)
+        Vector2 colliderSize;
+
+        switch (damageCollider2D)
         {
             case BoxCollider2D collider2D:
-                hits = Physics2D.OverlapBoxAll(transform.position, collider2D.size, 0.0f);
+                colliderSize = (collider2D.size * spriteRenderer.transform.localScale).Absolute();
+                hits = Physics2D.OverlapBoxAll(transform.position, colliderSize, 0.0f);
                 break;
             case CapsuleCollider2D collider2D:
-                hits = Physics2D.OverlapCapsuleAll(transform.position, collider2D.size, collider2D.direction, collider2D.transform.eulerAngles.z);
+                colliderSize = (collider2D.size * spriteRenderer.transform.localScale).Absolute();
+                hits = Physics2D.OverlapCapsuleAll(transform.position, colliderSize, collider2D.direction, collider2D.transform.eulerAngles.z);
                 break;
             default:
                 break;
@@ -244,7 +251,7 @@ public class DamageCollider : MonoBehaviour
 
         foreach (Collider2D hit in hits)
         {
-            if (hit == collider)
+            if (hit == damageCollider2D)
                 continue;
 
             // 检测【伤害块】是否可以与【碰撞体】互动————PS：这不意味着造成伤害，可能击中墙壁，敌人的子弹等。
@@ -274,6 +281,23 @@ public class DamageCollider : MonoBehaviour
                             var player = (Player)owner;
                             player.personality.ChargeEnerge(damage); // 受伤充能比率还得具体设计。
                         }
+
+                        switch (hitEffectPlayMode)
+                        {
+                            case HitEffectPlayMode.HitPoint: // hmm，不太完善。
+                                RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, (hit.transform.position - transform.position).normalized);
+                                if (raycastHit.collider != null)
+                                {
+                                    Vector2 collisionPoint = raycastHit.point;
+                                    HitAnimation(collisionPoint);
+                                }
+                                break;
+                            case HitEffectPlayMode.Target:
+                                HitAnimation(hit.transform.position);
+                                break;
+                            default:
+                                break;
+                        }
                     }
 
                     // 标记已经造成伤害
@@ -296,23 +320,6 @@ public class DamageCollider : MonoBehaviour
                 }
 
                 // 执行击中目标
-                // 播放击中动画
-                switch (hitEffectPlayMode)
-                {
-                    case HitEffectPlayMode.HitPoint:
-                        RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, (hit.transform.position - transform.position).normalized);
-                        if (raycastHit.collider != null)
-                        {
-                            Vector2 collisionPoint = raycastHit.point;
-                            HitAnimation(collisionPoint);
-                        }
-                        break;
-                    case HitEffectPlayMode.Target:
-                            HitAnimation(hit.transform.position);
-                        break;
-                    default:
-                        break;
-                }
 
                 // 如果一次性碰撞事件尚未触发，则触发
                 // 可以插入一些特殊结算，比如击中目标后产生爆炸，分裂子弹，反弹等。

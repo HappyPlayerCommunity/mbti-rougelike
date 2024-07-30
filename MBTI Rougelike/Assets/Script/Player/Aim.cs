@@ -18,11 +18,6 @@ public class Aim : MonoBehaviour
     private float aimPointdistance = 1.0f;
 
     private Transform shootPosition;
-
-    private float reloadingTime = 1.0f;
-    private float curretReloadingTime = 0.0f;
-    private float scatterAngleHalf = 0.15f;
-
     public Vector3 aimDirection;
 
     void Update()

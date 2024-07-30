@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d3ddf8688dd7884691ac835163fb231, type: 3}
+  m_Name: ENTP_Ult_Status
+  m_EditorClassIdentifier: 
+  duration: 4
+  timer: -0.009860899
+  root: 1
+  ultChargeBan: 1
+  attackSpeedBonus: 1000
+  stats: {fileID: 11400000, guid: 4702e21f9b56e34459599b2c66d1bbc0, type: 2}
