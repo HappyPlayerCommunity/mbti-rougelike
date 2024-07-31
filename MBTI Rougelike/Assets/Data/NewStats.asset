@@ -13,26 +13,26 @@ MonoBehaviour:
   m_Name: NewStats
   m_EditorClassIdentifier: Assembly-CSharp::Stats
   fireDamage: 0
-  movementSpeed: 5
+  movementSpeed: 0
   toughness: 0
   bondMovementSpeed: 0
   attackRange: 0
-  attackEnergeChargeRate: 100
+  attackEnergeCharge: 0
   iceDamage: 0
   maxShield: 0
   shieldRegen: 0
   buildingDurability: 0
   knockback: 0
-  injuryChargeRate: 0
+  injuryEnergeCharge: 0
   earthDamage: 0
-  maxHealth: 0
+  maxHealth: 25
   healthRegen: 0
   experienceMultiplier: 0
-  attackSpeed: 1
+  attackSpeed: 0
   physicalAttackPower: 0
   windDamage: 0
-  dodgeRate: 0
-  autoChargeRate: 0
+  dodge: 0
+  autoCharge: 0
   luck: 0
   specialCooldown: 1
   abstractAttackPower: 0
@@ -40,11 +40,47 @@ MonoBehaviour:
   globalAttackPower: 0
   waterDamage: 0
   healingPower: 0
-  critRate: 0
+  crit: 0
   critDamage: 0
   buildingPower: 0
   bondPower: 0
-  buffPower: 0
-  buffDuration: 0
-  buffImpact: 0
+  statusPower: 0
+  statusDuration: 0
+  statusImpact: 0
   anomalyResistance: 0
+  fireDamageINIT: 0
+  movementSpeedINIT: 0
+  toughnessINIT: 0
+  bondMovementSpeedINIT: 0
+  attackRangeINIT: 0
+  attackEnergeChargeINIT: 0
+  iceDamageINIT: 0
+  maxShieldINIT: 0
+  shieldRegenINIT: 0
+  buildingDurabilityINIT: 0
+  knockbackINIT: 0
+  injuryEnergeChargeINIT: 0
+  earthDamageINIT: 0
+  maxHealthINIT: 0
+  healthRegenINIT: 0
+  experienceMultiplierINIT: 0
+  attackSpeedINIT: 0
+  physicalAttackPowerINIT: 0
+  windDamageINIT: 0
+  dodgeINIT: 0
+  autoChargeINIT: 0
+  luckINIT: 0
+  specialCooldownINIT: 1
+  abstractAttackPowerINIT: 0
+  thunderDamageINIT: 0
+  globalAttackPowerINIT: 0
+  waterDamageINIT: 0
+  healingPowerINIT: 0
+  critINIT: 0
+  critDamageINIT: 0
+  buildingPowerINIT: 0
+  bondPowerINIT: 0
+  buffPowerINIT: 0
+  buffDurationINIT: 0
+  buffImpactINIT: 0
+  anomalyResistanceINIT: 0

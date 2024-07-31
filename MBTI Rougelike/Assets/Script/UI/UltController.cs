@@ -14,6 +14,7 @@ public class UltController : MonoBehaviour
     private void Start()
     {
         ult = GetComponent<Slider>();
+        personality = FindObjectOfType<Personality>();
     }
 
     private void Update()

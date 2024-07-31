@@ -28,12 +28,23 @@ public class Player : Unit
     {
         base.Start();
         stats.Initialize();
+        maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
+        hp = maxHp;
+
+        stats.OnValueChange += () => MaxHpUpdate();
     }
 
     public override void TakeDamage(int damage, float stuntime)
     {
         base.TakeDamage(damage, stuntime);
+        float boostCharge = stats.Calculate_InjuryEnergeCharge(); 
+        personality.InjuryChargeEnerge(damage, boostCharge); // 受伤充能比率还得具体设计。
+    }
 
-        personality.ChargeEnerge(damage); // 受伤充能比率还得具体设计。
+    private void MaxHpUpdate()
+    {
+        maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
+        Debug.Log("Update?");
+
     }
 }

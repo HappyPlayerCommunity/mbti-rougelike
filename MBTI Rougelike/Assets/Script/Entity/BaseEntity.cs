@@ -43,6 +43,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         canvasTransform = GameObject.Find("Canvas").transform;
         var healthBarInstance = Instantiate(hpControllerPrefab, canvasTransform);
         healthBarInstance.baseEntity = this;
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position + healthBarInstance.offset);
+        healthBarInstance.GetComponent<RectTransform>().position = screenPosition;
     }
 
     void Update()
@@ -173,5 +175,4 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     {
         damageTimers[collider] = timer;
     }
-
 }

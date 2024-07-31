@@ -16,7 +16,7 @@ public class Enemy : Unit
     private UnitAI unitAi;
 
     public delegate void DeathEvent();
-    public event DeathEvent OnDeath;
+    public event DeathEvent OnEnemyDeath;
 
     protected override void Start()
     {
@@ -112,9 +112,9 @@ public class Enemy : Unit
 
     protected override void Die()
     {
-        if (OnDeath != null)
+        if (OnEnemyDeath != null)
         {
-            OnDeath.Invoke();
+            OnEnemyDeath.Invoke();
         }
         base.Die();
     }

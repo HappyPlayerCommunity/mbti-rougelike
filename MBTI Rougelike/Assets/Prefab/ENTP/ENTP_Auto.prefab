@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
-  maxTimer: 2
+  maxTimer: 0.25
   collideTags:
   - Enemy
   damageTags:
@@ -200,3 +200,4 @@ MonoBehaviour:
   damageCollider2D: {fileID: 0}
   initSource: {fileID: 0}
   damageMovementType: 1
+  spriteRenderer: {fileID: 0}

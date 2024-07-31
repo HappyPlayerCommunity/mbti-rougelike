@@ -20,7 +20,7 @@ public class HPController : MonoBehaviour
 
         if (baseEntity != null)
         {
-            baseEntity.OnDeath += HandleDeath; // 订阅 OnDeath 事件
+            baseEntity.OnDeath += HandleDeath;
         }
     }
 

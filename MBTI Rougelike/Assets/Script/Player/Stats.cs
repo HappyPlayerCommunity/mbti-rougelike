@@ -35,7 +35,7 @@ public class Stats : ScriptableObject
     [Tooltip("击退")]
     public float knockback;
     [Tooltip("受伤充能率")]
-    public float injuryCharge;
+    public float injuryEnergeCharge;
 
 
     [Header("S")]
@@ -95,53 +95,54 @@ public class Stats : ScriptableObject
 
     [Header("P")]
     [Tooltip("状态强度")]
-    public float buffPower;
+    public float statusPower;
     [Tooltip("状态持续时间")]
-    public float buffDuration;
+    public float statusDuration;
     [Tooltip("状态造成的伤害/治疗")]
-    public float buffImpact;
+    public float statusImpact;
     [Tooltip("状态(异常)抗性")]
     public float anomalyResistance;
 
 
-
     [Header("初始值")]
-    public const float fireDamageINIT = 100.0f;
-    public const float movementSpeedINIT = 100.0f;
-    public const float toughnessINIT = 0.0f;
-    public const float bondMovementSpeedINIT = 0.0f;
-    public const float attackRangeINIT = 0.0f;           // hmm
-    public const float attackEnergeChargeINIT = 100.0f;
-    public const float iceDamageINIT = 0.0f;
-    public const float maxShieldINIT = 0.0f;
-    public const float shieldRegenINIT = 0.0f;
-    public const float buildingDurabilityINIT = 0.0f;
-    public const float knockbackINIT = 0.0f;
-    public const float injuryChargeINIT = 0.0f;
-    public const float earthDamageINIT = 0.0f;
-    public const float maxHealthINIT = 0.0f;
-    public const float healthRegenINIT = 0.0f;
-    public const float experienceMultiplierINIT = 0.0f;
-    public const float attackSpeedINIT = 0.0f;
-    public const float physicalAttackPowerINIT = 0.0f;
-    public const float windDamageINIT = 0.0f;
-    public const float dodgeINIT = 0.0f;
-    public const float autoChargeINIT = 0.0f;
-    public const float luckINIT = 0.0f;
-    public const float specialCooldownINIT = 1.0f;
-    public const float abstractAttackPowerINIT = 0.0f;
-    public const float thunderDamageINIT = 0.0f;
-    public const float globalAttackPowerINIT = 0.0f;
-    public const float waterDamageINIT = 0.0f;
-    public const float healingPowerINIT = 0.0f;
-    public const float critINIT = 0.0f;
-    public const float critDamageINIT = 0.0f;
-    public const float buildingPowerINIT = 0.0f;
-    public const float bondPowerINIT = 0.0f;
-    public const float buffPowerINIT = 0.0f;
-    public const float buffDurationINIT = 0.0f;
-    public const float buffImpactINIT = 0.0f;
-    public const float anomalyResistanceINIT = 0.0f;
+    public float fireDamageINIT = 0.0f;
+    public float movementSpeedINIT = 0.0f;
+    public float toughnessINIT = 0.0f;
+    public float bondMovementSpeedINIT = 0.0f;
+    public float attackRangeINIT = 0.0f;           // hmm
+    public float attackEnergeChargeINIT = 0.0f;
+    public float iceDamageINIT = 0.0f;
+    public float maxShieldINIT = 0.0f;
+    public float shieldRegenINIT = 0.0f;
+    public float buildingDurabilityINIT = 0.0f;
+    public float knockbackINIT = 0.0f;
+    public float injuryEnergeChargeINIT = 0.0f;
+    public float earthDamageINIT = 0.0f;
+    public float maxHealthINIT = 0.0f;
+    public float healthRegenINIT = 0.0f;
+    public float experienceMultiplierINIT = 0.0f;
+    public float attackSpeedINIT = 0.0f;
+    public float physicalAttackPowerINIT = 0.0f;
+    public float windDamageINIT = 0.0f;
+    public float dodgeINIT = 0.0f;
+    public float autoChargeINIT = 0.0f;
+    public float luckINIT = 0.0f;
+    public float specialCooldownINIT = 1.0f;
+    public float abstractAttackPowerINIT = 0.0f;
+    public float thunderDamageINIT = 0.0f;
+    public float globalAttackPowerINIT = 0.0f;
+    public float waterDamageINIT = 0.0f;
+    public float healingPowerINIT = 0.0f;
+    public float critINIT = 0.0f;
+    public float critDamageINIT = 0.0f;
+    public float buildingPowerINIT = 0.0f;
+    public float bondPowerINIT = 0.0f;
+    public float buffPowerINIT = 0.0f;
+    public float buffDurationINIT = 0.0f;
+    public float buffImpactINIT = 0.0f;
+    public float anomalyResistanceINIT = 0.0f;
+
+    private float previousMaxHealth = 0.0f;
 
     public const float percentage = 0.01f;
 
@@ -150,6 +151,15 @@ public class Stats : ScriptableObject
         return 1.0f + value * percentage;
     }
 
+    // 用于通过编辑器调数值时，更新相关的能力数据。
+    public delegate void ValidateEvent();
+    public event ValidateEvent OnValueChange;
+
+    // 下面这个部分还在施工中，有许多属性需要后续系统完善后才能实现。
+
+    /// <summary>
+    /// 【施工中】元素属性还未实现。
+    /// </summary>
     public float Calculate_FireDamage()
     {
         return percentageMultiplierCast(fireDamage);
@@ -157,93 +167,92 @@ public class Stats : ScriptableObject
 
     public const float basicMovementSpeed = 5;
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_MovementSpeed()
     {
         return basicMovementSpeed * percentageMultiplierCast(movementSpeed);
     }
 
-    public float Toughness
+    /// <summary>
+    /// 【施工中】韧性系统还未实现。
+    /// </summary>
+    public float Calculate_Toughness()
     {
-        get { return toughness; }
-        set { toughness = value; }
+        return toughness;
     }
 
-    public float BondMovementSpeed
+    /// <summary>
+    /// 【施工中】羁绊系统还未实现。
+    /// </summary>
+    public float Calculate_BondMovementSpeed()
     {
-        get { return bondMovementSpeed; }
-        set { bondMovementSpeed = value; }
+        return bondMovementSpeed;
     }
 
-    public float AttackRange
+    public float Calculate_AttackRange() //感觉要思考一下，吃这个加成的攻击方式可能比想象的少。
     {
-        get { return attackRange; }
-        set { attackRange = value; }
+        // 对两类伤害块的有不同的加成。
+        // 静态：每1点增加1%的碰撞体积；
+        // 动态：每1点增加1%的持续时间，变相增加了射程。
+        return percentageMultiplierCast(attackRange);
     }
 
-    public float AttackEnergeCharge
+    public float Calculate_AttackEnergeCharge()
     {
-        get { return attackEnergeCharge; }
-        set { attackEnergeCharge = value; }
+        return percentageMultiplierCast(attackEnergeCharge);
     }
 
-    public float IceDamage
+    public float Calculate_IceDamage()
     {
-        get { return iceDamage; }
-        set { iceDamage = value; }
+        return iceDamage;
     }
 
-    public float MaxShield
+    public float Calculate_MaxShield()
     {
-        get { return maxShield; }
-        set { maxShield = value; }
+        return maxShield;
     }
 
-    public float ShieldRegen
+    public float Calculate_ShieldRegen()
     {
-        get { return shieldRegen; }
-        set { shieldRegen = value; }
+        return shieldRegen;
     }
 
-    public float BuildingDurability
+    public float Calculate_BuildingDurability()
     {
-        get { return buildingDurability; }
-        set { buildingDurability = value; }
+        return buildingDurability;
     }
 
-    public float Knockback
+    public float Calculate_Knockback()
     {
-        get { return knockback; }
-        set { knockback = value; }
+        return knockback;
     }
 
-    public float InjuryCharge
+    public float Calculate_InjuryEnergeCharge()
     {
-        get { return injuryCharge; }
-        set { injuryCharge = value; }
+        return percentageMultiplierCast(injuryEnergeCharge);
     }
 
-    public float EarthDamage
+    public float Calculate_EarthDamage()
     {
-        get { return earthDamage; }
-        set { earthDamage = value; }
+        return earthDamage;
     }
 
-    public float MaxHealth
+    public const float basicMaxHealth = 100.0f;
+    public float Calculate_MaxHealth()
     {
-        get { return maxHealth; }
-        set { maxHealth = value; }
+        return basicMaxHealth * percentageMultiplierCast(maxHealth);
     }
 
-    public float HealthRegen
+    public float Calculate_HealthRegen()
     {
-        get { return healthRegen; }
-        set { healthRegen = value; }
+        return percentageMultiplierCast(healthRegen);
     }
 
-    public float ExperienceMultiplier
+    public float Calculate_ExperienceMultiplier()
     {
-        get { return experienceMultiplier; }
-        set { experienceMultiplier = value; }
+        return experienceMultiplier;
     }
 
     public float Calculate_AttackSpeed()
@@ -251,115 +260,97 @@ public class Stats : ScriptableObject
         return 1.0f / percentageMultiplierCast(attackSpeed);
     }
 
-    public float PhysicalAttackPower
+    public float Calculate_PhysicalAttackPower()
     {
-        get { return physicalAttackPower; }
-        set { physicalAttackPower = value; }
+        return physicalAttackPower;
     }
 
-    public float WindDamage
+    public float Calculate_WindDamage()
     {
-        get { return windDamage; }
-        set { windDamage = value; }
+        return windDamage;
     }
 
-    public float Dodge
+    public float Calculate_Dodge()
     {
-        get { return dodge; }
-        set { dodge = value; }
+        return dodge;
     }
 
-    public float AutoCharge
+    public float Calculate_AutoCharge()
     {
-        get { return autoCharge; }
-        set { autoCharge = value; }
+        return autoCharge;
     }
 
-    public float Luck
+    public float Calculate_Luck()
     {
-        get { return luck; }
-        set { luck = value; }
+        return luck;
     }
 
-    public float SpecialCooldown
+    public float Calculate_SpecialCooldown()
     {
-        get { return specialCooldown; }
-        set { specialCooldown = value; }
+        return specialCooldown;
     }
 
-    public float AbstractAttackPower
+    public float Calculate_AbstractAttackPower()
     {
-        get { return abstractAttackPower; }
-        set { abstractAttackPower = value; }
+        return abstractAttackPower;
     }
 
-    public float ThunderDamage
+    public float Calculate_ThunderDamage()
     {
-        get { return thunderDamage; }
-        set { thunderDamage = value; }
+        return thunderDamage;
     }
 
-    public float GlobalAttackPower
+    public float Calculate_GlobalAttackPower()
     {
-        get { return globalAttackPower; }
-        set { globalAttackPower = value; }
+        return globalAttackPower;
     }
 
-    public float WaterDamage
+    public float Calculate_WaterDamage()
     {
-        get { return waterDamage; }
-        set { waterDamage = value; }
+        return waterDamage;
     }
 
-    public float HealingPower
+    public float Calculate_HealingPower()
     {
-        get { return healingPower; }
-        set { healingPower = value; }
+        return healingPower;
     }
 
-    public float Crit
+    public float Calculate_Crit()
     {
-        get { return crit; }
-        set { crit = value; }
+        return crit;
     }
 
-    public float CritDamage
+    public float Calculate_CritDamage()
     {
-        get { return critDamage; }
-        set { critDamage = value; }
+        return critDamage;
     }
 
-    public float BuildingPower
+    public float Calculate_BuildingPower()
     {
-        get { return buildingPower; }
-        set { buildingPower = value; }
+        return buildingPower;
     }
 
-    public float BondPower
+    public float Calculate_BondPower()
     {
-        get { return bondPower; }
-        set { bondPower = value; }
+        return bondPower;
     }
 
-    public float BuffPower
+    public float Calculate_StatusPower()
     {
-        get { return buffPower; }
-        set { buffPower = value; }
+        return statusPower;
     }
 
-    public float BuffDuration
+    public float Calculate_StatusDuration()
     {
-        get { return buffDuration; }
-        set { buffDuration = value; }
+        return statusDuration;
     }
 
-    public float BuffImpact
+    public float Calculate_StatusImpact()
     {
-        get { return buffImpact; }
-        set { buffImpact = value; }
+        return statusImpact;
     }
 
-    public float AnomalyResistance
+    public float Calculate_AnomalyResistance
     {
         get { return anomalyResistance; }
         set { anomalyResistance = value; }
@@ -381,7 +372,7 @@ public class Stats : ScriptableObject
         shieldRegen = shieldRegenINIT;
         buildingDurability = buildingDurabilityINIT;
         knockback = knockbackINIT;
-        injuryCharge = injuryChargeINIT;
+        injuryEnergeCharge = injuryEnergeChargeINIT;
         earthDamage = earthDamageINIT;
         maxHealth = maxHealthINIT;
         healthRegen = healthRegenINIT;
@@ -402,11 +393,21 @@ public class Stats : ScriptableObject
         critDamage = critDamageINIT;
         buildingPower = buildingPowerINIT;
         bondPower = bondPowerINIT;
-        buffPower = buffPowerINIT;
-        buffDuration = buffDurationINIT;
-        buffImpact = buffImpactINIT;
+        statusPower = buffPowerINIT;
+        statusDuration = buffDurationINIT;
+        statusImpact = buffImpactINIT;
         anomalyResistance = anomalyResistanceINIT;
     }
 
-
+    public void OnValidate()
+    {
+        if (maxHealth != previousMaxHealth)
+        {
+            previousMaxHealth = maxHealth;
+            if (OnValueChange != null)
+            {
+                OnValueChange.Invoke();
+            }
+        }
+    }
 }

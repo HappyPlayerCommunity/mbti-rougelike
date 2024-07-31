@@ -186,6 +186,22 @@ public class DamageCollider : MonoBehaviour
         }
 
         transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
+        if (owner is Player)
+        {
+            var player = (Player)owner;
+            switch (damageMovementType)
+            {
+                case DamageMovementType.Passive: //对于静态的攻击，攻击范围会扩大碰撞体积。
+                    var trans = GetComponentInChildren<SpriteRenderer>().transform;
+                    trans.localScale *= player.stats.Calculate_AttackRange();
+                    break;
+                case DamageMovementType.Projectile: //对于动态的，投射类攻击，攻击范围会延长子弹持续的时间。
+                    maxTimer = maxTimer * player.stats.Calculate_AttackRange();
+                    break;
+                default:
+                    break;
+            }
+        }
 
         timer = maxTimer;
     }
@@ -279,7 +295,8 @@ public class DamageCollider : MonoBehaviour
                         if (owner is Player)
                         {
                             var player = (Player)owner;
-                            player.personality.ChargeEnerge(damage); // 受伤充能比率还得具体设计。
+                            float boostCharge = player.stats.Calculate_AttackEnergeCharge();
+                            player.personality.AttackChargeEnerge(damage, boostCharge); // 受伤充能比率还得具体设计。
                         }
 
                         switch (hitEffectPlayMode)

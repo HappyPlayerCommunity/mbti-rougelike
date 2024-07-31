@@ -14,6 +14,9 @@ public class EnemyManager : MonoBehaviour
     public int enemyPerWave = 5;
 
     [SerializeField, Tooltip("每波内生成敌人的间隔。")]
+    public float betweenWavesInterval = 3.0f;
+
+    [SerializeField, Tooltip("每波内生成敌人的间隔。")]
     public float spawnInterval = 1.0f;
 
     [SerializeField, Tooltip("一共多少波。")]
@@ -59,7 +62,7 @@ public class EnemyManager : MonoBehaviour
             }
 
             yield return new WaitUntil(() => currentWaveEnemies.Count == 0);
-
+            yield return new WaitForSeconds(betweenWavesInterval);
             currentWave++;
         }
     }
@@ -80,7 +83,7 @@ public class EnemyManager : MonoBehaviour
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         currentWaveEnemies.Add(enemy);
 
-        enemy.GetComponent<Enemy>().OnDeath += () => RemoveEnemyFromList(enemy);
+        enemy.GetComponent<Enemy>().OnEnemyDeath += () => RemoveEnemyFromList(enemy);
     }
 
     void RemoveEnemyFromList(GameObject enemy)

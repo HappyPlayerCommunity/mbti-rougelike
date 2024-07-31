@@ -155,7 +155,6 @@ public class Personality : MonoBehaviour
 
                     }
 
-
                     float scatterAngleHalf = scatterAngle / 2.0f;
 
                     float randomAngle = Random.Range(-scatterAngleHalf, scatterAngleHalf);
@@ -175,7 +174,7 @@ public class Personality : MonoBehaviour
                 }
                 else
                 {
-                    currentReloadingTimer = reloadingTime * stats.SpecialCooldown;
+                    currentReloadingTimer = reloadingTime /** stats.Calculate_SpecialCooldown()*/;
                 }
             }
         }
@@ -232,11 +231,24 @@ public class Personality : MonoBehaviour
         }
     }
 
-    public void ChargeEnerge(float amount)
+    public void AttackChargeEnerge(float amount, float boostRate = 1.0f)
     {
         if (statusManager.IsChargeBanned())
             return;
 
-        ultimateEnerge = Mathf.Min(ultimateEnerge + amount, maxUltimateEnerge);
+        ultimateEnerge = Mathf.Min(ultimateEnerge + AttackEnergeFomula(amount) * boostRate, maxUltimateEnerge);
+    }
+
+    public void InjuryChargeEnerge(float amount, float boostRate = 1.0f)
+    {
+        if (statusManager.IsChargeBanned())
+            return;
+
+        ultimateEnerge = Mathf.Min(ultimateEnerge + amount * boostRate, maxUltimateEnerge);
+    }
+
+    public float AttackEnergeFomula(float amount)
+    {
+        return (amount * 0.1f);
     }
 }
