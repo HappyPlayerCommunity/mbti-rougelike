@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// 【伤害块】的基类，包含了绝大多数常见的伤害块行为；一些行为复杂的【伤害块】可以另开子类实现。
 /// </summary>
-public class DamageCollider : MonoBehaviour
+public class DamageCollider : MonoBehaviour, IPoolable
 {
     [Header("基础数据")]
     [SerializeField, Tooltip("该伤害块击中目标时可以造成的伤害。")]
@@ -90,6 +91,7 @@ public class DamageCollider : MonoBehaviour
     [SerializeField, Tooltip("是否已经运行过Awake()。")]
     protected bool awaked = false;
 
+    private string poolKey;
 
     [Header("互动组件")]
     public Collider2D damageCollider2D;
@@ -158,6 +160,8 @@ public class DamageCollider : MonoBehaviour
 
     private void Awake()
     {
+        poolKey = gameObject.name;
+
         damageCollider2D = GetComponent<Collider2D>();
 
         if (damageCollider2D == null)
@@ -173,37 +177,34 @@ public class DamageCollider : MonoBehaviour
 
     void Start()
     {
-        BeforeStart();
+        OnStart();
+    }
 
-        if (initSource)
-        {
-            initSource.Play();
-        }
-        var audioSource = GetComponentInChildren<AudioSource>();
-        if (audioSource)
-        {
-            audioSource.time = audioSource.clip.length * 0.25f;
-        }
+    /// <summary>
+    /// 当对象从对象池中取出时，调用这个方法来初始化
+    /// </summary>
+    public void Activate(Vector3 position, Quaternion rotation, Unit owner)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
 
-        transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
-        if (owner is Player)
-        {
-            var player = (Player)owner;
-            switch (damageMovementType)
-            {
-                case DamageMovementType.Passive: //对于静态的攻击，攻击范围会扩大碰撞体积。
-                    var trans = GetComponentInChildren<SpriteRenderer>().transform;
-                    trans.localScale *= player.stats.Calculate_AttackRange();
-                    break;
-                case DamageMovementType.Projectile: //对于动态的，投射类攻击，攻击范围会延长子弹持续的时间。
-                    maxTimer = maxTimer * player.stats.Calculate_AttackRange();
-                    break;
-                default:
-                    break;
-            }
-        }
+        this.owner = owner;
 
-        timer = maxTimer;
+        var sprite = GetComponentInChildren<SpriteRenderer>();
+        if (sprite)
+        {
+            sprite.transform.localScale = new Vector3(Mathf.Abs(sprite.transform.localScale.x), Mathf.Abs(sprite.transform.localScale.y), sprite.transform.localScale.z);
+            sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+        }
+    }
+
+    /// <summary>
+    /// 调用这个方法将对象塞回对象池
+    /// </summary>
+    public void Deactivate()
+    {
+        DamageManager.ClearReferences(gameObject);
+        PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
 
     void Update()
@@ -214,7 +215,8 @@ public class DamageCollider : MonoBehaviour
 
         if (timer <= 0.0f)
         {
-            Destroy(gameObject); // object pool later
+            //Destroy(gameObject); // object pool later
+            Deactivate();
         }
         else
         {
@@ -280,8 +282,13 @@ public class DamageCollider : MonoBehaviour
                 if (TagDamageCheck(hit))
                 {
                     var entity = hit.gameObject.GetComponent<BaseEntity>();
+
+                    //确定该实体是否能受到伤害。
                     if (entity && entity.CanTakeDamageFrom(gameObject))
                     {
+                        //注册此伤害行为。
+                        DamageManager.RegisterDamage(gameObject, entity);
+
                         // 如果【碰撞体】是Unit类型，则结算【吹飞】效果。
                         if (entity is Unit)
                         {
@@ -290,6 +297,8 @@ public class DamageCollider : MonoBehaviour
 
                         // 对实体造成伤害并设置击晕时间
                         entity.TakeDamage(damage, stunTime);
+
+                        // 令该实体保存一个对此【伤害块】的计时器，短时间无法再对其造成伤害。
                         entity.SetDamageTimer(gameObject, damageTriggerTime);
 
                         if (owner is Player)
@@ -326,7 +335,8 @@ public class DamageCollider : MonoBehaviour
                 {
                     case DamageType.SingleHit:
                         // 单次击中碰撞体后消失
-                        Destroy(gameObject);
+                        //Destroy(gameObject);
+                        Deactivate();
                         break;
                     case DamageType.MultiHit:
                         // 击中多个目标但不会持续伤害，不销毁
@@ -351,7 +361,8 @@ public class DamageCollider : MonoBehaviour
         // 如果击中目标且不是【持续群体打击】类型，则销毁子弹
         if (hitted && damageType != DamageType.SustainedMultiHit)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Deactivate();
         }
     }
 
@@ -460,4 +471,49 @@ public class DamageCollider : MonoBehaviour
 
     }
 
+    //private void OnDestroy()
+    //{
+    //    if (gameObject.activeInHierarchy) // 检查对象是否仍在场景中活跃
+    //    {
+    //        Debug.LogError("Object destroyed improperly: " + gameObject.name);
+    //    }
+    //}
+
+    public void ResetObjectState()
+    {
+        OnStart();
+        var animController = transform.GetComponentInChildren<AnimationController2D>(true);
+        var spriteRenderer = transform.GetComponentInChildren<SpriteRenderer>(true);
+
+        if (animController)
+        {
+            animController.animationFinished = false;
+        }
+
+        if (spriteRenderer)
+        {
+            spriteRenderer.gameObject.SetActive(true);
+        }
+    }
+
+    void OnStart()
+    {
+        BeforeStart();
+
+        if (initSource)
+        {
+            initSource.Play();
+        }
+        var audioSource = GetComponentInChildren<AudioSource>();
+        if (audioSource)
+        {
+            audioSource.time = audioSource.clip.length * 0.25f;
+        }
+
+        timer = maxTimer;
+        onceHitEventTrigger = false;
+        hitted = false;
+        didDamage = false;
+        Array.Clear(hits, 0, hits.Length);
+    }
 }

@@ -88,10 +88,15 @@ public class Enemy : Unit
         {
             if (attackTimer <= 0.0f)
             {
-                DamageCollider attackBox = Instantiate(damageCollider, transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
-                attackBox.owner = transform.GetComponent<Unit>();
+                string poolKey = damageCollider.name;
+                GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, damageCollider.gameObject);
+                DamageCollider collider = damageColliderObj.GetComponent<DamageCollider>();
+                collider.Activate(transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f), transform.GetComponent<Unit>());
 
-                attackBox.Velocity = (distanceVec.normalized * initAttackMovementSpeed);
+                //DamageCollider attackBox = Instantiate(damageCollider, transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                //attackBox.owner = transform.GetComponent<Unit>();
+
+                collider.Velocity = (distanceVec.normalized * initAttackMovementSpeed);
 
                 attackTimer = attackTime;
             }

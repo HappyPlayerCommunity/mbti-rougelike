@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 30
-  maxTimer: 5
+  maxTimer: 2
   collideTags:
   - Enemy
   damageTags:

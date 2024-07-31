@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: ENTP_Atk
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 4191177479539466285, guid: 9ce62004aef0bf74cb49a72a24a00470, type: 3}
-  reloadingTime: 0.1
+  reloadingTime: 0.25
   scatterAngle: 30
   damageColliderSpeed: 20
   maxChargeCount: 0
-  damageColliderRenderMode: 1
+  selfBlowForce: 0
+  controlScheme: 0
+  renderMode: 0
+  selfStatus: {fileID: 0}

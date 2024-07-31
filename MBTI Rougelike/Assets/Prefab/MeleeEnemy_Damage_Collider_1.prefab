@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 161389626845162144}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.45, y: 0.76, z: 0}
+  m_LocalPosition: {x: 0.6703048, y: 0.014831126, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -54,8 +54,8 @@ MonoBehaviour:
   isAttachedPos: 0
   stunTime: 0
   blowForceSpeed: 0
-  animationPrefab: {fileID: 0}
   hitEffectPrefab: {fileID: 4191014965251029583, guid: 76a865e944a60d54881ae9c480db5ea8, type: 3}
+  hitEffectPlayMode: 0
   damageType: 0
   damageTriggerTime: 100
   timer: 0
@@ -67,9 +67,10 @@ MonoBehaviour:
   hitted: 0
   didDamage: 0
   awaked: 0
-  collider2D: {fileID: 0}
+  damageCollider2D: {fileID: 0}
   initSource: {fileID: 0}
   damageMovementType: 1
+  spriteRenderer: {fileID: 0}
 --- !u!1 &8407462781873523849
 GameObject:
   m_ObjectHideFlags: 0

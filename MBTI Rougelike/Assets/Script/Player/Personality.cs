@@ -114,13 +114,16 @@ public class Personality : MonoBehaviour
             {
                 if (skill.DamageCollider)
                 {
-                    DamageCollider damageCollider = Instantiate(skill.DamageCollider, initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-                    damageCollider.owner = player;
+                    //DamageCollider damageCollider = Instantiate(skill.DamageCollider, initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                    string poolKey = skill.DamageCollider.name;
+                    GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, skill.DamageCollider.gameObject);
+                    DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
+                    damageCollider.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f), player);
 
-                    if (damageCollider.GetComponentInChildren<SpriteRenderer>())
+                    var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
+
+                    if (sprite)
                     {
-                        var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
-
                         float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), aimDirection);
                         sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
 

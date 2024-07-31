@@ -19,6 +19,6 @@ public class TestingManager : MonoBehaviour
     public void ResetPlayer()
     {
         player.gameObject.SetActive(true);
-        player.HP = player.MaxHP;
+        player.Respawn();
     }
 }

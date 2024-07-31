@@ -10,7 +10,7 @@ public class AnimationController2D : MonoBehaviour
     protected Animator animator;
     public bool isAttached = false;
     public Transform attachedTransform;
-    private bool animationFinished = false;
+    public bool animationFinished = false;
 
     public Animator GetAnimator()
     {
@@ -38,6 +38,12 @@ public class AnimationController2D : MonoBehaviour
     public void OnAnimationEnd()
     {
         animationFinished = true;
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        //var damageCollider = gameObject.GetComponent<DamageCollider>();
+        //if (damageCollider)
+        //{
+        //    damageCollider.Deactivate();
+        //}
+        //Destroy(gameObject);
     }
 }

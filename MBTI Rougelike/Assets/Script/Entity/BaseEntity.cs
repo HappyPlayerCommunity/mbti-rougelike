@@ -50,6 +50,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     private Dictionary<GameObject, float> damageTimers = new Dictionary<GameObject, float>();
 
     public event Action OnDeath;
+    public event Action OnRespawn;
 
     private Coroutine hpRegenCoroutine;
     private Coroutine shieldRestoreCoroutine;
@@ -79,8 +80,12 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         foreach (var key in keys)
         {
             damageTimers[key] -= Time.deltaTime;
-            if (damageTimers[key] <= 0)
+            Debug.Log("Current Key:" + damageTimers[key]);
+
+            if (damageTimers[key] <= 0.0f)
             {
+                Debug.Log("Remove Key:" + key);
+                DamageManager.ClearReferences(key);
                 damageTimers.Remove(key);
             }
         }
@@ -236,6 +241,21 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     public void SetDamageTimer(GameObject collider, float timer)
     {
         damageTimers[collider] = timer;
+    }
+
+    public void ClearDamageTimer(GameObject damageCollider)
+    {
+        if (damageTimers.ContainsKey(damageCollider))
+        {
+            damageTimers.Remove(damageCollider);
+        }
+    }
+
+    public void Respawn()
+    {
+        this.HP = this.MaxHP;
+        gameObject.SetActive(true);
+        OnRespawn?.Invoke();
     }
 
     private void StartHealthRegen()

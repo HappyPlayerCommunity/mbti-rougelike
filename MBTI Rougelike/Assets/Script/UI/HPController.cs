@@ -21,6 +21,7 @@ public class HPController : MonoBehaviour
         if (baseEntity != null)
         {
             baseEntity.OnDeath += HandleDeath;
+            baseEntity.OnRespawn += HandleRespawn;
         }
     }
 
@@ -61,11 +62,17 @@ public class HPController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void HandleRespawn()
+    {
+        gameObject.SetActive(true);
+    }
+
     private void OnDestroy()
     {
         if (baseEntity != null)
         {
             baseEntity.OnDeath -= HandleDeath;
+            baseEntity.OnRespawn -= HandleRespawn;
         }
     }
 }
