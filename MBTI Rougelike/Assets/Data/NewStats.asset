@@ -25,7 +25,7 @@ MonoBehaviour:
   knockback: 0
   injuryEnergeCharge: 0
   earthDamage: 0
-  maxHealth: 25
+  maxHealth: 0
   healthRegen: 0
   experienceMultiplier: 0
   attackSpeed: 0

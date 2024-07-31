@@ -9,11 +9,14 @@ using UnityEngine;
 public abstract class BaseEntity : MonoBehaviour, IEntity
 {
     [Header("实体数据")]
-    [SerializeField, Tooltip("该实体的当前生命")]
+    [SerializeField, Tooltip("该实体的当前生命。")]
     protected int hp;
 
-    [SerializeField, Tooltip("该实体的生命上限")]
+    [SerializeField, Tooltip("该实体的生命上限。")]
     protected int maxHp;
+
+    [SerializeField, Tooltip("该实体的生命再生。")]
+    protected int hpRegen;
 
     [SerializeField, Tooltip("当前实体的【速度】向量值")]
     protected Vector3 velocity;
@@ -30,6 +33,16 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("此数值决定了【吹飞速度】的下降率")]
     protected float blowSpeedReduceRate = 0.1f;
 
+    [SerializeField, Tooltip("该实体的当前护盾。")]
+    protected int shield;
+
+    [SerializeField, Tooltip("该实体的护盾上限。")]
+    protected int maxShield;
+
+    [SerializeField, Tooltip("该实体的护盾再生。")]
+    protected int shieldRegen;
+
+
     [Header("互动组件")]
     public HPController hpControllerPrefab;
     public Transform canvasTransform;
@@ -38,6 +51,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     public event Action OnDeath;
 
+    private Coroutine hpRegenCoroutine;
+    private Coroutine shieldRestoreCoroutine;
+
     protected virtual void Start()
     {
         canvasTransform = GameObject.Find("Canvas").transform;
@@ -45,6 +61,13 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         healthBarInstance.baseEntity = this;
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position + healthBarInstance.offset);
         healthBarInstance.GetComponent<RectTransform>().position = screenPosition;
+
+        hp = maxHp;
+        shield = maxShield;
+
+        StartHealthRegen();
+
+        shieldRestoreCoroutine = StartCoroutine(ShieldRestoreRoutine());
     }
 
     void Update()
@@ -105,6 +128,30 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public int Shield
+    {
+        get
+        {
+            return shield;
+        }
+        set
+        {
+            shield = value;
+        }
+    }
+
+    public int MaxShield
+    {
+        get
+        {
+            return maxShield;
+        }
+        set
+        {
+            maxShield = value;
+        }
+    }
+
     public Vector3 Velocity
     {
         get
@@ -131,7 +178,21 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     public virtual void TakeDamage(int damage, float stuntime)
     {
-        hp -= damage;
+        ResetShieldRestoreCoroutine();
+
+        if (shield > 0)
+        {
+            shield -= damage;
+            if (shield < 0)
+            {
+                // 将穿透护盾的伤害施加到声明上。
+                hp += shield;
+            }
+        }
+        else
+        {
+            hp -= damage;
+        }
 
         if (hp <= 0)
         {
@@ -174,5 +235,45 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     public void SetDamageTimer(GameObject collider, float timer)
     {
         damageTimers[collider] = timer;
+    }
+
+    private void StartHealthRegen()
+    {
+        if (hpRegenCoroutine != null)
+        {
+            StopCoroutine(hpRegenCoroutine);
+        }
+        hpRegenCoroutine = StartCoroutine(HpRegenHealthOverTime());
+    }
+
+    private IEnumerator HpRegenHealthOverTime()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1.0f);
+            if (hp < maxHp)
+            {
+                hp += hpRegen;
+                hp = Mathf.Min(hp, maxHp);
+            }
+        }
+    }
+
+    private IEnumerator ShieldRestoreRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(3.0f);
+            shield = maxShield;
+        }
+    }
+
+    private void ResetShieldRestoreCoroutine()
+    {
+        if (shieldRestoreCoroutine != null)
+        {
+            StopCoroutine(shieldRestoreCoroutine);
+        }
+        shieldRestoreCoroutine = StartCoroutine(ShieldRestoreRoutine());
     }
 }

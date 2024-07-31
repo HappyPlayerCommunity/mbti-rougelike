@@ -31,7 +31,7 @@ public class Player : Unit
         maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
         hp = maxHp;
 
-        stats.OnValueChange += () => MaxHpUpdate();
+        stats.OnValueChange += () => statsUpdate();
     }
 
     public override void TakeDamage(int damage, float stuntime)
@@ -41,10 +41,9 @@ public class Player : Unit
         personality.InjuryChargeEnerge(damage, boostCharge); // 受伤充能比率还得具体设计。
     }
 
-    private void MaxHpUpdate()
+    private void statsUpdate()
     {
         maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
-        Debug.Log("Update?");
-
+        hpRegen = Mathf.RoundToInt(stats.Calculate_HealthRegen());
     }
 }

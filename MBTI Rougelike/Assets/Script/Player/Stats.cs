@@ -143,6 +143,7 @@ public class Stats : ScriptableObject
     public float anomalyResistanceINIT = 0.0f;
 
     private float previousMaxHealth = 0.0f;
+    private float previousHealthRegen = 0.0f;
 
     public const float percentage = 0.01f;
 
@@ -158,7 +159,7 @@ public class Stats : ScriptableObject
     // 下面这个部分还在施工中，有许多属性需要后续系统完善后才能实现。
 
     /// <summary>
-    /// 【施工中】元素属性还未实现。
+    /// 【未实现】元素属性还未实现。
     /// </summary>
     public float Calculate_FireDamage()
     {
@@ -176,7 +177,7 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【施工中】韧性系统还未实现。
+    /// 【未实现】韧性系统还未实现。
     /// </summary>
     public float Calculate_Toughness()
     {
@@ -184,14 +185,17 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【施工中】羁绊系统还未实现。
+    /// 【未实现】羁绊系统还未实现。
     /// </summary>
     public float Calculate_BondMovementSpeed()
     {
         return bondMovementSpeed;
     }
 
-    public float Calculate_AttackRange() //感觉要思考一下，吃这个加成的攻击方式可能比想象的少。
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
+    public float Calculate_AttackRange()
     {
         // 对两类伤害块的有不同的加成。
         // 静态：每1点增加1%的碰撞体积；
@@ -199,11 +203,17 @@ public class Stats : ScriptableObject
         return percentageMultiplierCast(attackRange);
     }
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_AttackEnergeCharge()
     {
         return percentageMultiplierCast(attackEnergeCharge);
     }
 
+    /// <summary>
+    /// 【未实现】元素系统未实现。
+    /// </summary>
     public float Calculate_IceDamage()
     {
         return iceDamage;
@@ -240,14 +250,20 @@ public class Stats : ScriptableObject
     }
 
     public const float basicMaxHealth = 100.0f;
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_MaxHealth()
     {
         return basicMaxHealth * percentageMultiplierCast(maxHealth);
     }
 
+    /// <summary>
+    /// 【初步实现】目前采用的常数值。
+    /// </summary>
     public float Calculate_HealthRegen()
     {
-        return percentageMultiplierCast(healthRegen);
+        return healthRegen;
     }
 
     public float Calculate_ExperienceMultiplier()
@@ -401,13 +417,22 @@ public class Stats : ScriptableObject
 
     public void OnValidate()
     {
+        bool changed = false;
         if (maxHealth != previousMaxHealth)
         {
             previousMaxHealth = maxHealth;
-            if (OnValueChange != null)
-            {
-                OnValueChange.Invoke();
-            }
+            changed = true;
+        }
+
+        if (healthRegen != previousHealthRegen)
+        {
+            previousHealthRegen = healthRegen;
+            changed = true;
+        }
+
+        if (changed && OnValueChange != null)
+        {
+            OnValueChange.Invoke();
         }
     }
 }

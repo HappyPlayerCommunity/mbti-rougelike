@@ -8,7 +8,8 @@ using UnityEngine.UI;
 /// </summary>
 public class HPController : MonoBehaviour
 {
-    public Slider HP;
+    public Slider hp;
+    public Slider shield;
     public BaseEntity baseEntity;
     private RectTransform rectTransform;
     public Vector3 offset = new Vector3(0.0f, 0.75f, 0.0f);
@@ -16,7 +17,6 @@ public class HPController : MonoBehaviour
     private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
-        HP = GetComponent<Slider>();
 
         if (baseEntity != null)
         {
@@ -37,7 +37,20 @@ public class HPController : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        HP.value = (float)baseEntity.HP / (float)baseEntity.MaxHP;
+        hp.value = (float)baseEntity.HP / (float)baseEntity.MaxHP;
+
+        if (baseEntity.MaxShield > 0 && baseEntity.Shield > 0)
+        {
+            // 护盾不会超过当前血条的长度。
+            float shieldPercentage = (float)baseEntity.Shield / (float)baseEntity.MaxShield;
+            float effectiveShieldPercentage = Mathf.Min(shieldPercentage, hp.value);
+
+            shield.value = effectiveShieldPercentage;
+        }
+        else
+        {
+            shield.value = 0;
+        }
 
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(baseEntity.transform.position + offset);
         rectTransform.position = screenPosition;
