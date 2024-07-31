@@ -28,10 +28,14 @@ public class Player : Unit
     {
         base.Start();
         stats.Initialize();
+
         maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
         hp = maxHp;
 
-        stats.OnValueChange += () => statsUpdate();
+        maxShield = Mathf.RoundToInt(stats.Calculate_MaxShield());
+        shield = maxShield;
+
+        stats.OnValueChange += () => StatsUpdate();
     }
 
     public override void TakeDamage(int damage, float stuntime)
@@ -41,7 +45,7 @@ public class Player : Unit
         personality.InjuryChargeEnerge(damage, boostCharge); // 受伤充能比率还得具体设计。
     }
 
-    private void statsUpdate()
+    private void StatsUpdate()
     {
         maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
         hpRegen = Mathf.RoundToInt(stats.Calculate_HealthRegen());

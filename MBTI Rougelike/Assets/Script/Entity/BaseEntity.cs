@@ -183,9 +183,10 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         if (shield > 0)
         {
             shield -= damage;
-            if (shield < 0)
+            if (shield <= 0)
             {
-                // 将穿透护盾的伤害施加到声明上。
+                AnimationManager.Instance.PlayAnimation(Animation.ShieldBreak, transform, true);
+                // 将穿透护盾的伤害施加到生命上。
                 hp += shield;
             }
         }
@@ -261,9 +262,11 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     private IEnumerator ShieldRestoreRoutine()
     {
-        while (true)
+        while (maxShield > 0 && shield < maxShield)
         {
             yield return new WaitForSeconds(3.0f);
+
+            AnimationManager.Instance.PlayAnimation(Animation.ShieldRestore, transform, true);
             shield = maxShield;
         }
     }

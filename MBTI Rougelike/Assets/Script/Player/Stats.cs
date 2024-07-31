@@ -144,6 +144,7 @@ public class Stats : ScriptableObject
 
     private float previousMaxHealth = 0.0f;
     private float previousHealthRegen = 0.0f;
+    private float previousMaxShield = 0.0f;
 
     public const float percentage = 0.01f;
 
@@ -427,6 +428,12 @@ public class Stats : ScriptableObject
         if (healthRegen != previousHealthRegen)
         {
             previousHealthRegen = healthRegen;
+            changed = true;
+        }
+
+        if (maxShield != previousMaxShield)
+        {
+            previousMaxShield = maxShield;
             changed = true;
         }
 

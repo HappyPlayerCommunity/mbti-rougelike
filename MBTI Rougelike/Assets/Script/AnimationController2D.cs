@@ -8,6 +8,8 @@ using UnityEngine;
 public class AnimationController2D : MonoBehaviour
 {
     protected Animator animator;
+    public bool isAttached = false;
+    public Transform attachedTransform;
     private bool animationFinished = false;
 
     public Animator GetAnimator()
@@ -18,6 +20,14 @@ public class AnimationController2D : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        if (isAttached)
+        {
+            transform.position = attachedTransform.position;
+        }
     }
 
     public void PlayAnimation(string name)
