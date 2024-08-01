@@ -203,6 +203,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
             sprite.transform.localScale = new Vector3(Mathf.Abs(sprite.transform.localScale.x), Mathf.Abs(sprite.transform.localScale.y), sprite.transform.localScale.z);
             sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
         }
+
+        gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -210,6 +212,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
     /// </summary>
     public void Deactivate()
     {
+        gameObject.SetActive(false);
+
         DamageManager.ClearReferences(gameObject);
         PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }

@@ -53,7 +53,7 @@ MonoBehaviour:
   - Enemy
   isAttachedPos: 1
   stunTime: 0
-  blowForceSpeed: 30
+  blowForceSpeed: 15
   hitEffectPrefab: {fileID: 0}
   hitEffectPlayMode: 1
   damageType: 2

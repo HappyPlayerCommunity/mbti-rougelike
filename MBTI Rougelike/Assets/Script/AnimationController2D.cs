@@ -70,6 +70,8 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     {
         transform.position = position;
         transform.rotation = rotation;
+
+        gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -77,6 +79,8 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     /// </summary>
     public void Deactivate()
     {
+        gameObject.SetActive(false);
+
         PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
 }

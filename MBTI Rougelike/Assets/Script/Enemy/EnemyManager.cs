@@ -37,7 +37,8 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (var obj in currentWaveEnemies)
         {
-            Destroy(obj);
+            //Destroy(obj);
+            obj.GetComponent<Enemy>().Deactivate();
         }
 
         currentWaveEnemies.Clear();
@@ -80,10 +81,15 @@ public class EnemyManager : MonoBehaviour
         float randomY = Random.Range(screenBottomLeft.y, screenTopRight.y);
         Vector3 spawnPosition = new Vector3(randomX, randomY, 0.0f);
 
-        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        currentWaveEnemies.Add(enemy);
+        //GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 
-        enemy.GetComponent<Enemy>().OnEnemyDeath += () => RemoveEnemyFromList(enemy);
+        GameObject enemyObj = PoolManager.Instance.GetObject(enemyPrefab.name, enemyPrefab.gameObject);
+        Enemy enemy = enemyObj.GetComponent<Enemy>();
+        enemy.Activate(spawnPosition, Quaternion.identity);
+
+        currentWaveEnemies.Add(enemy.gameObject);
+
+        enemy.GetComponent<Enemy>().OnEnemyDeath += () => RemoveEnemyFromList(enemy.gameObject);
     }
 
     void RemoveEnemyFromList(GameObject enemy)

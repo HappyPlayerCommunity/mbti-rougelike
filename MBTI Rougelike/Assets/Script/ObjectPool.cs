@@ -42,13 +42,13 @@ public class ObjectPool
             obj = Object.Instantiate(_prefab);
             //Debug.Log("新物体: " + PoolManager.NormalizePoolKey(obj.name));
         }
-        obj.SetActive(true);
+        //obj.SetActive(true);
         return obj;
     }
 
     public void Return(GameObject obj)
     {
-        obj.SetActive(false);
+        //obj.SetActive(false);
         _pool.Enqueue(obj);
         //Debug.Log("返还: " + PoolManager.NormalizePoolKey(obj.name));
 

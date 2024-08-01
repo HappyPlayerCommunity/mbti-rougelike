@@ -52,16 +52,16 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     public event Action OnDeath;
     public event Action OnRespawn;
 
-    private Coroutine hpRegenCoroutine;
-    private Coroutine shieldRestoreCoroutine;
+    protected Coroutine hpRegenCoroutine;
+    protected Coroutine shieldRestoreCoroutine;
+
+    protected virtual void Awake()
+    {
+    }
 
     protected virtual void Start()
     {
-        canvasTransform = GameObject.Find("Canvas").transform;
-        var healthBarInstance = Instantiate(hpControllerPrefab, canvasTransform);
-        healthBarInstance.baseEntity = this;
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position + healthBarInstance.offset);
-        healthBarInstance.GetComponent<RectTransform>().position = screenPosition;
+        CreateHealthBar();
 
         hp = maxHp;
         shield = maxShield;
@@ -211,8 +211,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected virtual void Die()
     {
         //Destroy(gameObject); // for now
-        gameObject.SetActive(false);
         OnDeath?.Invoke();
+        gameObject.SetActive(false);
     }
 
     public float blowSpeedReduceUpdate(float speed)
@@ -256,7 +256,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         OnRespawn?.Invoke();
     }
 
-    private void StartHealthRegen()
+    protected void StartHealthRegen()
     {
         if (hpRegenCoroutine != null)
         {
@@ -278,7 +278,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
-    private IEnumerator ShieldRestoreRoutine()
+    protected IEnumerator ShieldRestoreRoutine()
     {
         while (maxShield > 0 && shield < maxShield)
         {
@@ -296,5 +296,19 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
             StopCoroutine(shieldRestoreCoroutine);
         }
         shieldRestoreCoroutine = StartCoroutine(ShieldRestoreRoutine());
+    }
+
+    protected void CreateHealthBar()
+    {
+        canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
+
+        GameObject healthBarObj = PoolManager.Instance.GetObject(hpControllerPrefab.name, hpControllerPrefab.gameObject);
+        HPController healthBar = healthBarObj.GetComponent<HPController>();
+        healthBar.transform.SetParent(canvasTransform, false);
+        healthBar.baseEntity = this;
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position + healthBar.offset);
+        healthBar.GetComponent<RectTransform>().position = screenPosition;
+
+        healthBar.Activate(Vector3.zero, Quaternion.identity);
     }
 }

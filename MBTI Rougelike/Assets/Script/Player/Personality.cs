@@ -190,7 +190,7 @@ public class Personality : MonoBehaviour
 
     protected virtual void UltimateSkillUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && ultimateEnerge >= maxUltimateEnerge)
         {
             ultimateEnerge = 0.0f;
 

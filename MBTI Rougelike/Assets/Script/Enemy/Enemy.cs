@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 敌人的基类。在这里实现了大部分敌人的共同行为；特殊的敌人可以另开子类实现。
 /// </summary>
-public class Enemy : Unit
+public class Enemy : Unit, IPoolable
 {
     [SerializeField, Tooltip("用于追踪，检测玩家的索引。")]
     private Player player;
@@ -14,23 +14,39 @@ public class Enemy : Unit
     private Transform artTransform;
 
     private UnitAI unitAi;
+    private string poolKey;
 
     public delegate void DeathEvent();
     public event DeathEvent OnEnemyDeath;
 
+    bool firstTimeCreated = true;
+
+    public string PoolKey
+    {
+        get { return poolKey; }
+        set { poolKey = value; }
+    }
+
+    protected override void Awake()
+    {
+        poolKey = gameObject.name;
+    }
+
     protected override void Start()
     {
         base.Start();
+
         player = FindObjectOfType<Player>(); // EnemyManager Later.
         unitAi = GetComponent<UnitAI>();
     }
 
     protected override void OnUpdate()
     {
-        if (hp <= 0)
-        {
-            gameObject.SetActive(false);
-        }
+        //if (hp <= 0)
+        //{
+        //    //gameObject.SetActive(false);
+        //    Deactivate();
+        //}
 
         if (player == null) // 临时
             return;
@@ -122,6 +138,48 @@ public class Enemy : Unit
         {
             OnEnemyDeath.Invoke();
         }
+        Deactivate();
         base.Die();
+    }
+
+    /// <summary>
+    /// 继承自IPoolable接口的方法。用于对象池物体的初始化。
+    /// </summary>
+    public void ResetObjectState()
+    {
+        hp = maxHp;
+        shield = maxShield;
+        velocity = Vector3.zero;
+        blowForceVelocity = Vector3.zero;
+
+        if (firstTimeCreated)
+        {
+            firstTimeCreated = false;
+        }
+        else
+        {
+            CreateHealthBar();
+        }
+    }
+
+    /// <summary>
+    /// 当对象从对象池中取出时，调用这个方法来初始化
+    /// </summary>
+    public void Activate(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
+
+        gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// 调用这个方法将对象塞回对象池
+    /// </summary>
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
+
+        PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
 }

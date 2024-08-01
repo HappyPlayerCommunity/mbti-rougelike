@@ -132,13 +132,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2590e76ec54b6b348a8b85cc338a81b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
-  maxHp: 100
+  hp: 50
+  maxHp: 50
+  hpRegen: 0
   velocity: {x: 0, y: 0, z: 0}
   blowForceVelocity: {x: 0, y: 0, z: 0}
-  movementSpeed: 2
+  movementSpeed: 1
   stopBlowThreadshold: 0.01
   blowSpeedReduceRate: 0.99
+  shield: 0
+  maxShield: 0
+  shieldRegen: 0
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   attackRange: 1

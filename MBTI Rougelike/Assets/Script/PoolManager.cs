@@ -89,7 +89,6 @@ public class PoolManager : MonoBehaviour
     public void ReturnObject(string key, GameObject obj)
     {
         key = NormalizePoolKey(key);
-        //Debug.Log("ReturnObject key: " + key);
 
         if (_pools.TryGetValue(key, out ObjectPool pool))
         {

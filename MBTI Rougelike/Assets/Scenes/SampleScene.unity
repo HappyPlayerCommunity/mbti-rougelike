@@ -543,7 +543,7 @@ GameObject:
   - component: {fileID: 1023004541}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: MainCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -850,7 +850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2187154304236326421, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2278473685590432179, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
       propertyPath: ultimateSkill
@@ -1412,7 +1412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4506611985501209401, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8425808833404993618, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: hp
