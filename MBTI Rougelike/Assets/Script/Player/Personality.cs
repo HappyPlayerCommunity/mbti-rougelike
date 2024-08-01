@@ -36,6 +36,9 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("当前大招充能。充满到100才能释放大招，并消耗所有能量。")]
     private float ultimateEnerge = 0.0f;
 
+    [SerializeField, Tooltip("大招的生成位置。")]
+    private Transform ultSkill_InitPosition;
+
     [SerializeField, Tooltip("该大招能生成的伤害块")]
     private float maxUltimateEnerge = 100.0f;
 
@@ -198,8 +201,10 @@ public class Personality : MonoBehaviour
 
             if (ultimateSkill.DamageCollider)
             {
-                DamageCollider damageCollider = Instantiate(ultimateSkill.DamageCollider, specialSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-                damageCollider.owner = player;
+                string poolKey = ultimateSkill.DamageCollider.name;
+                GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, ultimateSkill.DamageCollider.gameObject);
+                DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
+                damageCollider.Activate(ultSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f), player);
 
                 if (damageCollider.GetComponentInChildren<SpriteRenderer>())
                 {

@@ -80,11 +80,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         foreach (var key in keys)
         {
             damageTimers[key] -= Time.deltaTime;
-            Debug.Log("Current Key:" + damageTimers[key]);
 
             if (damageTimers[key] <= 0.0f)
             {
-                Debug.Log("Remove Key:" + key);
                 DamageManager.ClearReferences(key);
                 damageTimers.Remove(key);
             }

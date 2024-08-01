@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0982b1d45c1a1af40a875949f5969b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 30
-  maxTimer: 2
+  damage: 10
+  maxTimer: 0.25
   collideTags:
   - Enemy
   damageTags:

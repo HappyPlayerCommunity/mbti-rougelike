@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 30
-  maxTimer: 3
+  maxTimer: 0.5
   collideTags:
   - Enemy
   damageTags:
@@ -67,9 +67,10 @@ MonoBehaviour:
   hitted: 0
   didDamage: 0
   awaked: 0
-  collider2D: {fileID: 0}
+  damageCollider2D: {fileID: 0}
   initSource: {fileID: 0}
   damageMovementType: 0
+  spriteRenderer: {fileID: 0}
 --- !u!1001 &8132758770252520616
 PrefabInstance:
   m_ObjectHideFlags: 0

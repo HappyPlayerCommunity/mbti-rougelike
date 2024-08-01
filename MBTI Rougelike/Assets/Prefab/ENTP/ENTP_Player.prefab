@@ -47,7 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerArtTransform: {fileID: 239052382136621899}
   weaponArtTransform: {fileID: 8197774310681915711}
-  damageCollider1: {fileID: 4191177479539466285, guid: 9ce62004aef0bf74cb49a72a24a00470, type: 3}
   aimPointdistance: 1
   aimDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &2068947503555262250
@@ -75,7 +74,7 @@ Transform:
   m_GameObject: {fileID: 2068947503555262250}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.31800002, y: 0.071, z: 0}
+  m_LocalPosition: {x: -0.277, y: 0.071, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -94,6 +93,7 @@ GameObject:
   - component: {fileID: 7569192453486922388}
   - component: {fileID: 4649547173850444404}
   - component: {fileID: 2278473685590432179}
+  - component: {fileID: 3826817314290885212}
   - component: {fileID: 4023818838806788150}
   m_Layer: 0
   m_Name: ENTP_Player
@@ -159,9 +159,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  statusManager: {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
-  movementSpeed: 5
-  movementSpeedDuringActioning: 3
+  movementSpeedReduceRate: 0.6
 --- !u!114 &4649547173850444404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,11 +176,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 50
   maxHp: 50
+  hpRegen: 0
   velocity: {x: 0, y: 0, z: 0}
   blowForceVelocity: {x: 0, y: 0, z: 0}
   movementSpeed: 1
   stopBlowThreadshold: 0.5
   blowSpeedReduceRate: 0.95
+  shield: 0
+  maxShield: 0
+  shieldRegen: 0
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   attackRange: 1
@@ -191,9 +195,12 @@ MonoBehaviour:
   attackInitDistance: 0
   initAttackMovementSpeed: 0
   isActioning: 0
+  statusManager: {fileID: 0}
   playerArtTransform: {fileID: 239052382136621899}
   weaponArtTransform: {fileID: 8197774310681915711}
   personality: {fileID: 2278473685590432179}
+  preference: {fileID: 0}
+  stats: {fileID: 11400000, guid: 4702e21f9b56e34459599b2c66d1bbc0, type: 2}
 --- !u!114 &2278473685590432179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,11 +219,32 @@ MonoBehaviour:
   specialSkill: {fileID: 11400000, guid: 2e79a90e218cdc844b1079d69f3e5c4d, type: 2}
   specialSkill_CurretReloadingTimer: 0
   specialSkill_InitPosition: {fileID: 7788157121886040201}
-  ultimateSkill: {fileID: 0}
+  ultimateSkill: {fileID: 11400000, guid: c47a4264819a6fa4a99487e1286c5c28, type: 2}
   ultimateEnerge: 0
+  ultSkill_InitPosition: {fileID: 2720760219743948391}
   maxUltimateEnerge: 100
+  preference: {fileID: 0}
+  stats: {fileID: 0}
+  statusManager: {fileID: 0}
   player: {fileID: 0}
   aim: {fileID: 0}
+--- !u!114 &3826817314290885212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2187154304236326421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb211aaf791fa69408d4dbd287455e4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeStatus: []
+  rootCount: 0
+  chargeBanCount: 0
+  invincibleCount: 0
+  silenceCount: 0
 --- !u!61 &4023818838806788150
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -346,6 +374,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &5385850604188901781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2720760219743948391}
+  m_Layer: 0
+  m_Name: InitPos_Ult
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2720760219743948391
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5385850604188901781}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.29, y: 0.071, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8197774310681915711}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5793602082264164480
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,6 +437,7 @@ Transform:
   m_Children:
   - {fileID: 1629006836526479769}
   - {fileID: 7788157121886040201}
+  - {fileID: 2720760219743948391}
   m_Father: {fileID: 189125828098872668}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2420938034471194443
