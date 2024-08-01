@@ -91,6 +91,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("是否已经运行过Awake()。")]
     protected bool awaked = false;
 
+    private Vector3 initSpriteLocalScale;
+
     private string poolKey;
 
     [Header("互动组件")]
@@ -158,6 +160,12 @@ public class DamageCollider : MonoBehaviour, IPoolable
         set { owner = value; }
     }
 
+    public string PoolKey
+    {
+        get { return poolKey; }
+        set { poolKey = value; }
+    }
+
     private void Awake()
     {
         poolKey = gameObject.name;
@@ -170,6 +178,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         }
 
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        initSpriteLocalScale = spriteRenderer.transform.localScale;
 
         damageCollider2D.isTrigger = true;
         awaked = true;
@@ -181,14 +190,12 @@ public class DamageCollider : MonoBehaviour, IPoolable
     }
 
     /// <summary>
-    /// 当对象从对象池中取出时，调用这个方法来初始化
+    /// 当对象从对象池中取出时，调用这个方法来初始化。
     /// </summary>
-    public void Activate(Vector3 position, Quaternion rotation, Unit owner)
+    public void Activate(Vector3 position, Quaternion rotation)
     {
         transform.position = position;
         transform.rotation = rotation;
-
-        this.owner = owner;
 
         var sprite = GetComponentInChildren<SpriteRenderer>();
         if (sprite)
@@ -199,7 +206,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     }
 
     /// <summary>
-    /// 调用这个方法将对象塞回对象池
+    /// 调用这个方法将对象塞回对象池。
     /// </summary>
     public void Deactivate()
     {
@@ -447,7 +454,13 @@ public class DamageCollider : MonoBehaviour, IPoolable
     protected virtual void HitAnimation(Vector3 position)
     {
         if (hitEffectPrefab)
-            Instantiate(hitEffectPrefab, position, Quaternion.identity);
+        {
+            GameObject hitEffect = PoolManager.Instance.GetObject(hitEffectPrefab.name, hitEffectPrefab.gameObject);
+            AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
+            anim.Activate(position, Quaternion.identity);
+            //DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
+        }
+        //Instantiate(hitEffectPrefab, position, Quaternion.identity);
     }
 
     protected virtual void OnUpdate()
@@ -455,7 +468,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     protected virtual void OnFixedUpdate()
     { }
-
 
     private void OnDrawGizmos()
     {
@@ -479,9 +491,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
     //    }
     //}
 
+    /// <summary>
+    /// 继承自IPoolable接口的方法。用于对象池物体的初始化。
+    /// </summary>
     public void ResetObjectState()
     {
-        OnStart();
         var animController = transform.GetComponentInChildren<AnimationController2D>(true);
         var spriteRenderer = transform.GetComponentInChildren<SpriteRenderer>(true);
 
@@ -493,7 +507,10 @@ public class DamageCollider : MonoBehaviour, IPoolable
         if (spriteRenderer)
         {
             spriteRenderer.gameObject.SetActive(true);
+            spriteRenderer.transform.localScale = initSpriteLocalScale;
         }
+
+        OnStart();
     }
 
     void OnStart()
@@ -510,10 +527,32 @@ public class DamageCollider : MonoBehaviour, IPoolable
             audioSource.time = audioSource.clip.length * 0.25f;
         }
 
-        timer = maxTimer;
         onceHitEventTrigger = false;
         hitted = false;
         didDamage = false;
         Array.Clear(hits, 0, hits.Length);
+
+        if (owner is Player)
+        {
+            var player = (Player)owner;
+            float attackRangeBouns = player.stats.Calculate_AttackRange();
+
+            // 【攻击范围】对两类伤害块的有不同的加成。
+            switch (damageMovementType)
+            {
+                case DamageMovementType.Passive:
+                    // 静态：每1点增加1%的碰撞体积；
+                    spriteRenderer.transform.localScale *= attackRangeBouns;
+                break;
+                case DamageMovementType.Projectile:
+                    // 动态：每1点增加1%的持续时间，变相增加了射程。
+                    maxTimer *= attackRangeBouns;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        timer = maxTimer;
     }
 }

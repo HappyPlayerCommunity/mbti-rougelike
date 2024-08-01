@@ -117,11 +117,11 @@ public class Personality : MonoBehaviour
             {
                 if (skill.DamageCollider)
                 {
-                    //DamageCollider damageCollider = Instantiate(skill.DamageCollider, initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
                     string poolKey = skill.DamageCollider.name;
                     GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, skill.DamageCollider.gameObject);
                     DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
-                    damageCollider.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f), player);
+                    damageCollider.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                    damageCollider.owner = player;
 
                     var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
 
@@ -204,7 +204,8 @@ public class Personality : MonoBehaviour
                 string poolKey = ultimateSkill.DamageCollider.name;
                 GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, ultimateSkill.DamageCollider.gameObject);
                 DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
-                damageCollider.Activate(ultSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f), player);
+                damageCollider.Activate(ultSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                damageCollider.owner = player;
 
                 if (damageCollider.GetComponentInChildren<SpriteRenderer>())
                 {

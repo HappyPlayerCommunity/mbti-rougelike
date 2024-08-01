@@ -33,7 +33,12 @@ public class AnimationManager : MonoBehaviour
 
     public void PlayAnimation(Animation animation, Transform attachedTransform, bool attached = false)
     {
-        var anim = Instantiate(animationController2Ds[(int)animation], attachedTransform.position, Quaternion.identity);
+        //var anim = Instantiate(animationController2Ds[(int)animation], attachedTransform.position, Quaternion.identity);
+
+        var animPrefab = animationController2Ds[(int)animation];
+        GameObject animObj = PoolManager.Instance.GetObject(animPrefab.name, animPrefab.gameObject);
+        AnimationController2D anim = animObj.GetComponent<AnimationController2D>();
+        anim.Activate(attachedTransform.position, Quaternion.identity);
 
         if (attached)
         {

@@ -5,7 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewENTPStatus", menuName = "Status Data/ENTP Ult Data")]
 public class StatusEntpUlt : Status
 {
-    public float attackSpeedBonus = 500.0f;
+    public float attackSpeedBonus;
+    public float attackRangedBonus;
+
     public Stats stats;
 
     public override void OnUpdate(GameObject target, float deltaTime)
@@ -19,6 +21,7 @@ public class StatusEntpUlt : Status
 
        stats = target.GetComponent<Player>().stats;
        target.GetComponent<Player>().stats.attackSpeed += attackSpeedBonus;
+       target.GetComponent<Player>().stats.attackRange += attackRangedBonus;
     }
 
     public override void OnExpire(GameObject target)
@@ -26,6 +29,8 @@ public class StatusEntpUlt : Status
         base.OnExpire(target);
 
         target.GetComponent<Player>().stats.attackSpeed -= attackSpeedBonus;
+        target.GetComponent<Player>().stats.attackRange -= attackRangedBonus;
+
     }
 
 }

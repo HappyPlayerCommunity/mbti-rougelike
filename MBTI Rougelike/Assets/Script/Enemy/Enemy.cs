@@ -91,7 +91,8 @@ public class Enemy : Unit
                 string poolKey = damageCollider.name;
                 GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, damageCollider.gameObject);
                 DamageCollider collider = damageColliderObj.GetComponent<DamageCollider>();
-                collider.Activate(transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f), transform.GetComponent<Unit>());
+                collider.Activate(transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                collider.owner = transform.GetComponent<Unit>();
 
                 //DamageCollider attackBox = Instantiate(damageCollider, transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
                 //attackBox.owner = transform.GetComponent<Unit>();

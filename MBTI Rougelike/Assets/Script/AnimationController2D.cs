@@ -5,21 +5,29 @@ using UnityEngine;
 /// <summary>
 /// 用来控制所有2D帧动画的类。
 /// </summary>
-public class AnimationController2D : MonoBehaviour
+public class AnimationController2D : MonoBehaviour, IPoolable
 {
     protected Animator animator;
     public bool isAttached = false;
     public Transform attachedTransform;
     public bool animationFinished = false;
+    public string poolKey;
 
     public Animator GetAnimator()
     {
         return animator;
     }
 
+    public string PoolKey
+    {
+        get { return poolKey; }
+        set { poolKey = value; }
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
+        poolKey = gameObject.name;
     }
 
     private void Update()
@@ -45,5 +53,30 @@ public class AnimationController2D : MonoBehaviour
         //    damageCollider.Deactivate();
         //}
         //Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// 继承自IPoolable接口的方法。用于对象池物体的初始化。
+    /// </summary>
+    public void ResetObjectState()
+    {
+        animationFinished = false;
+    }
+
+    /// <summary>
+    /// 当对象从对象池中取出时，调用这个方法来初始化
+    /// </summary>
+    public void Activate(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
+    }
+
+    /// <summary>
+    /// 调用这个方法将对象塞回对象池
+    /// </summary>
+    public void Deactivate()
+    {
+        PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
 }
