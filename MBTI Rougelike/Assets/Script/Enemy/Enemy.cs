@@ -132,7 +132,7 @@ public class Enemy : Unit, IPoolable
         }
     }
 
-    protected override void Die()
+    public override void Die()
     {
         if (OnEnemyDeath != null)
         {

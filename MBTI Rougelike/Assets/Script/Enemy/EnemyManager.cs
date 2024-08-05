@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 用来管理所有敌人的类。目前只有简单的波数功能。后续应该要添加共同的AI，大目标等功能。
@@ -28,6 +29,9 @@ public class EnemyManager : MonoBehaviour
     private List<GameObject> currentWaveEnemies = new List<GameObject>();
     private Coroutine spawnWaveCoroutine;
 
+    [SerializeField, Tooltip("ResetTesting 按钮")]
+    private Button resetTestingButton;
+
     void Start()
     {
         spawnWaveCoroutine = StartCoroutine(SpawnWave());
@@ -35,10 +39,11 @@ public class EnemyManager : MonoBehaviour
 
     public void ResetTesting()
     {
-        foreach (var obj in currentWaveEnemies)
+        List<GameObject> enemiesToRemove = new List<GameObject>(currentWaveEnemies);
+
+        foreach (var obj in enemiesToRemove)
         {
-            //Destroy(obj);
-            obj.GetComponent<Enemy>().Deactivate();
+            obj.GetComponent<Enemy>().Die();
         }
 
         currentWaveEnemies.Clear();
@@ -56,10 +61,20 @@ public class EnemyManager : MonoBehaviour
     {
         while (currentWave < totalWaves)
         {
+            if (resetTestingButton != null)
+            {
+                resetTestingButton.interactable = false;
+            }
+
             for (int i = 0; i < enemyPerWave; i++)
             {
                 SpawnEnemy();
                 yield return new WaitForSeconds(spawnInterval);
+            }
+
+            if (resetTestingButton != null)
+            {
+                resetTestingButton.interactable = true;
             }
 
             yield return new WaitUntil(() => currentWaveEnemies.Count == 0);

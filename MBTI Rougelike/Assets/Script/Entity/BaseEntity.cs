@@ -208,7 +208,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
-    protected virtual void Die()
+    public virtual void Die()
     {
         //Destroy(gameObject); // for now
         OnDeath?.Invoke();

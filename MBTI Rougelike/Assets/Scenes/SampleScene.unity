@@ -673,6 +673,7 @@ MonoBehaviour:
   spawnInterval: 0.5
   totalWaves: 10
   currentWave: 0
+  resetTestingButton: {fileID: 138940784}
 --- !u!4 &1480984079
 Transform:
   m_ObjectHideFlags: 0
