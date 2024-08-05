@@ -9,7 +9,7 @@
 *.sln.docstates
 
 # Ignore Visual Studio specific files
-/.vs/
+.vs/ 
 
 # Unity generated folders
 /MBTI RougeLike/[Ll]ibrary/
@@ -68,3 +68,16 @@ sysinfo.txt
 /MBTI RougeLike/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata
 /MBTI RougeLike/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata.meta
 *.lock
+
+# Copilot Chat session files
+/MBTI Rougelike.vs/MBTI Rougelike/copilot-chat/
+
+# SQLite temporary files
+/MBTI Rougelike.vs/MBTI Rougelike/v15/Server/sqlite3/storage.ide-shm
+/MBTI Rougelike.vs/MBTI Rougelike/v15/Server/sqlite3/storage.ide-wal
+
+# Visual Studio document layout files
+/MBTI Rougelike.vs/MBTI Rougelike/v17/
+
+# Visual Studio user settings
+/MBTI Rougelike/UserSettings/Layouts/default-2022.dwlt
