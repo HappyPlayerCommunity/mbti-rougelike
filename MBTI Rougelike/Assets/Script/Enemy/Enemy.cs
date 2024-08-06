@@ -152,14 +152,7 @@ public class Enemy : Unit, IPoolable
         velocity = Vector3.zero;
         blowForceVelocity = Vector3.zero;
 
-        if (firstTimeCreated)
-        {
-            firstTimeCreated = false;
-        }
-        else
-        {
-            CreateHealthBar();
-        }
+        //Debug.Log("Enemy ResetObjectState?");
     }
 
     /// <summary>
@@ -169,6 +162,15 @@ public class Enemy : Unit, IPoolable
     {
         transform.position = position;
         transform.rotation = rotation;
+
+        if (firstTimeCreated)
+        {
+            firstTimeCreated = false;
+        }
+        else
+        {
+            CreateHealthBar();
+        }
 
         gameObject.SetActive(true);
     }

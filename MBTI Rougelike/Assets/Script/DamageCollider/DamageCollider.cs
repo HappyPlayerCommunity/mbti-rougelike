@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// 【伤害块】的基类，包含了绝大多数常见的伤害块行为；一些行为复杂的【伤害块】可以另开子类实现。
@@ -26,6 +28,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     [SerializeField, Tooltip("击中目标时造成的僵直时间。")]
     protected float stunTime = 0.0f;
+
+    [SerializeField, Tooltip("决定此【伤害块】是否与某个状态绑定，若绑定，则此伤害块的持续时间无限，直至绑定状态消失。")]
+    protected bool isLifeTimeBindingWithState = false;
 
     [SerializeField, Tooltip("伤害块施加给被击中目标的【吹飞力度】。")]
     protected float blowForceSpeed;
@@ -92,6 +97,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
     protected bool awaked = false;
 
     private Vector3 initSpriteLocalScale;
+    private float initBlowForceSpeed;
+    protected float initMaxTimer;
 
     private string poolKey;
 
@@ -100,6 +107,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
     public AudioSource initSource;
     public DamageMovementType damageMovementType;
     public SpriteRenderer spriteRenderer;
+    public Status ownerStatus;
+    public Status applyStatus;
 
     public enum DamageMovementType
     {
@@ -166,6 +175,12 @@ public class DamageCollider : MonoBehaviour, IPoolable
         set { poolKey = value; }
     }
 
+    public float BlowForceSpeed
+    {
+        get { return blowForceSpeed; }
+        set { blowForceSpeed = value; }
+    }
+
     private void Awake()
     {
         poolKey = gameObject.name;
@@ -179,7 +194,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         initSpriteLocalScale = spriteRenderer.transform.localScale;
-
+        initBlowForceSpeed = blowForceSpeed;
+        initMaxTimer = maxTimer;
         damageCollider2D.isTrigger = true;
         awaked = true;
     }
@@ -222,17 +238,25 @@ public class DamageCollider : MonoBehaviour, IPoolable
     {
         OnUpdate();
 
-        timer -= Time.deltaTime;
+        if (isLifeTimeBindingWithState)
+        {
+            if (ownerStatus && ownerStatus.IsExpired())
+            {
+                timer = 0.0f;
+            }
+        }
+        else
+        {
+            timer -= Time.deltaTime;
+        }
 
         if (timer <= 0.0f)
         {
-            //Destroy(gameObject); // object pool later
             Deactivate();
         }
         else
         {
             CollisionCheck();
-
         }
     }
 
@@ -300,10 +324,21 @@ public class DamageCollider : MonoBehaviour, IPoolable
                         //注册此伤害行为。
                         DamageManager.RegisterDamage(gameObject, entity);
 
-                        // 如果【碰撞体】是Unit类型，则结算【吹飞】效果。
+                        // 如果【碰撞体】是Unit类型，则结算【闪避】和【吹飞】效果。
                         if (entity is Unit)
                         {
-                            BlowUnit((Unit)entity);
+                            var unit = (Unit)entity;
+
+                            if (TryHit(unit))
+                            {
+                                BlowUnit(unit);
+                            }
+                            else
+                            {
+                                // 使【伤害块】短时间无法再对该目标造成伤害。
+                                entity.SetDamageTimer(gameObject, damageTriggerTime);
+                                continue;
+                            }
                         }
 
                         // 对实体造成伤害并设置击晕时间
@@ -514,6 +549,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
             spriteRenderer.transform.localScale = initSpriteLocalScale;
         }
 
+        blowForceSpeed = initBlowForceSpeed;
+        maxTimer = initMaxTimer;
+
         OnStart();
     }
 
@@ -555,8 +593,28 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 default:
                     break;
             }
+
+            blowForceSpeed *= player.stats.Calculate_Knockback();
         }
 
         timer = maxTimer;
+    }
+
+    protected bool TryHit(Unit unit)
+    {
+        if (unit == null)
+        {
+            return false;
+        }
+
+        float randomValue = UnityEngine.Random.value;
+
+        // 如果随机数大于闪避概率，则成功命中
+        if (randomValue > unit.DodgeRate)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

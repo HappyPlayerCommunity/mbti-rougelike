@@ -29,29 +29,10 @@ public class HPController : MonoBehaviour, IPoolable
     private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
-        if (baseEntity != null)
-        {
-            baseEntity.OnDeath += HandleDeath;
-            baseEntity.OnRespawn += HandleRespawn;
-        }
     }
 
     private void Update()
     {
-        //if (baseEntity == null)
-        //{
-        //    //Destroy(gameObject);
-        //    Deactivate();
-        //    return;
-        //}
-
-        //if (!baseEntity.isActiveAndEnabled)
-        //{
-        //    //gameObject.SetActive(false);
-        //    Deactivate();
-        //    return;
-        //}
-
         hp.value = (float)baseEntity.HP / (float)baseEntity.MaxHP;
 
         if (baseEntity.MaxShield > 0 && baseEntity.Shield > 0)
@@ -83,15 +64,6 @@ public class HPController : MonoBehaviour, IPoolable
         ResetObjectState();
     }
 
-    //private void OnDestroy()
-    //{
-    //    if (baseEntity != null)
-    //    {
-    //        baseEntity.OnDeath -= HandleDeath;
-    //        baseEntity.OnRespawn -= HandleRespawn;
-    //    }
-    //}
-
     /// <summary>
     /// 继承自IPoolable接口的方法。用于对象池物体的初始化。
     /// </summary>
@@ -110,9 +82,6 @@ public class HPController : MonoBehaviour, IPoolable
             {
                 shield.value = 0;
             }
-
-            baseEntity.OnDeath += HandleDeath;
-            baseEntity.OnRespawn += HandleRespawn;
         }
     }
 
@@ -132,12 +101,6 @@ public class HPController : MonoBehaviour, IPoolable
     /// </summary>
     public void Deactivate()
     {
-        if (baseEntity != null)
-        {
-            baseEntity.OnDeath -= HandleDeath;
-            baseEntity.OnRespawn -= HandleRespawn;
-        }
-
         gameObject.SetActive(false);
 
         PoolManager.Instance.ReturnObject(poolKey, gameObject);

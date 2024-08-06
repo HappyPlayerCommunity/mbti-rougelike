@@ -31,10 +31,25 @@ public class Unit : BaseEntity
     [SerializeField, Tooltip("此单位是否正在释放某项技能。")]
     protected bool isActioning;
 
+    [SerializeField, Tooltip("此单位能闪避伤害块的概率。")]
+    protected float dodgeRate;
+
     [SerializeField, Tooltip("此单位的状态管理器，用来结算各种状态。")]
     protected StatusManager statusManager;
 
     //或许应该攻击技能动作剥离出去，单开一个类。
+
+    public float DodgeRate
+    {
+        get
+        {
+            return dodgeRate;
+        }
+        set
+        {
+            dodgeRate = value;
+        }
+    }
 
     public StatusManager StatusManager
     {

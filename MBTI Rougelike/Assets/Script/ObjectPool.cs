@@ -22,6 +22,7 @@ public class ObjectPool
             GameObject obj = Object.Instantiate(_prefab);
             obj.transform.SetParent(poolContainer.transform);
             obj.SetActive(false);
+            //ResetObjectState(obj);
             _pool.Enqueue(obj);
         }
     }
@@ -34,14 +35,13 @@ public class ObjectPool
         {
             obj = _pool.Dequeue();
             //obj.SetActive(true);
-            ResetObjectState(obj);
-            //Debug.Log("复用: " + PoolManager.NormalizePoolKey(obj.name));
         }
         else
         {
             obj = Object.Instantiate(_prefab);
-            //Debug.Log("新物体: " + PoolManager.NormalizePoolKey(obj.name));
         }
+        ResetObjectState(obj);
+
         //obj.SetActive(true);
         return obj;
     }

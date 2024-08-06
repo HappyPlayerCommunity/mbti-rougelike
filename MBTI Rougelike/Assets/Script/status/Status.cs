@@ -25,9 +25,18 @@ public abstract class Status : ScriptableObject
     [Tooltip("此状态是否会禁止玩家释放技能。")]
     public bool silence = false;
 
+    [Tooltip("此状态的强度变化率")]
+    public float modifyPowerRate = 1.0f;
+
+    [Tooltip("此状态的持续时间变化率")]
+    public float modifyDurationRate = 1.0f;
+
+    [Header("互动组件")]
+    public Stats stats;
+
     public virtual void OnApply(GameObject target)
     {
-        timer = duration;
+        timer = duration * modifyDurationRate;
     }
 
     public virtual void OnUpdate(GameObject target, float deltaTime)

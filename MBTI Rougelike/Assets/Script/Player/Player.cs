@@ -29,10 +29,9 @@ public class Player : Unit
         base.Start();
         stats.Initialize();
 
-        maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
-        hp = maxHp;
+        StatsUpdate();
 
-        maxShield = Mathf.RoundToInt(stats.Calculate_MaxShield());
+        hp = maxHp;
         shield = maxShield;
 
         stats.OnValueChange += () => StatsUpdate();
@@ -49,5 +48,11 @@ public class Player : Unit
     {
         maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
         hpRegen = Mathf.RoundToInt(stats.Calculate_HealthRegen());
+
+        maxShield = Mathf.RoundToInt(stats.Calculate_MaxShield());
+
+        shieldReset = stats.Calculate_ShieldReset();
+
+        dodgeRate = stats.Calculate_Dodge();
     }
 }

@@ -53,6 +53,7 @@ public class Personality : MonoBehaviour
     [Tooltip("状态管理机。")]
     public StatusManager statusManager;
 
+    protected Coroutine energeChargeCoroutine;
 
     public float UltimateEnerge
     {
@@ -79,6 +80,7 @@ public class Personality : MonoBehaviour
         player = GetComponent<Player>();
         stats = player.stats;
         statusManager = GetComponent<StatusManager>();
+        StartEnergeCharge();
     }
 
     void Update()
@@ -174,14 +176,11 @@ public class Personality : MonoBehaviour
                 player.BlowForceVelocity = aimDirection * skill.SelfBlowForce; //for now, 负数可以做向后退的技能。
 
                 currentReloadingTimer = reloadingTime;
+
                 if (isAuto)
-                {
                     currentReloadingTimer = reloadingTime * stats.Calculate_AttackSpeed();
-                }
                 else
-                {
-                    currentReloadingTimer = reloadingTime /** stats.Calculate_SpecialCooldown()*/;
-                }
+                    currentReloadingTimer = reloadingTime * stats.Calculate_SpecialCooldown();
             }
         }
 
@@ -194,8 +193,16 @@ public class Personality : MonoBehaviour
         {
             ultimateEnerge = 0.0f;
 
+            Status selfStatus = null;
+
             if (ultimateSkill.SelfStatus)
-                player.StatusManager.AddStatus(ultimateSkill.SelfStatus);
+            {
+                selfStatus = ultimateSkill.SelfStatus;
+                selfStatus.modifyPowerRate = stats.Calculate_StatusPower();
+                selfStatus.modifyDurationRate = stats.Calculate_StatusDuration();
+                selfStatus.stats = stats;
+                player.StatusManager.AddStatus(selfStatus);
+            }
 
             Vector3 aimDirection = aim.aimDirection;
 
@@ -205,7 +212,13 @@ public class Personality : MonoBehaviour
                 GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, ultimateSkill.DamageCollider.gameObject);
                 DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
                 damageCollider.Activate(ultSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+
                 damageCollider.owner = player;
+
+                if (selfStatus != null)
+                {
+                    damageCollider.ownerStatus = selfStatus;
+                }
 
                 if (damageCollider.GetComponentInChildren<SpriteRenderer>())
                 {
@@ -259,5 +272,28 @@ public class Personality : MonoBehaviour
     public float AttackEnergeFomula(float amount)
     {
         return (amount * 0.1f);
+    }
+
+    protected void StartEnergeCharge()
+    {
+        if (energeChargeCoroutine != null)
+        {
+            StopCoroutine(energeChargeCoroutine);
+        }
+        energeChargeCoroutine = StartCoroutine(EnergeChargeOverTime());
+    }
+
+    private IEnumerator EnergeChargeOverTime()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1.0f);
+
+            if (!statusManager.IsChargeBanned() && ultimateEnerge < maxUltimateEnerge)
+            {
+                ultimateEnerge += stats.Calculate_AutoCharge();
+                ultimateEnerge = Mathf.Min(ultimateEnerge, maxUltimateEnerge);
+            }
+        }
     }
 }

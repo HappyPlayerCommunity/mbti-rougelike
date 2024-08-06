@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: ENTP_Ult_Status
   m_EditorClassIdentifier: 
   duration: 4
-  timer: -0.0029899445
+  timer: -0.0041042403
   root: 1
   ultChargeBan: 1
   invincible: 0
   silence: 0
+  modifyDurationRate: 1.5
   attackSpeedBonus: 1000
   attackRangedBonus: 100
   stats: {fileID: 11400000, guid: 4702e21f9b56e34459599b2c66d1bbc0, type: 2}

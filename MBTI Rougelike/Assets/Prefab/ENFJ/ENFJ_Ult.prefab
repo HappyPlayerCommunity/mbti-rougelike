@@ -53,6 +53,7 @@ MonoBehaviour:
   - Enemy
   isAttachedPos: 1
   stunTime: 0
+  isLifeTimeBindingWithState: 1
   blowForceSpeed: 5
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
   hitEffectPlayMode: 1
@@ -71,6 +72,9 @@ MonoBehaviour:
   initSource: {fileID: 0}
   damageMovementType: 0
   spriteRenderer: {fileID: 0}
+  ownerStatus: {fileID: 0}
+  applyStatus: {fileID: 0}
+  helperFunc: {fileID: 0}
 --- !u!1 &2483830369894947779
 GameObject:
   m_ObjectHideFlags: 0

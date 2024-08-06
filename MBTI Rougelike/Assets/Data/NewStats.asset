@@ -19,8 +19,8 @@ MonoBehaviour:
   attackRange: 0
   attackEnergeCharge: 0
   iceDamage: 0
-  maxShield: 20
-  shieldRegen: 0
+  maxShield: 0
+  shieldReset: 0
   buildingDurability: 0
   knockback: 0
   injuryEnergeCharge: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
   physicalAttackPower: 0
   windDamage: 0
   dodge: 0
-  autoCharge: 0
+  autoEnergeCharge: 100
   luck: 0
   specialCooldown: 1
   abstractAttackPower: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   buildingPower: 0
   bondPower: 0
   statusPower: 0
-  statusDuration: 0
+  statusDuration: 50
   statusImpact: 0
   anomalyResistance: 0
   fireDamageINIT: 0
@@ -55,8 +55,8 @@ MonoBehaviour:
   attackRangeINIT: 0
   attackEnergeChargeINIT: 0
   iceDamageINIT: 0
-  maxShieldINIT: 20
-  shieldRegenINIT: 0
+  maxShieldINIT: 0
+  shieldResetINIT: 0
   buildingDurabilityINIT: 0
   knockbackINIT: 0
   injuryEnergeChargeINIT: 0
@@ -68,9 +68,9 @@ MonoBehaviour:
   physicalAttackPowerINIT: 0
   windDamageINIT: 0
   dodgeINIT: 0
-  autoChargeINIT: 0
+  autoEnergeChargeINIT: 0
   luckINIT: 0
-  specialCooldownINIT: 1
+  specialCooldownINIT: 0
   abstractAttackPowerINIT: 0
   thunderDamageINIT: 0
   globalAttackPowerINIT: 0

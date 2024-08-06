@@ -43,7 +43,7 @@ public class EnemyManager : MonoBehaviour
 
         foreach (var obj in enemiesToRemove)
         {
-            obj.GetComponent<Enemy>().Die();
+            obj.GetComponent<Unit>().Die();
         }
 
         currentWaveEnemies.Clear();

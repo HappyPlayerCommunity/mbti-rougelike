@@ -39,18 +39,16 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("该实体的护盾上限。")]
     protected int maxShield;
 
-    [SerializeField, Tooltip("该实体的护盾再生。")]
-    protected int shieldRegen;
+    [SerializeField, Tooltip("该实体的护盾再生时间。")]
+    protected float shieldReset;
 
 
     [Header("互动组件")]
     public HPController hpControllerPrefab;
     public Transform canvasTransform;
+    protected HPController hpController;
 
     private Dictionary<GameObject, float> damageTimers = new Dictionary<GameObject, float>();
-
-    public event Action OnDeath;
-    public event Action OnRespawn;
 
     protected Coroutine hpRegenCoroutine;
     protected Coroutine shieldRestoreCoroutine;
@@ -210,8 +208,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     public virtual void Die()
     {
-        //Destroy(gameObject); // for now
-        OnDeath?.Invoke();
+        hpController.Deactivate();
         gameObject.SetActive(false);
     }
 
@@ -253,7 +250,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     {
         this.HP = this.MaxHP;
         gameObject.SetActive(true);
-        OnRespawn?.Invoke();
+        //OnRespawn?.Invoke();
+
+        hpController.ResetObjectState();
     }
 
     protected void StartHealthRegen()
@@ -282,7 +281,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     {
         while (maxShield > 0 && shield < maxShield)
         {
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(Stats.basicShieldReset * shieldReset);
 
             AnimationManager.Instance.PlayAnimation(Animation.ShieldRestore, transform, true);
             shield = maxShield;
@@ -310,5 +309,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         healthBar.GetComponent<RectTransform>().position = screenPosition;
 
         healthBar.Activate(Vector3.zero, Quaternion.identity);
+
+        hpController = healthBar;
     }
 }

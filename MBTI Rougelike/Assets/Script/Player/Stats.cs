@@ -28,8 +28,8 @@ public class Stats : ScriptableObject
     public float iceDamage;
     [Tooltip("护盾上限")]
     public float maxShield;
-    [Tooltip("护盾再生")]
-    public float shieldRegen;
+    [Tooltip("护盾重置速率")]
+    public float shieldReset;
     [Tooltip("建筑耐久")]
     public float buildingDurability;
     [Tooltip("击退")]
@@ -59,7 +59,7 @@ public class Stats : ScriptableObject
     [Tooltip("闪避率")]
     public float dodge;
     [Tooltip("自动充能率")]
-    public float autoCharge;
+    public float autoEnergeCharge;
     [Tooltip("幸运")]
     public float luck;
     [Tooltip("特技冷却")]
@@ -113,7 +113,7 @@ public class Stats : ScriptableObject
     public float attackEnergeChargeINIT = 0.0f;
     public float iceDamageINIT = 0.0f;
     public float maxShieldINIT = 0.0f;
-    public float shieldRegenINIT = 0.0f;
+    public float shieldResetINIT = 0.0f;
     public float buildingDurabilityINIT = 0.0f;
     public float knockbackINIT = 0.0f;
     public float injuryEnergeChargeINIT = 0.0f;
@@ -125,7 +125,7 @@ public class Stats : ScriptableObject
     public float physicalAttackPowerINIT = 0.0f;
     public float windDamageINIT = 0.0f;
     public float dodgeINIT = 0.0f;
-    public float autoChargeINIT = 0.0f;
+    public float autoEnergeChargeINIT = 0.0f;
     public float luckINIT = 0.0f;
     public float specialCooldownINIT = 1.0f;
     public float abstractAttackPowerINIT = 0.0f;
@@ -137,20 +137,29 @@ public class Stats : ScriptableObject
     public float critDamageINIT = 0.0f;
     public float buildingPowerINIT = 0.0f;
     public float bondPowerINIT = 0.0f;
-    public float buffPowerINIT = 0.0f;
-    public float buffDurationINIT = 0.0f;
-    public float buffImpactINIT = 0.0f;
+    public float statusPowerINIT = 0.0f;
+    public float statusDurationINIT = 0.0f;
+    public float statusImpactINIT = 0.0f;
     public float anomalyResistanceINIT = 0.0f;
 
+    // 【测试用】用于存储上一次的数值，用于判断是否发生了变化。
     private float previousMaxHealth = 0.0f;
     private float previousHealthRegen = 0.0f;
     private float previousMaxShield = 0.0f;
+    private float previousShieldReset = 0.0f;
+    private float previousDodgeRate = 0.0f;
+
 
     public const float percentage = 0.01f;
 
-    private float percentageMultiplierCast(float value)
+    private float ApplyPercentageMultiplier(float value)
     {
         return 1.0f + value * percentage;
+    }
+
+    private float ApplyPercentage(float value)
+    {
+        return value * percentage;
     }
 
     // 用于通过编辑器调数值时，更新相关的能力数据。
@@ -164,21 +173,21 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_FireDamage()
     {
-        return percentageMultiplierCast(fireDamage);
+        return ApplyPercentageMultiplier(fireDamage);
     }
 
-    public const float basicMovementSpeed = 5;
+    public const float basicMovementSpeed = 5.0f;
 
     /// <summary>
     /// 【初步实现】
     /// </summary>
     public float Calculate_MovementSpeed()
     {
-        return basicMovementSpeed * percentageMultiplierCast(movementSpeed);
+        return basicMovementSpeed * ApplyPercentageMultiplier(movementSpeed);
     }
 
     /// <summary>
-    /// 【未实现】韧性系统还未实现。
+    /// 【未实现】韧性系统还未实现。试图和护盾结合出类似哈迪斯的霸体效果。
     /// </summary>
     public float Calculate_Toughness()
     {
@@ -201,7 +210,7 @@ public class Stats : ScriptableObject
         // 对两类伤害块的有不同的加成。
         // 静态：每1点增加1%的碰撞体积；
         // 动态：每1点增加1%的持续时间，变相增加了射程。
-        return percentageMultiplierCast(attackRange);
+        return ApplyPercentageMultiplier(attackRange);
     }
 
     /// <summary>
@@ -209,7 +218,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_AttackEnergeCharge()
     {
-        return percentageMultiplierCast(attackEnergeCharge);
+        return ApplyPercentageMultiplier(attackEnergeCharge);
     }
 
     /// <summary>
@@ -220,31 +229,52 @@ public class Stats : ScriptableObject
         return iceDamage;
     }
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_MaxShield()
     {
         return maxShield;
     }
 
-    public float Calculate_ShieldRegen()
+    public const float basicShieldReset = 10.0f;
+
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
+    public float Calculate_ShieldReset()
     {
-        return shieldRegen;
+        return 1.0f / ApplyPercentageMultiplier(shieldReset);
+
     }
 
+    /// <summary>
+    /// 【未实现】建筑系统未实现。
+    /// </summary>
     public float Calculate_BuildingDurability()
     {
         return buildingDurability;
     }
-
+    
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_Knockback()
     {
-        return knockback;
+        return ApplyPercentageMultiplier(knockback);
     }
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_InjuryEnergeCharge()
     {
-        return percentageMultiplierCast(injuryEnergeCharge);
+        return ApplyPercentageMultiplier(injuryEnergeCharge);
     }
 
+    /// <summary>
+    /// 【未实现】元素系统未实现。
+    /// </summary>
     public float Calculate_EarthDamage()
     {
         return earthDamage;
@@ -256,7 +286,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_MaxHealth()
     {
-        return basicMaxHealth * percentageMultiplierCast(maxHealth);
+        return basicMaxHealth * ApplyPercentageMultiplier(maxHealth);
     }
 
     /// <summary>
@@ -267,106 +297,170 @@ public class Stats : ScriptableObject
         return healthRegen;
     }
 
+    /// <summary>
+    /// 【未实现】经验系统未实现。
+    /// </summary>
     public float Calculate_ExperienceMultiplier()
     {
         return experienceMultiplier;
     }
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_AttackSpeed()
     {
-        return 1.0f / percentageMultiplierCast(attackSpeed);
+        return 1.0f / ApplyPercentageMultiplier(attackSpeed);
     }
 
+    /// <summary>
+    /// 【未实现】伤害公式还未实现。
+    /// </summary>
     public float Calculate_PhysicalAttackPower()
     {
         return physicalAttackPower;
     }
 
+    /// <summary>
+    /// 【未实现】元素系统未实现。
+    /// </summary>
     public float Calculate_WindDamage()
     {
         return windDamage;
     }
 
+    /// <summary>
+    /// 【初步实现】动画的击中效果，闪避的动画效果还未实现。视觉上比较怪异。
+    /// </summary>
     public float Calculate_Dodge()
     {
-        return dodge;
+        return ApplyPercentage(Mathf.Clamp(dodge, 0.0f, 100.0f));
     }
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_AutoCharge()
     {
-        return autoCharge;
+        return autoEnergeCharge;
     }
 
+    /// <summary>
+    /// 【未实现】还未实现天赋/装备系统。
+    /// </summary>
     public float Calculate_Luck()
     {
         return luck;
     }
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_SpecialCooldown()
     {
-        return specialCooldown;
+        return 1.0f / ApplyPercentageMultiplier(specialCooldown);
     }
 
+    /// <summary>
+    /// 【未实现】伤害公式还未实现。
+    /// </summary>
     public float Calculate_AbstractAttackPower()
     {
         return abstractAttackPower;
     }
 
+    /// <summary>
+    /// 【未实现】元素系统还未实现。
+    /// </summary>
     public float Calculate_ThunderDamage()
     {
         return thunderDamage;
     }
 
+    /// <summary>
+    /// 【未实现】伤害公式还未实现。
+    /// </summary>
     public float Calculate_GlobalAttackPower()
     {
         return globalAttackPower;
     }
 
+    /// <summary>
+    /// 【未实现】元素系统还未实现。
+    /// </summary>
     public float Calculate_WaterDamage()
     {
         return waterDamage;
     }
 
+    /// <summary>
+    /// 【未实现】治疗公式和系统还未实现。
+    /// </summary>
     public float Calculate_HealingPower()
     {
         return healingPower;
     }
 
+    /// <summary>
+    /// 【未实现】伤害公式还未实现。
+    /// </summary>
     public float Calculate_Crit()
     {
         return crit;
     }
 
+    /// <summary>
+    /// 【未实现】伤害公式还未实现。
+    /// </summary>
     public float Calculate_CritDamage()
     {
         return critDamage;
     }
 
+    /// <summary>
+    /// 【未实现】建筑系统还未实现。
+    /// </summary>
     public float Calculate_BuildingPower()
     {
         return buildingPower;
     }
 
+    /// <summary>
+    /// 【未实现】羁绊系统还未实现。
+    /// </summary>
     public float Calculate_BondPower()
     {
         return bondPower;
     }
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
+    /// <returns></returns>
     public float Calculate_StatusPower()
     {
-        return statusPower;
+        return ApplyPercentageMultiplier(statusPower);
     }
 
+    /// <summary>
+    /// 【初步实现】
+    /// </summary>
     public float Calculate_StatusDuration()
     {
-        return statusDuration;
+        return ApplyPercentageMultiplier(statusDuration);
     }
 
+    /// <summary>
+    /// 【未实现】还没有造成伤害/治疗的buff。
+    /// </summary>
     public float Calculate_StatusImpact()
     {
         return statusImpact;
     }
 
+    /// <summary>
+    /// 【未实现】还没有会施加debuff的敌人。
+    /// </summary>
     public float Calculate_AnomalyResistance
     {
         get { return anomalyResistance; }
@@ -386,7 +480,7 @@ public class Stats : ScriptableObject
         attackEnergeCharge = attackEnergeChargeINIT;
         iceDamage = iceDamageINIT;
         maxShield = maxShieldINIT;
-        shieldRegen = shieldRegenINIT;
+        shieldReset = shieldResetINIT;
         buildingDurability = buildingDurabilityINIT;
         knockback = knockbackINIT;
         injuryEnergeCharge = injuryEnergeChargeINIT;
@@ -398,7 +492,7 @@ public class Stats : ScriptableObject
         physicalAttackPower = physicalAttackPowerINIT;
         windDamage = windDamageINIT;
         dodge = dodgeINIT;
-        autoCharge = autoChargeINIT;
+        autoEnergeCharge = autoEnergeChargeINIT;
         luck = luckINIT;
         specialCooldown = specialCooldownINIT;
         abstractAttackPower = abstractAttackPowerINIT;
@@ -410,12 +504,15 @@ public class Stats : ScriptableObject
         critDamage = critDamageINIT;
         buildingPower = buildingPowerINIT;
         bondPower = bondPowerINIT;
-        statusPower = buffPowerINIT;
-        statusDuration = buffDurationINIT;
-        statusImpact = buffImpactINIT;
+        statusPower = statusPowerINIT;
+        statusDuration = statusDurationINIT;
+        statusImpact = statusImpactINIT;
         anomalyResistance = anomalyResistanceINIT;
     }
 
+    /// <summary>
+    /// 有一些数值中转存储于实体上，在编辑器上调增数值时，需要通过这里来更新。
+    /// </summary>
     public void OnValidate()
     {
         bool changed = false;
@@ -434,6 +531,18 @@ public class Stats : ScriptableObject
         if (maxShield != previousMaxShield)
         {
             previousMaxShield = maxShield;
+            changed = true;
+        }
+
+        if (shieldReset != previousShieldReset)
+        {
+            previousShieldReset = shieldReset;
+            changed = true;
+        }
+
+        if (dodge != previousDodgeRate)
+        {
+            previousDodgeRate = dodge;
             changed = true;
         }
 
