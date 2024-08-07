@@ -17,6 +17,7 @@ public class DamagePopup : MonoBehaviour, IPoolable
     private string poolKey;
 
     public Vector3 initLocalScale;
+    public string missText = "Miss";
 
     public string PoolKey
     {
@@ -59,6 +60,15 @@ public class DamagePopup : MonoBehaviour, IPoolable
     public void SetDamage(int damage)
     {
         damageText.text = damage.ToString();
+
+        // 设置描边效果
+        damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
+        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize); // 设置描边宽度
+    }
+
+    public void SetMiss()
+    {
+        damageText.text = missText;
 
         // 设置描边效果
         damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
