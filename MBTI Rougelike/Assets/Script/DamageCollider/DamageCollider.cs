@@ -44,6 +44,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("决定了击中特效的播放类型。")]
     HitEffectPlayMode hitEffectPlayMode;
 
+    public Transform canvasTransform;
+
 
     public enum HitEffectPlayMode
     {
@@ -109,6 +111,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     public SpriteRenderer spriteRenderer;
     public Status ownerStatus;
     public Status applyStatus;
+    public GameObject damagePopupPrefab;
 
     public enum DamageMovementType
     {
@@ -198,6 +201,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         initMaxTimer = maxTimer;
         damageCollider2D.isTrigger = true;
         awaked = true;
+        canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
     }
 
     void Start()
@@ -343,6 +347,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
                         // 对实体造成伤害并设置击晕时间
                         entity.TakeDamage(damage, stunTime);
+
+
+                        ShowDamagePopup(damage, hit.transform.position);
 
                         // 令该实体保存一个对此【伤害块】的计时器，短时间无法再对其造成伤害。
                         entity.SetDamageTimer(gameObject, damageTriggerTime);
@@ -616,5 +623,22 @@ public class DamageCollider : MonoBehaviour, IPoolable
         }
 
         return false;
+    }
+
+    protected void ShowDamagePopup(int damage, Vector3 position)
+    {
+        if (damagePopupPrefab)
+        {
+            GameObject popupObj = PoolManager.Instance.GetObject(damagePopupPrefab.name, damagePopupPrefab.gameObject);
+            DamagePopup damagePopup = popupObj.GetComponent<DamagePopup>();
+            damagePopup.Activate(position, Quaternion.identity);
+
+            //GameObject popup = Instantiate(damagePopupPrefab, position, Quaternion.identity);
+            //DamagePopup damagePopup = popup.GetComponent<DamagePopup>();
+            damagePopup.SetDamage(damage);
+            damagePopup.transform.SetParent(canvasTransform, false);
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
+            damagePopup.GetComponent<RectTransform>().position = screenPosition;
+        }
     }
 }

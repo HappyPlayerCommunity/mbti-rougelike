@@ -668,9 +668,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 8779559174516582916, guid: f2635c698e51b6c488d4bd5996b39964, type: 3}
-  enemyPerWave: 10
+  enemyPerWave: 30
   betweenWavesInterval: 3
-  spawnInterval: 0.25
+  spawnInterval: 0.1
   totalWaves: 10
   currentWave: 0
   resetTestingButton: {fileID: 138940784}
