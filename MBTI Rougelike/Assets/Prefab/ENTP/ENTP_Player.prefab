@@ -89,12 +89,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8883716087494439959}
-  - component: {fileID: 8951967565930231590}
   - component: {fileID: 7569192453486922388}
   - component: {fileID: 4649547173850444404}
   - component: {fileID: 2278473685590432179}
   - component: {fileID: 3826817314290885212}
   - component: {fileID: 4023818838806788150}
+  - component: {fileID: 8980660126910431251}
   m_Layer: 0
   m_Name: ENTP_Player
   m_TagString: Player
@@ -119,33 +119,6 @@ Transform:
   - {fileID: 189125828098872668}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &8951967565930231590
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2187154304236326421}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!114 &7569192453486922388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +157,10 @@ MonoBehaviour:
   blowSpeedReduceRate: 0.95
   shield: 0
   maxShield: 0
-  shieldRegen: 0
+  shieldReset: 0
+  physicalAtkPower: 1
+  abstractAtkPower: 1
+  globalAtkPower: 1
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   attackRange: 1
@@ -195,6 +171,7 @@ MonoBehaviour:
   attackInitDistance: 0
   initAttackMovementSpeed: 0
   isActioning: 0
+  dodgeRate: 0
   statusManager: {fileID: 0}
   playerArtTransform: {fileID: 239052382136621899}
   weaponArtTransform: {fileID: 8197774310681915711}
@@ -290,6 +267,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &8980660126910431251
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2187154304236326421}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &5111811288598931684
 GameObject:
   m_ObjectHideFlags: 0

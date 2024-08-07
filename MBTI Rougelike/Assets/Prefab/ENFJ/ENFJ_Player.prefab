@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 8958558747575410762}
   - component: {fileID: 8050734867993010048}
   - component: {fileID: 6062250672494410570}
+  - component: {fileID: 6392914236689720445}
   m_Layer: 0
   m_Name: ENFJ_Player
   m_TagString: Player
@@ -163,7 +164,10 @@ MonoBehaviour:
   blowSpeedReduceRate: 0.95
   shield: 50
   maxShield: 50
-  shieldRegen: 0
+  shieldReset: 0
+  physicalAtkPower: 1
+  abstractAtkPower: 1
+  globalAtkPower: 1
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   attackRange: 1
@@ -174,6 +178,7 @@ MonoBehaviour:
   attackInitDistance: 0
   initAttackMovementSpeed: 0
   isActioning: 0
+  dodgeRate: 0
   statusManager: {fileID: 0}
   playerArtTransform: {fileID: 384654484377366786}
   weaponArtTransform: {fileID: 91587254736442588}
@@ -269,6 +274,33 @@ MonoBehaviour:
   chargeBanCount: 0
   invincibleCount: 0
   silenceCount: 0
+--- !u!50 &6392914236689720445
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4506611985501209401}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &5710409203726182712
 GameObject:
   m_ObjectHideFlags: 0

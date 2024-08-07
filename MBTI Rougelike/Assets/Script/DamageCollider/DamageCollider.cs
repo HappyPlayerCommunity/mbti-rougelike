@@ -381,7 +381,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
                                     Vector2 collisionPoint = raycastHit.point;
                                     HitAnimation(collisionPoint);
                                 }
-                                Debug.Log("SIngle Hit?");
                                 break;
                             case HitEffectPlayMode.Target:
                                 HitAnimation(hit.transform.position);

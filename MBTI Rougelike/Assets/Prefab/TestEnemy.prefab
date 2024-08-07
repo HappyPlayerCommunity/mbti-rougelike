@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 3564827861202140205}
   - component: {fileID: 4691985066896393618}
   - component: {fileID: 8502305885786276776}
+  - component: {fileID: -4295607793491414615}
   m_Layer: 0
   m_Name: TestEnemy
   m_TagString: Enemy
@@ -142,7 +143,10 @@ MonoBehaviour:
   blowSpeedReduceRate: 0.99
   shield: 0
   maxShield: 0
-  shieldRegen: 0
+  shieldReset: 0
+  physicalAtkPower: 1
+  abstractAtkPower: 1
+  globalAtkPower: 1
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   attackRange: 1
@@ -153,6 +157,7 @@ MonoBehaviour:
   attackInitDistance: 1
   initAttackMovementSpeed: 0
   isActioning: 0
+  dodgeRate: 0
   statusManager: {fileID: 0}
   player: {fileID: 0}
   artTransform: {fileID: 2115127078010498206}
@@ -233,3 +238,30 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.48, y: 0.44}
   m_EdgeRadius: 0
+--- !u!50 &-4295607793491414615
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8779559174516582916}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4

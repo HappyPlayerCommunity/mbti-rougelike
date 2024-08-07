@@ -29,6 +29,7 @@ public class Enemy : Unit, IPoolable
 
     protected override void Awake()
     {
+        base.Awake();
         poolKey = gameObject.name;
     }
 

@@ -35,9 +35,9 @@ MonoBehaviour:
   autoEnergeCharge: 0
   luck: 0
   specialCooldown: 0
-  abstractAttackPower: 60
+  abstractAttackPower: 0
   thunderDamage: 0
-  globalAttackPower: 50
+  globalAttackPower: 0
   waterDamage: 0
   healingPower: 0
   crit: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   specialCooldownINIT: 0
   abstractAttackPowerINIT: 0
   thunderDamageINIT: 0
-  globalAttackPowerINIT: 50
+  globalAttackPowerINIT: 0
   waterDamageINIT: 0
   healingPowerINIT: 0
   critINIT: 0

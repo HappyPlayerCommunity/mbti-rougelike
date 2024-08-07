@@ -61,8 +61,21 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected Coroutine hpRegenCoroutine;
     protected Coroutine shieldRestoreCoroutine;
 
+    private Rigidbody2D rb;
+    private Collider2D col;
+
+
+    [SerializeField, Tooltip("当前正在碰撞的物体。")]
+    public Collider2D[] hits;
+
     protected virtual void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
+        rb.isKinematic = false;
+        rb.gravityScale = 0.0f;
+
+        col = GetComponent<Collider2D>();
+        col.isTrigger = false;
     }
 
     protected virtual void Start()
@@ -355,5 +368,19 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         healthBar.Activate(Vector3.zero, Quaternion.identity);
 
         hpController = healthBar;
+    }
+
+    protected void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 处理碰撞逻辑，例如反弹或分离
+        Vector3 separationDirection = (transform.position - collision.transform.position).normalized;
+        //rb.AddForce(separationDirection * 10.0f); // 添加分离力
+    }
+
+    protected void OnCollisionStay2D(Collision2D collision)
+    {
+        // 持续处理碰撞逻辑，例如保持分离
+        Vector3 separationDirection = (transform.position - collision.transform.position).normalized;
+        //rb.AddForce(separationDirection * 10.0f * Time.deltaTime); // 添加分离力
     }
 }
