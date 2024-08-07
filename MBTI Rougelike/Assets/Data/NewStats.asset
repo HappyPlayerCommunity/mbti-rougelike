@@ -31,13 +31,13 @@ MonoBehaviour:
   attackSpeed: 0
   physicalAttackPower: 0
   windDamage: 0
-  dodge: 70
+  dodge: 0
   autoEnergeCharge: 0
   luck: 0
   specialCooldown: 0
-  abstractAttackPower: 0
+  abstractAttackPower: 60
   thunderDamage: 0
-  globalAttackPower: 0
+  globalAttackPower: 50
   waterDamage: 0
   healingPower: 0
   crit: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   specialCooldownINIT: 0
   abstractAttackPowerINIT: 0
   thunderDamageINIT: 0
-  globalAttackPowerINIT: 0
+  globalAttackPowerINIT: 50
   waterDamageINIT: 0
   healingPowerINIT: 0
   critINIT: 0

@@ -148,6 +148,9 @@ public class Stats : ScriptableObject
     private float previousMaxShield = 0.0f;
     private float previousShieldReset = 0.0f;
     private float previousDodgeRate = 0.0f;
+    private float previousPhysicalAttackPower = 0.0f;
+    private float previousAbstractAttackPower = 0.0f;
+    private float previousGlobalAttackPower = 0.0f;
 
 
     public const float percentage = 0.01f;
@@ -318,7 +321,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_PhysicalAttackPower()
     {
-        return physicalAttackPower;
+        return ApplyPercentageMultiplier(physicalAttackPower);
     }
 
     /// <summary>
@@ -366,7 +369,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_AbstractAttackPower()
     {
-        return abstractAttackPower;
+        return ApplyPercentageMultiplier(abstractAttackPower);
     }
 
     /// <summary>
@@ -382,7 +385,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_GlobalAttackPower()
     {
-        return globalAttackPower;
+        return ApplyPercentageMultiplier(globalAttackPower);
     }
 
     /// <summary>
@@ -544,6 +547,26 @@ public class Stats : ScriptableObject
         {
             previousDodgeRate = dodge;
             changed = true;
+        }
+
+
+        if (physicalAttackPower != previousPhysicalAttackPower)
+        {
+            previousPhysicalAttackPower = physicalAttackPower;
+            changed = true;
+        }
+
+        if (abstractAttackPower != previousAbstractAttackPower)
+        {
+            previousAbstractAttackPower = abstractAttackPower;
+            changed = true;
+        }
+
+        if (globalAttackPower != previousGlobalAttackPower)
+        {
+            previousGlobalAttackPower = globalAttackPower;
+            changed = true;
+
         }
 
         if (changed && OnValueChange != null)

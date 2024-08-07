@@ -177,7 +177,9 @@ MonoBehaviour:
   blowForceSpeed: 25
   hitEffectPrefab: {fileID: 0}
   hitEffectPlayMode: 0
-  damageType: 2
+  damageType: 1
+  canvasTransform: {fileID: 0}
+  damageHitType: 2
   damageTriggerTime: 100
   timer: 0
   velocity: {x: 0, y: 0}

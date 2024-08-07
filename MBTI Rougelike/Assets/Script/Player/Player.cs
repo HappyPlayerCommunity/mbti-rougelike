@@ -54,5 +54,9 @@ public class Player : Unit
         shieldReset = stats.Calculate_ShieldReset();
 
         dodgeRate = stats.Calculate_Dodge();
+
+        physicalAtkPower = stats.Calculate_PhysicalAttackPower();
+        abstractAtkPower = stats.Calculate_AbstractAttackPower();
+        globalAtkPower = stats.Calculate_GlobalAttackPower();
     }
 }

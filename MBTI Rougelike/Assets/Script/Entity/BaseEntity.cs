@@ -42,6 +42,14 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("该实体的护盾再生时间。")]
     protected float shieldReset;
 
+    [SerializeField, Tooltip("该实体的【实体攻击力】。")]
+    protected float physicalAtkPower = 1.0f;
+
+    [SerializeField, Tooltip("该实体的【抽象攻击力】。")]
+    protected float abstractAtkPower = 1.0f;
+
+    [SerializeField, Tooltip("该实体的【全局攻击力】。")]
+    protected float globalAtkPower = 1.0f;
 
     [Header("互动组件")]
     public HPController hpControllerPrefab;
@@ -174,6 +182,42 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         set
         {
             blowForceVelocity = value;
+        }
+    }
+
+    public float PhysicalAtkPower
+    {
+        get
+        {
+            return physicalAtkPower;
+        }
+        set
+        {
+            physicalAtkPower = value;
+        }
+    }
+
+    public float AbstractAtkPower
+    {
+        get
+        {
+            return abstractAtkPower;
+        }
+        set
+        {
+            abstractAtkPower = value;
+        }
+    }
+
+    public float GlobalAtkPower
+    {
+        get
+        {
+            return globalAtkPower;
+        }
+        set
+        {
+            globalAtkPower = value;
         }
     }
 
