@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 8958558747575410762}
   - component: {fileID: 8050734867993010048}
   - component: {fileID: 6062250672494410570}
-  - component: {fileID: 6392914236689720445}
+  - component: {fileID: 8976664838760256466}
   m_Layer: 0
   m_Name: ENFJ_Player
   m_TagString: Player
@@ -170,6 +170,7 @@ MonoBehaviour:
   globalAtkPower: 1
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
+  hits: []
   attackRange: 1
   attackTimer: 0
   attackTime: 0
@@ -274,7 +275,7 @@ MonoBehaviour:
   chargeBanCount: 0
   invincibleCount: 0
   silenceCount: 0
---- !u!50 &6392914236689720445
+--- !u!50 &8976664838760256466
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -282,14 +283,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4506611985501209401}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -300,7 +301,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &5710409203726182712
 GameObject:
   m_ObjectHideFlags: 0

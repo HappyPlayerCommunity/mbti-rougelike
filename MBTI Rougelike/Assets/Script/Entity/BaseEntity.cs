@@ -71,11 +71,11 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.isKinematic = false;
-        rb.gravityScale = 0.0f;
+        //rb.isKinematic = false;
+        //rb.gravityScale = 0.0f;
 
         col = GetComponent<Collider2D>();
-        col.isTrigger = false;
+        //col.isTrigger = false;
     }
 
     protected virtual void Start()
@@ -111,7 +111,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected virtual void OnUpdate()
     {}
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         transform.Translate(velocity * Time.fixedDeltaTime);
         transform.Translate(blowForceVelocity * Time.fixedDeltaTime);
