@@ -348,8 +348,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
                         // 对实体造成伤害并设置击晕时间
                         entity.TakeDamage(damage, stunTime);
 
-
-                        ShowDamagePopup(damage, hit.transform.position);
+                        DamagePopupManager.Instance.PopupDamageNumber(damage, hit.transform.position);
+                        //ShowDamagePopup(damage, hit.transform.position);
 
                         // 令该实体保存一个对此【伤害块】的计时器，短时间无法再对其造成伤害。
                         entity.SetDamageTimer(gameObject, damageTriggerTime);
