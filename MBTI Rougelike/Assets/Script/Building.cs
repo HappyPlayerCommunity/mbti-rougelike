@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Building : BaseEntity
 {
+    protected override void Start()
+    {
+        base.Start();
+        toughness = 0.0f; 
+    }
 
     protected override void FixedUpdate()
     {

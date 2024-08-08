@@ -52,12 +52,13 @@ MonoBehaviour:
   damageTags:
   - Enemy
   isAttachedPos: 0
-  stunTime: 0
+  staggerTime: 1
   isLifeTimeBindingWithState: 0
   blowForceSpeed: 10
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
   hitEffectPlayMode: 1
   damageType: 0
+  damageElementType: 1
   canvasTransform: {fileID: 0}
   damageHitType: 2
   damageTriggerTime: 100

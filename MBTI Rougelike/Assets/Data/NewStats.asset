@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: NewStats
   m_EditorClassIdentifier: Assembly-CSharp::Stats
-  fireDamage: 0
-  movementSpeed: 100
+  fireDamage: 150
+  movementSpeed: 0
   toughness: 0
   bondMovementSpeed: 0
   attackRange: 0
@@ -26,11 +26,11 @@ MonoBehaviour:
   injuryEnergeCharge: 0
   earthDamage: 0
   maxHealth: 0
-  healthRegen: 5
+  healthRegen: 1
   experienceMultiplier: 0
   attackSpeed: 0
   physicalAttackPower: 0
-  windDamage: 0
+  windDamage: 200
   dodge: 0
   autoEnergeCharge: 0
   luck: 0

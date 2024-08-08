@@ -39,7 +39,7 @@ public class DamagePopupManager : MonoBehaviour
     /// 【闪避】，【破盾】等其他弹出，或许应该使用不同的预制件甚至类，来做到不同的效果。
     ///  但目前先统一，简单地归类为DamagePopup。某种程度上，它们也是和伤害相关的。
     /// </summary>
-    public void Popup(PopupType popupType, Vector3 position, int damage = 0)
+    public void Popup(PopupType popupType, Vector3 position, int damage = 0, bool isCrit = false)
     {
         GameObject popupObj = PoolManager.Instance.GetObject(damagePopupPrefab.name, damagePopupPrefab.gameObject);
         DamagePopup damagePopup = popupObj.GetComponent<DamagePopup>();
@@ -48,7 +48,7 @@ public class DamagePopupManager : MonoBehaviour
         switch (popupType)
         {
             case PopupType.Damage:
-                damagePopup.SetDamage(damage);
+                damagePopup.SetDamage(damage, isCrit);
                 break;
             case PopupType.Miss:
                 damagePopup.SetMiss();

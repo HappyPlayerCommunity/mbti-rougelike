@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -60,5 +61,37 @@ public class Player : Unit
         globalAtkPower = stats.Calculate_GlobalAttackPower();
 
         toughness = stats.Calculate_Toughness();
+
+        crit = stats.Calculate_Crit();
+        critDamageRate = stats.Calculate_CritDamageRate();
+    }
+
+    public override float GetElementDamageRate(DamageElementType damageElementType)
+    {
+        switch (damageElementType)
+        {
+            case DamageElementType.None:
+                return 1.0f;
+            case DamageElementType.Fire:
+                Debug.Log("Fire");
+                return stats.Calculate_FireDamage();
+            case DamageElementType.Ice:
+                Debug.Log("Ice");
+                return stats.Calculate_IceDamage();
+            case DamageElementType.Earth:
+                Debug.Log("Earth");
+                return stats.Calculate_EarthDamage();
+            case DamageElementType.Wind:
+                Debug.Log("Wind");
+                return stats.Calculate_WindDamage();
+            case DamageElementType.Thunder:
+                Debug.Log("Thunder");
+                return stats.Calculate_ThunderDamage();
+            case DamageElementType.Water:
+                Debug.Log("Water");
+                return stats.Calculate_WaterDamage();
+            default:
+                return 1.0f;
+        }
     }
 }

@@ -149,8 +149,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageText: {fileID: 3850268722301994270}
   lifetime: 1
+  lifetimer: 0
   floatSpeed: 10
   rectTransform: {fileID: 5696240815847511757}
   renderPosition: {x: 0, y: 0, z: 0}
   outlineSize: 0.3
   outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  initLocalScale: {x: 0, y: 0, z: 0}
+  missText: Miss
+  crited: 0
+  critVec: {x: 2, y: 2, z: 2}

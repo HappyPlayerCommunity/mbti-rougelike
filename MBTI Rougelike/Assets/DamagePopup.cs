@@ -14,10 +14,15 @@ public class DamagePopup : MonoBehaviour, IPoolable
 
     public float outlineSize = 0.5f;
     public Color outlineColor = Color.black;
+
     private string poolKey;
 
     public Vector3 initLocalScale;
     public string missText = "Miss";
+
+    public bool crited = false;
+
+    public Vector3 critVec = new Vector3(2.0f, 2.0f, 2.0f);
 
     public string PoolKey
     {
@@ -44,7 +49,14 @@ public class DamagePopup : MonoBehaviour, IPoolable
         rectTransform.position += Vector3.up * floatSpeed * Time.deltaTime;
 
         float t = 1.0f - (lifetimer / lifetime);
-        rectTransform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, t);
+        if (crited)
+        {
+            rectTransform.localScale = Vector3.Lerp(critVec, Vector3.zero, t);
+        }
+        else
+        {
+            rectTransform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, t);
+        }
 
         if (lifetimer < 0.0f)
         {
@@ -56,22 +68,31 @@ public class DamagePopup : MonoBehaviour, IPoolable
         }
     }
 
-    public void SetDamage(int damage)
+    public void SetDamage(int damage, bool isCrit = false)
     {
         damageText.text = damage.ToString();
 
-        // 设置描边效果
-        damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
-        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize); // 设置描边宽度
+        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
+
+        if (isCrit)
+        {
+            damageText.color = Color.yellow;
+            crited = true;
+            rectTransform.localScale = critVec;
+        }
+        else
+        {
+            damageText.color = Color.white;
+            damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
+        }
     }
 
     public void SetMiss()
     {
         damageText.text = missText;
 
-        // 设置描边效果
         damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
-        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize); // 设置描边宽度
+        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
     }
 
     /// <summary>
@@ -81,6 +102,7 @@ public class DamagePopup : MonoBehaviour, IPoolable
     {
         lifetimer = lifetime;
         rectTransform.localScale = initLocalScale;
+        crited = false;
     }
 
     /// <summary>

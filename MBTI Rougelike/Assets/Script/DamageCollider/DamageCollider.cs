@@ -11,6 +11,17 @@ public enum DamageType
     Abstract
 }
 
+public enum DamageElementType
+{
+    None,
+    Fire,
+    Ice,
+    Earth,
+    Wind,
+    Thunder,
+    Water
+}
+
 /// <summary>
 /// 【伤害块】的基类，包含了绝大多数常见的伤害块行为；一些行为复杂的【伤害块】可以另开子类实现。
 /// </summary>
@@ -52,6 +63,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     [SerializeField, Tooltip("决定了伤害为【实体伤害】，或【抽象伤害】。")]
     DamageType damageType;
+
+    [SerializeField, Tooltip("此伤害块造成的伤害元素属性。")]
+    DamageElementType damageElementType = DamageElementType.None;
 
     public Transform canvasTransform;
 
@@ -356,14 +370,20 @@ public class DamageCollider : MonoBehaviour, IPoolable
                                 DamagePopupManager.Instance.Popup(PopupType.Miss, hit.transform.position);
                                 continue;
                             }
+
                         }
 
-                        int finalDamage = DamageManager.CalculateDamage(damageType, damage, owner);
+                        // 后面需要考虑到子弹单位的拥有者位死亡后，子弹还在的情况。
+                        // 以目前对象池的逻辑，拥有者不在了死亡以后，它们并没有被销毁，而是在对象池内，依然可以访问owner。
+
+                        // 暴击默认为false，如果暴击，则会在CalculateDamage中修改。
+                        bool isCrit = false;
+                        int finalDamage = DamageManager.CalculateDamage(damageType, damage, owner, ref isCrit, damageElementType);
 
                         // 对实体造成伤害并设置击晕时间
                         entity.TakeDamage(finalDamage, staggerTime);
 
-                        DamagePopupManager.Instance.Popup(PopupType.Damage, hit.transform.position, finalDamage);
+                        DamagePopupManager.Instance.Popup(PopupType.Damage, hit.transform.position, finalDamage, isCrit);
 
                         // 令该实体保存一个对此【伤害块】的计时器，短时间无法再对其造成伤害。
                         entity.SetDamageTimer(gameObject, damageTriggerTime);
@@ -646,6 +666,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
         return false;
     }
+
 
     protected void ShowDamagePopup(int damage, Vector3 position)
     {

@@ -63,6 +63,12 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("韧性，对硬直的抗性")]
     public float toughness = 1.0f;
 
+    [SerializeField, Tooltip("此实体造成伤害时的暴击概率。")]
+    protected float crit;
+
+    [SerializeField, Tooltip("此实体造成伤害时的暴击概率。")]
+    protected float critDamageRate;
+
     [Header("互动组件")]
     public HPController hpControllerPrefab;
     public Transform canvasTransform;
@@ -130,6 +136,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         else
         {
             staggerRate = 1.0f;
+            spriteRenderer.color = Color.white;
         }
     }
 
@@ -283,6 +290,31 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+
+    public float Crit
+    {
+        get
+        {
+            return crit;
+        }
+        set
+        {
+            crit = value;
+        }
+    }
+
+    public float CritDamageRate
+    {
+        get
+        {
+            return critDamageRate;
+        }
+        set
+        {
+            critDamageRate = value;
+        }
+    }
+
     public virtual void TakeDamage(int damage, float stuntime)
     {
         ResetShieldRestoreCoroutine();
@@ -303,6 +335,11 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
             spriteRenderer.color = Color.red;
             staggerTimer = stuntime * toughness;
             staggerRecordTime = staggerTimer;
+
+            if (Mathf.Approximately(toughness, 0.0f))
+            {
+                spriteRenderer.color = Color.white;
+            }
         }
 
         if (hp <= 0)
@@ -438,6 +475,12 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     public bool IsStaggered()
     {
         return staggerTimer > 0.0f;
+    }
+
+    public virtual float GetElementDamageRate(DamageElementType damageElementType)
+    {
+        // 除了玩家以外，其他实体的元素伤害比率都是1.0f。
+        return 1.0f;
     }
 }
 
