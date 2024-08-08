@@ -13,9 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Tooltip("当前玩家的速度向量值。")]
     private Vector3 velocity;
 
-    //[SerializeField, Tooltip("玩家的移动速度，后面改为由PlayerData中读取。")]
-    //private float movementSpeed = 5.0f;
-
     [SerializeField, Tooltip("玩家攻击时的移动速度，后面改为由PlayerData中读取。")]
     private float movementSpeedReduceRate = 0.6f;
 

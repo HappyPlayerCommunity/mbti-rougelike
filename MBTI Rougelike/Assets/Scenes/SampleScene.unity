@@ -1024,9 +1024,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 8779559174516582916, guid: f2635c698e51b6c488d4bd5996b39964, type: 3}
-  enemyPerWave: 30
+  enemyPerWave: 10
   betweenWavesInterval: 3
-  spawnInterval: 0.1
+  spawnInterval: 0.5
   totalWaves: 10
   currentWave: 0
   resetTestingButton: {fileID: 138940784}
@@ -1216,8 +1216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8255be649f37f894883fc6e3c973d71c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 50
-  maxHp: 50
+  hp: 300
+  maxHp: 300
   hpRegen: 0
   velocity: {x: 0, y: 0, z: 0}
   blowForceVelocity: {x: 0, y: 0, z: 0}
@@ -1230,9 +1230,11 @@ MonoBehaviour:
   physicalAtkPower: 1
   abstractAtkPower: 1
   globalAtkPower: 1
+  staggerTimer: 0
+  staggerRecordTime: 0
+  staggerRate: 0
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
-  hits: []
 --- !u!1 &1613029562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,6 +1522,10 @@ PrefabInstance:
     - target: {fileID: 2187154304236326421, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
       propertyPath: m_Name
       value: ENTP_Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187154304236326421, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8883716087494439959, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2066,6 +2072,10 @@ PrefabInstance:
     - target: {fileID: 4506611985501209401, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: m_Name
       value: ENFJ_Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506611985501209401, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8976664838760256466, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: m_GravityScale

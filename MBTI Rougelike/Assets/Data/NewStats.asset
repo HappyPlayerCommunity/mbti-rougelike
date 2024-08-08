@@ -19,7 +19,7 @@ MonoBehaviour:
   attackRange: 0
   attackEnergeCharge: 0
   iceDamage: 0
-  maxShield: 0
+  maxShield: 100
   shieldReset: 0
   buildingDurability: 0
   knockback: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   attackRangeINIT: 0
   attackEnergeChargeINIT: 0
   iceDamageINIT: 0
-  maxShieldINIT: 0
+  maxShieldINIT: 100
   shieldResetINIT: 0
   buildingDurabilityINIT: 0
   knockbackINIT: 0

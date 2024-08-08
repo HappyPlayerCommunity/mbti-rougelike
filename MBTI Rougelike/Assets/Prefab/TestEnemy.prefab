@@ -142,14 +142,16 @@ MonoBehaviour:
   stopBlowThreadshold: 0.01
   blowSpeedReduceRate: 0.99
   shield: 0
-  maxShield: 0
-  shieldReset: 0
+  maxShield: 50
+  shieldReset: 1
   physicalAtkPower: 1
   abstractAtkPower: 1
   globalAtkPower: 1
+  staggerTimer: 0
+  staggerRecordTime: 0
+  staggerRate: 0
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
-  hits: []
   attackRange: 1
   attackTimer: 0
   attackTime: 2

@@ -43,7 +43,6 @@ public class DamagePopup : MonoBehaviour, IPoolable
     {
         rectTransform.position += Vector3.up * floatSpeed * Time.deltaTime;
 
-        // 计算插值因子
         float t = 1.0f - (lifetimer / lifetime);
         rectTransform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, t);
 

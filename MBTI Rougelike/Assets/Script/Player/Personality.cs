@@ -85,6 +85,14 @@ public class Personality : MonoBehaviour
 
     void Update()
     {
+        normalAttack_CurretReloadingTimer -= Time.deltaTime;
+        specialSkill_CurretReloadingTimer -= Time.deltaTime;
+
+        if (player.IsStaggered())
+        {
+            return;
+        }
+
         player.IsActioning = false;
 
         if (!statusManager.IsSlienced())
@@ -184,7 +192,7 @@ public class Personality : MonoBehaviour
             }
         }
 
-        currentReloadingTimer -= Time.deltaTime;
+        //currentReloadingTimer -= Time.deltaTime;
     }
 
     protected virtual void UltimateSkillUpdate()

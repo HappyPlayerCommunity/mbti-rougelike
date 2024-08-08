@@ -153,6 +153,10 @@ public class Enemy : Unit, IPoolable
         velocity = Vector3.zero;
         blowForceVelocity = Vector3.zero;
 
+        spriteRenderer.color = Color.white;
+        staggerTimer = 0.0f;
+        staggerRecordTime = 0.0f;
+
         //Debug.Log("Enemy ResetObjectState?");
     }
 

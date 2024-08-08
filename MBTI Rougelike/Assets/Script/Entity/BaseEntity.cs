@@ -39,8 +39,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("该实体的护盾上限。")]
     protected int maxShield;
 
-    [SerializeField, Tooltip("该实体的护盾再生时间。")]
-    protected float shieldReset;
+    [SerializeField, Tooltip("该实体的护盾再生时间比率。")]
+    protected float shieldReset = 1.0f;
 
     [SerializeField, Tooltip("该实体的【实体攻击力】。")]
     protected float physicalAtkPower = 1.0f;
@@ -51,10 +51,20 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("该实体的【全局攻击力】。")]
     protected float globalAtkPower = 1.0f;
 
+    [SerializeField, Tooltip("硬直计时器")]
+    protected float staggerTimer = 0.0f;
+
+    [SerializeField, Tooltip("储存上次被攻击后的初始硬直时间。")]
+    protected float staggerRecordTime;
+
+    [SerializeField, Tooltip("硬直比率。用于计算显示受伤的红光，以及移动速度的减益率。")]
+    public float staggerRate = 0.0f;
+
     [Header("互动组件")]
     public HPController hpControllerPrefab;
     public Transform canvasTransform;
     protected HPController hpController;
+    protected SpriteRenderer spriteRenderer;
 
     private Dictionary<GameObject, float> damageTimers = new Dictionary<GameObject, float>();
 
@@ -64,10 +74,6 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     private Rigidbody2D rb;
     private Collider2D col;
 
-
-    [SerializeField, Tooltip("当前正在碰撞的物体。")]
-    public Collider2D[] hits;
-
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -76,6 +82,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
         col = GetComponent<Collider2D>();
         //col.isTrigger = false;
+
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     protected virtual void Start()
@@ -106,6 +114,18 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
                 damageTimers.Remove(key);
             }
         }
+
+        if (staggerTimer > 0.0f)
+        {
+            staggerTimer -= Time.deltaTime;
+            staggerRate = 1.0f - staggerTimer / staggerRecordTime;
+
+            spriteRenderer.color = Color.Lerp(Color.red, Color.white, staggerRate);
+        }
+        else
+        {
+            staggerRate = 1.0f;
+        }
     }
 
     protected virtual void OnUpdate()
@@ -113,11 +133,11 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     protected virtual void FixedUpdate()
     {
-        transform.Translate(velocity * Time.fixedDeltaTime);
+        transform.Translate(velocity * staggerRate * Time.fixedDeltaTime);
         transform.Translate(blowForceVelocity * Time.fixedDeltaTime);
 
         blowForceVelocity = new Vector3
-(blowSpeedReduceUpdate(blowForceVelocity.x), blowSpeedReduceUpdate(blowForceVelocity.y), 0.0f);
+(BlowSpeedReduceUpdate(blowForceVelocity.x), BlowSpeedReduceUpdate(blowForceVelocity.y), 0.0f);
 
         if (Mathf.Abs(blowForceVelocity.x) < stopBlowThreadshold)
             blowForceVelocity = new Vector3(0.0f, blowForceVelocity.y, 0.0f);
@@ -234,6 +254,18 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public float StaggerRate
+    {
+        get
+        {
+            return staggerRate;
+        }
+        set
+        {
+            staggerRate = value;
+        }
+    }
+
     public virtual void TakeDamage(int damage, float stuntime)
     {
         ResetShieldRestoreCoroutine();
@@ -251,6 +283,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         else
         {
             hp -= damage;
+            spriteRenderer.color = Color.red;
+            staggerTimer = stuntime;
+            staggerRecordTime = stuntime;
         }
 
         if (hp <= 0)
@@ -269,7 +304,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         gameObject.SetActive(false);
     }
 
-    public float blowSpeedReduceUpdate(float speed)
+    public float BlowSpeedReduceUpdate(float speed)
     {
         if (speed > 0)
         {
@@ -383,4 +418,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         Vector3 separationDirection = (transform.position - collision.transform.position).normalized;
         //rb.AddForce(separationDirection * 10.0f * Time.deltaTime); // 添加分离力
     }
+    public bool IsStaggered()
+    {
+        return staggerTimer > 0.0f;
+    }
 }
+

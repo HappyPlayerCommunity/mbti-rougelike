@@ -317,7 +317,7 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【未实现】伤害公式还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_PhysicalAttackPower()
     {
@@ -365,7 +365,7 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【未实现】伤害公式还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_AbstractAttackPower()
     {
@@ -381,7 +381,7 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【未实现】伤害公式还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_GlobalAttackPower()
     {

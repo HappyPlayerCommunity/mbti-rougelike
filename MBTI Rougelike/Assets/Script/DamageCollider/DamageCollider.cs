@@ -33,7 +33,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     protected bool isAttachedPos = false;
 
     [SerializeField, Tooltip("击中目标时造成的僵直时间。")]
-    protected float stunTime = 0.0f;
+    protected float staggerTime = 1.0f;
 
     [SerializeField, Tooltip("决定此【伤害块】是否与某个状态绑定，若绑定，则此伤害块的持续时间无限，直至绑定状态消失。")]
     protected bool isLifeTimeBindingWithState = false;
@@ -112,6 +112,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
     protected float initMaxTimer;
 
     private string poolKey;
+
+    const float basicShieldResistance = 0.5f;
+
 
     [Header("互动组件")]
     public Collider2D damageCollider2D;
@@ -358,7 +361,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                         int finalDamage = DamageManager.CalculateDamage(damageType, damage, owner);
 
                         // 对实体造成伤害并设置击晕时间
-                        entity.TakeDamage(finalDamage, stunTime);
+                        entity.TakeDamage(finalDamage, staggerTime);
 
                         DamagePopupManager.Instance.Popup(PopupType.Damage, hit.transform.position, finalDamage);
 
@@ -445,6 +448,10 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     protected virtual void BlowUnit(Unit unit)
     {
+        // 护盾会令吹飞效果减半。
+        float blowupResistance = unit.Shield > 0.0f ? basicShieldResistance : 1.0f;
+
+
         switch (damageMovementType)
         {
             case DamageMovementType.Passive:
@@ -455,7 +462,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 else
                     direction = (unit.transform.position - transform.position).normalized;
 
-                unit.BlowForceVelocity = blowForceSpeed * direction;
+                unit.BlowForceVelocity = blowForceSpeed * direction * blowupResistance;
                 break;
         
             case DamageMovementType.Projectile:
@@ -464,7 +471,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 var direction1 = (characterPos - transform.position).normalized;
                 var direction2 = (velocity).normalized;
         
-                unit.BlowForceVelocity = blowForceSpeed * (direction1 + (Vector3)direction2);
+                unit.BlowForceVelocity = blowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance;
                 break;
         
             default:
