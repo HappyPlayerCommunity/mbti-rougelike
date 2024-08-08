@@ -39,26 +39,66 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("该实体的护盾上限。")]
     protected int maxShield;
 
-    [SerializeField, Tooltip("该实体的护盾再生时间。")]
-    protected float shieldReset;
+    [SerializeField, Tooltip("该实体的护盾再生时间比率。")]
+    protected float shieldReset = 1.0f;
 
+    [SerializeField, Tooltip("该实体的【实体攻击力】。")]
+    protected float physicalAtkPower = 1.0f;
+
+    [SerializeField, Tooltip("该实体的【抽象攻击力】。")]
+    protected float abstractAtkPower = 1.0f;
+
+    [SerializeField, Tooltip("该实体的【全局攻击力】。")]
+    protected float globalAtkPower = 1.0f;
+
+    [SerializeField, Tooltip("硬直计时器")]
+    protected float staggerTimer = 0.0f;
+
+    [SerializeField, Tooltip("储存上次被攻击后的初始硬直时间。")]
+    protected float staggerRecordTime;
+
+    [SerializeField, Tooltip("硬直比率。用于计算显示受伤的红光，以及移动速度的减益率。")]
+    public float staggerRate = 0.0f;
+
+    [SerializeField, Tooltip("韧性，对硬直的抗性")]
+    public float toughness = 1.0f;
+
+    [SerializeField, Tooltip("此实体造成伤害时的暴击概率。")]
+    protected float crit;
+
+    [SerializeField, Tooltip("此实体造成伤害时的暴击概率。")]
+    protected float critDamageRate;
 
     [Header("互动组件")]
     public HPController hpControllerPrefab;
     public Transform canvasTransform;
-    protected HPController hpController;
+    public HPController hpController;
+    protected SpriteRenderer spriteRenderer;
 
     private Dictionary<GameObject, float> damageTimers = new Dictionary<GameObject, float>();
 
     protected Coroutine hpRegenCoroutine;
     protected Coroutine shieldRestoreCoroutine;
 
+    private Rigidbody2D rb;
+    private Collider2D col;
+
     protected virtual void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
+        //rb.isKinematic = false;
+        //rb.gravityScale = 0.0f;
+
+        col = GetComponent<Collider2D>();
+        //col.isTrigger = false;
+
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     protected virtual void Start()
     {
+        canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
+
         CreateHealthBar();
 
         hp = maxHp;
@@ -85,18 +125,31 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
                 damageTimers.Remove(key);
             }
         }
+
+        if (staggerTimer > 0.0f)
+        {
+            staggerTimer -= Time.deltaTime;
+            staggerRate = 1.0f - staggerTimer / staggerRecordTime;
+
+            spriteRenderer.color = Color.Lerp(Color.red, Color.white, staggerRate);
+        }
+        else
+        {
+            staggerRate = 1.0f;
+            spriteRenderer.color = Color.white;
+        }
     }
 
     protected virtual void OnUpdate()
     {}
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
-        transform.Translate(velocity * Time.fixedDeltaTime);
+        transform.Translate(velocity * staggerRate * Time.fixedDeltaTime);
         transform.Translate(blowForceVelocity * Time.fixedDeltaTime);
 
         blowForceVelocity = new Vector3
-(blowSpeedReduceUpdate(blowForceVelocity.x), blowSpeedReduceUpdate(blowForceVelocity.y), 0.0f);
+(BlowSpeedReduceUpdate(blowForceVelocity.x), BlowSpeedReduceUpdate(blowForceVelocity.y), 0.0f);
 
         if (Mathf.Abs(blowForceVelocity.x) < stopBlowThreadshold)
             blowForceVelocity = new Vector3(0.0f, blowForceVelocity.y, 0.0f);
@@ -177,6 +230,91 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public float PhysicalAtkPower
+    {
+        get
+        {
+            return physicalAtkPower;
+        }
+        set
+        {
+            physicalAtkPower = value;
+        }
+    }
+
+    public float AbstractAtkPower
+    {
+        get
+        {
+            return abstractAtkPower;
+        }
+        set
+        {
+            abstractAtkPower = value;
+        }
+    }
+
+    public float GlobalAtkPower
+    {
+        get
+        {
+            return globalAtkPower;
+        }
+        set
+        {
+            globalAtkPower = value;
+        }
+    }
+
+    public float StaggerRate
+    {
+        get
+        {
+            return staggerRate;
+        }
+        set
+        {
+            staggerRate = value;
+        }
+    }
+
+    public float Toughness
+    {
+        get
+        {
+            return toughness;
+        }
+        set
+        {
+            toughness = value;
+        }
+    }
+
+
+    public float Crit
+    {
+        get
+        {
+            return crit;
+        }
+        set
+        {
+            crit = value;
+        }
+    }
+
+    public float CritDamageRate
+    {
+        get
+        {
+            return critDamageRate;
+        }
+        set
+        {
+            critDamageRate = value;
+        }
+    }
+
     public virtual void TakeDamage(int damage, float stuntime)
     {
         ResetShieldRestoreCoroutine();
@@ -194,6 +332,14 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         else
         {
             hp -= damage;
+            spriteRenderer.color = Color.red;
+            staggerTimer = stuntime * toughness;
+            staggerRecordTime = staggerTimer;
+
+            if (Mathf.Approximately(toughness, 0.0f))
+            {
+                spriteRenderer.color = Color.white;
+            }
         }
 
         if (hp <= 0)
@@ -212,7 +358,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         gameObject.SetActive(false);
     }
 
-    public float blowSpeedReduceUpdate(float speed)
+    public float BlowSpeedReduceUpdate(float speed)
     {
         if (speed > 0)
         {
@@ -249,10 +395,12 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     public void Respawn()
     {
         this.HP = this.MaxHP;
+        this.Shield = this.MaxShield;
         gameObject.SetActive(true);
         //OnRespawn?.Invoke();
-
-        hpController.ResetObjectState();
+        CreateHealthBar();
+        StartHealthRegen();
+        ResetShieldRestoreCoroutine();
     }
 
     protected void StartHealthRegen()
@@ -299,8 +447,6 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     protected void CreateHealthBar()
     {
-        canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
-
         GameObject healthBarObj = PoolManager.Instance.GetObject(hpControllerPrefab.name, hpControllerPrefab.gameObject);
         HPController healthBar = healthBarObj.GetComponent<HPController>();
         healthBar.transform.SetParent(canvasTransform, false);
@@ -312,4 +458,29 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
         hpController = healthBar;
     }
+
+    protected void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 处理碰撞逻辑，例如反弹或分离
+        Vector3 separationDirection = (transform.position - collision.transform.position).normalized;
+        //rb.AddForce(separationDirection * 10.0f); // 添加分离力
+    }
+
+    protected void OnCollisionStay2D(Collision2D collision)
+    {
+        // 持续处理碰撞逻辑，例如保持分离
+        Vector3 separationDirection = (transform.position - collision.transform.position).normalized;
+        //rb.AddForce(separationDirection * 10.0f * Time.deltaTime); // 添加分离力
+    }
+    public bool IsStaggered()
+    {
+        return staggerTimer > 0.0f;
+    }
+
+    public virtual float GetElementDamageRate(DamageElementType damageElementType)
+    {
+        // 除了玩家以外，其他实体的元素伤害比率都是1.0f。
+        return 1.0f;
+    }
 }
+

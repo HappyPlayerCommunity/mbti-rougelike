@@ -5,6 +5,23 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
+public enum DamageType
+{
+    Physical,
+    Abstract
+}
+
+public enum DamageElementType
+{
+    None,
+    Fire,
+    Ice,
+    Earth,
+    Wind,
+    Thunder,
+    Water
+}
+
 /// <summary>
 /// 【伤害块】的基类，包含了绝大多数常见的伤害块行为；一些行为复杂的【伤害块】可以另开子类实现。
 /// </summary>
@@ -27,7 +44,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     protected bool isAttachedPos = false;
 
     [SerializeField, Tooltip("击中目标时造成的僵直时间。")]
-    protected float stunTime = 0.0f;
+    protected float staggerTime = 1.0f;
 
     [SerializeField, Tooltip("决定此【伤害块】是否与某个状态绑定，若绑定，则此伤害块的持续时间无限，直至绑定状态消失。")]
     protected bool isLifeTimeBindingWithState = false;
@@ -44,6 +61,14 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("决定了击中特效的播放类型。")]
     HitEffectPlayMode hitEffectPlayMode;
 
+    [SerializeField, Tooltip("决定了伤害为【实体伤害】，或【抽象伤害】。")]
+    DamageType damageType;
+
+    [SerializeField, Tooltip("此伤害块造成的伤害元素属性。")]
+    DamageElementType damageElementType = DamageElementType.None;
+
+    public Transform canvasTransform;
+
 
     public enum HitEffectPlayMode
     {
@@ -51,7 +76,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         Target     //在目标身上播放。
     }
 
-    public enum DamageType
+    public enum DamageHitType
     {
         SingleHit,           // 最常见的一次性伤害块，例如机枪射出的子弹，击中第一个目标便消失。
         MultiHit,            // 多目标一次性伤害块，例如较大的冲击波，可以击中多个目标，击中目标后便消失。
@@ -60,7 +85,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     }
 
     [SerializeField, Tooltip("伤害块的【伤害类型】，决定了它是如何结算伤害的。")]
-    protected DamageType damageType;
+    protected DamageHitType damageHitType;
 
     [SerializeField, Tooltip("若伤害块是【持续性的】，那它在【多久的间隔】可以对一个目标【再次造成伤害】；" +
         "设置成一个较大的值（例如超过其持续时间）可以用于那些只造成一次伤害，但不会立刻消失的伤害块类型。")]
@@ -102,6 +127,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     private string poolKey;
 
+    const float basicShieldResistance = 0.5f;
+
+
     [Header("互动组件")]
     public Collider2D damageCollider2D;
     public AudioSource initSource;
@@ -109,6 +137,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     public SpriteRenderer spriteRenderer;
     public Status ownerStatus;
     public Status applyStatus;
+    public GameObject damagePopupPrefab;
 
     public enum DamageMovementType
     {
@@ -198,6 +227,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         initMaxTimer = maxTimer;
         damageCollider2D.isTrigger = true;
         awaked = true;
+        canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
     }
 
     void Start()
@@ -337,12 +367,23 @@ public class DamageCollider : MonoBehaviour, IPoolable
                             {
                                 // 使【伤害块】短时间无法再对该目标造成伤害。
                                 entity.SetDamageTimer(gameObject, damageTriggerTime);
+                                DamagePopupManager.Instance.Popup(PopupType.Miss, hit.transform.position);
                                 continue;
                             }
+
                         }
 
+                        // 后面需要考虑到子弹单位的拥有者位死亡后，子弹还在的情况。
+                        // 以目前对象池的逻辑，拥有者不在了死亡以后，它们并没有被销毁，而是在对象池内，依然可以访问owner。
+
+                        // 暴击默认为false，如果暴击，则会在CalculateDamage中修改。
+                        bool isCrit = false;
+                        int finalDamage = DamageManager.CalculateDamage(damageType, damage, owner, ref isCrit, damageElementType);
+
                         // 对实体造成伤害并设置击晕时间
-                        entity.TakeDamage(damage, stunTime);
+                        entity.TakeDamage(finalDamage, staggerTime);
+
+                        DamagePopupManager.Instance.Popup(PopupType.Damage, hit.transform.position, finalDamage, isCrit);
 
                         // 令该实体保存一个对此【伤害块】的计时器，短时间无法再对其造成伤害。
                         entity.SetDamageTimer(gameObject, damageTriggerTime);
@@ -351,7 +392,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                         {
                             var player = (Player)owner;
                             float boostCharge = player.stats.Calculate_AttackEnergeCharge();
-                            player.personality.AttackChargeEnerge(damage, boostCharge); // 受伤充能比率还得具体设计。
+                            player.personality.AttackChargeEnerge(finalDamage, boostCharge); // 受伤充能比率还得具体设计。
                         }
 
                         switch (hitEffectPlayMode)
@@ -376,21 +417,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
                     didDamage = true;
                 }
 
-                // 根据伤害类型决定是否销毁子弹（后续可以优化进子弹池）
-                switch (damageType)
-                {
-                    case DamageType.SingleHit:
-                        // 单次击中碰撞体后消失
-                        //Destroy(gameObject);
-                        Deactivate();
-                        break;
-                    case DamageType.MultiHit:
-                        // 击中多个目标但不会持续伤害，不销毁
-                        break;
-                    case DamageType.SustainedMultiHit:
-                        // 持续对接触的目标造成伤害，不销毁
-                        break;
-                }
 
                 // 执行击中目标
 
@@ -401,14 +427,31 @@ public class DamageCollider : MonoBehaviour, IPoolable
                     OnceCollideEvents(hit);
                     onceHitEventTrigger = true;
                 }
+
+                // 根据伤害类型决定是否销毁子弹（后续可以优化进子弹池）
+                switch (damageHitType)
+                {
+                    case DamageHitType.SingleHit:
+                        // 单次击中碰撞体后消失
+                        //Destroy(gameObject);
+                        Deactivate();
+                        return;
+                    case DamageHitType.MultiHit:
+                        // 击中多个目标但不会持续伤害，不销毁
+                        break;
+                    case DamageHitType.SustainedMultiHit:
+                        // 持续对接触的目标造成伤害，不销毁
+                        break;
+                }
             }
         }
 
         // 如果击中目标且不是【持续群体打击】类型，则销毁子弹
-        if (hitted && damageType != DamageType.SustainedMultiHit)
+        if (hitted && damageHitType != DamageHitType.SustainedMultiHit)
         {
             //Destroy(gameObject);
             Deactivate();
+            return;
         }
     }
 
@@ -425,6 +468,12 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     protected virtual void BlowUnit(Unit unit)
     {
+        // 护盾会令吹飞效果减半。
+        float blowupResistance = unit.Shield > 0.0f ? basicShieldResistance : 1.0f;
+
+        // 韧性效果会令吹飞效果等比率下降。
+        float toughness = unit.Toughness;
+
         switch (damageMovementType)
         {
             case DamageMovementType.Passive:
@@ -435,7 +484,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 else
                     direction = (unit.transform.position - transform.position).normalized;
 
-                unit.BlowForceVelocity = blowForceSpeed * direction;
+                unit.BlowForceVelocity = blowForceSpeed * direction * blowupResistance * toughness;
                 break;
         
             case DamageMovementType.Projectile:
@@ -444,7 +493,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 var direction1 = (characterPos - transform.position).normalized;
                 var direction2 = (velocity).normalized;
         
-                unit.BlowForceVelocity = blowForceSpeed * (direction1 + (Vector3)direction2);
+                unit.BlowForceVelocity = blowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance * toughness;
                 break;
         
             default:
@@ -616,5 +665,23 @@ public class DamageCollider : MonoBehaviour, IPoolable
         }
 
         return false;
+    }
+
+
+    protected void ShowDamagePopup(int damage, Vector3 position)
+    {
+        if (damagePopupPrefab)
+        {
+            GameObject popupObj = PoolManager.Instance.GetObject(damagePopupPrefab.name, damagePopupPrefab.gameObject);
+            DamagePopup damagePopup = popupObj.GetComponent<DamagePopup>();
+            damagePopup.Activate(position, Quaternion.identity);
+
+            //GameObject popup = Instantiate(damagePopupPrefab, position, Quaternion.identity);
+            //DamagePopup damagePopup = popup.GetComponent<DamagePopup>();
+            damagePopup.SetDamage(damage);
+            damagePopup.transform.SetParent(canvasTransform, false);
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
+            damagePopup.GetComponent<RectTransform>().position = screenPosition;
+        }
     }
 }

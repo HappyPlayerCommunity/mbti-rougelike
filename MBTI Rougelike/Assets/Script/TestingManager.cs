@@ -18,7 +18,7 @@ public class TestingManager : MonoBehaviour
 
     public void ResetPlayer()
     {
-        player.gameObject.SetActive(true);
+        player.Die();
         player.Respawn();
     }
 }

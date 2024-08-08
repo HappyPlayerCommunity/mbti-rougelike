@@ -12,29 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: NewStats
   m_EditorClassIdentifier: Assembly-CSharp::Stats
-  fireDamage: 0
+  fireDamage: 150
   movementSpeed: 0
   toughness: 0
   bondMovementSpeed: 0
   attackRange: 0
   attackEnergeCharge: 0
   iceDamage: 0
-  maxShield: 0
+  maxShield: 20
   shieldReset: 0
   buildingDurability: 0
   knockback: 0
   injuryEnergeCharge: 0
   earthDamage: 0
   maxHealth: 0
-  healthRegen: 0
+  healthRegen: 1
   experienceMultiplier: 0
   attackSpeed: 0
   physicalAttackPower: 0
-  windDamage: 0
+  windDamage: 200
   dodge: 0
-  autoEnergeCharge: 100
+  autoEnergeCharge: 0
   luck: 0
-  specialCooldown: 1
+  specialCooldown: 0
   abstractAttackPower: 0
   thunderDamage: 0
   globalAttackPower: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   buildingPower: 0
   bondPower: 0
   statusPower: 0
-  statusDuration: 50
+  statusDuration: 0
   statusImpact: 0
   anomalyResistance: 0
   fireDamageINIT: 0
@@ -55,14 +55,14 @@ MonoBehaviour:
   attackRangeINIT: 0
   attackEnergeChargeINIT: 0
   iceDamageINIT: 0
-  maxShieldINIT: 0
+  maxShieldINIT: 20
   shieldResetINIT: 0
   buildingDurabilityINIT: 0
   knockbackINIT: 0
   injuryEnergeChargeINIT: 0
   earthDamageINIT: 0
   maxHealthINIT: 0
-  healthRegenINIT: 0
+  healthRegenINIT: 1
   experienceMultiplierINIT: 0
   attackSpeedINIT: 0
   physicalAttackPowerINIT: 0
@@ -80,7 +80,7 @@ MonoBehaviour:
   critDamageINIT: 0
   buildingPowerINIT: 0
   bondPowerINIT: 0
-  buffPowerINIT: 0
-  buffDurationINIT: 0
-  buffImpactINIT: 0
+  statusPowerINIT: 0
+  statusDurationINIT: 0
+  statusImpactINIT: 0
   anomalyResistanceINIT: 0

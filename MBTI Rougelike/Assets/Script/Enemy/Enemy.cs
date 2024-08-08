@@ -29,6 +29,7 @@ public class Enemy : Unit, IPoolable
 
     protected override void Awake()
     {
+        base.Awake();
         poolKey = gameObject.name;
     }
 
@@ -151,6 +152,10 @@ public class Enemy : Unit, IPoolable
         shield = maxShield;
         velocity = Vector3.zero;
         blowForceVelocity = Vector3.zero;
+
+        spriteRenderer.color = Color.white;
+        staggerTimer = 0.0f;
+        staggerRecordTime = 0.0f;
 
         //Debug.Log("Enemy ResetObjectState?");
     }

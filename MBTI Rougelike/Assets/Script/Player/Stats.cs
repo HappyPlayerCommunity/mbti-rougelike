@@ -148,7 +148,12 @@ public class Stats : ScriptableObject
     private float previousMaxShield = 0.0f;
     private float previousShieldReset = 0.0f;
     private float previousDodgeRate = 0.0f;
-
+    private float previousPhysicalAttackPower = 0.0f;
+    private float previousAbstractAttackPower = 0.0f;
+    private float previousGlobalAttackPower = 0.0f;
+    private float previousToughness = 0.0f;
+    private float previousCrit = 0.0f;
+    private float previousCritDamageRate = 0.0f;
 
     public const float percentage = 0.01f;
 
@@ -169,7 +174,7 @@ public class Stats : ScriptableObject
     // 下面这个部分还在施工中，有许多属性需要后续系统完善后才能实现。
 
     /// <summary>
-    /// 【未实现】元素属性还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_FireDamage()
     {
@@ -191,7 +196,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_Toughness()
     {
-        return toughness;
+        return 1.0f / ApplyPercentageMultiplier(toughness);
     }
 
     /// <summary>
@@ -222,11 +227,12 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【未实现】元素系统未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_IceDamage()
     {
-        return iceDamage;
+        return ApplyPercentageMultiplier(iceDamage);
+
     }
 
     /// <summary>
@@ -273,11 +279,12 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【未实现】元素系统未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_EarthDamage()
     {
-        return earthDamage;
+        return ApplyPercentageMultiplier(earthDamage);
+
     }
 
     public const float basicMaxHealth = 100.0f;
@@ -314,19 +321,20 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【未实现】伤害公式还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_PhysicalAttackPower()
     {
-        return physicalAttackPower;
+        return ApplyPercentageMultiplier(physicalAttackPower);
     }
 
     /// <summary>
-    /// 【未实现】元素系统未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_WindDamage()
     {
-        return windDamage;
+        return ApplyPercentageMultiplier(windDamage);
+
     }
 
     /// <summary>
@@ -362,35 +370,36 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【未实现】伤害公式还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_AbstractAttackPower()
     {
-        return abstractAttackPower;
+        return ApplyPercentageMultiplier(abstractAttackPower);
     }
 
     /// <summary>
-    /// 【未实现】元素系统还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_ThunderDamage()
     {
-        return thunderDamage;
+        return ApplyPercentageMultiplier(thunderDamage);
+
     }
 
     /// <summary>
-    /// 【未实现】伤害公式还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_GlobalAttackPower()
     {
-        return globalAttackPower;
+        return ApplyPercentageMultiplier(globalAttackPower);
     }
 
     /// <summary>
-    /// 【未实现】元素系统还未实现。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_WaterDamage()
     {
-        return waterDamage;
+        return ApplyPercentageMultiplier(waterDamage);
     }
 
     /// <summary>
@@ -406,15 +415,15 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_Crit()
     {
-        return crit;
+        return ApplyPercentage(Mathf.Clamp(crit, 0.0f, 100.0f));
     }
 
     /// <summary>
     /// 【未实现】伤害公式还未实现。
     /// </summary>
-    public float Calculate_CritDamage()
+    public float Calculate_CritDamageRate()
     {
-        return critDamage;
+        return ApplyPercentageMultiplier(critDamage);
     }
 
     /// <summary>
@@ -543,6 +552,43 @@ public class Stats : ScriptableObject
         if (dodge != previousDodgeRate)
         {
             previousDodgeRate = dodge;
+            changed = true;
+        }
+
+
+        if (physicalAttackPower != previousPhysicalAttackPower)
+        {
+            previousPhysicalAttackPower = physicalAttackPower;
+            changed = true;
+        }
+
+        if (abstractAttackPower != previousAbstractAttackPower)
+        {
+            previousAbstractAttackPower = abstractAttackPower;
+            changed = true;
+        }
+
+        if (globalAttackPower != previousGlobalAttackPower)
+        {
+            previousGlobalAttackPower = globalAttackPower;
+            changed = true;
+        }
+
+        if (toughness != previousToughness)
+        {
+            previousToughness = toughness;
+            changed = true;
+        }
+
+        if (crit != previousCrit)
+        {
+            previousCrit = crit;
+            changed = true;
+        }
+
+        if (critDamage != previousCritDamageRate)
+        {
+            previousCritDamageRate = critDamage;
             changed = true;
         }
 

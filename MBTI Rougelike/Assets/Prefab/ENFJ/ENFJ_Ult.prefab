@@ -57,7 +57,9 @@ MonoBehaviour:
   blowForceSpeed: 5
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
   hitEffectPlayMode: 1
-  damageType: 2
+  damageType: 0
+  canvasTransform: {fileID: 0}
+  damageHitType: 2
   damageTriggerTime: 0.25
   timer: 0
   velocity: {x: 0, y: 0}
@@ -74,7 +76,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   ownerStatus: {fileID: 0}
   applyStatus: {fileID: 0}
-  helperFunc: {fileID: 0}
+  damagePopupPrefab: {fileID: 0}
 --- !u!1 &2483830369894947779
 GameObject:
   m_ObjectHideFlags: 0
