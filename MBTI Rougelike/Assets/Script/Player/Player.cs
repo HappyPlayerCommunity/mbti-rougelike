@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.ShaderKeywordFilter.FilterAttribute;
 
 /// <summary>
 /// 玩家类。继承自单位，用来实现一些独属于玩家的功能。
@@ -30,12 +31,14 @@ public class Player : Unit
         base.Start();
         stats.Initialize();
 
+        preference.SetUpStats(stats);
+
         StatsUpdate();
+        preference.OnValueChange += () => SetUpPreferenceToStats();
+        stats.OnValueChange += () => StatsUpdate();
 
         hp = maxHp;
         shield = maxShield;
-
-        stats.OnValueChange += () => StatsUpdate();
     }
 
     public override void TakeDamage(int damage, float stuntime)
@@ -93,5 +96,11 @@ public class Player : Unit
             default:
                 return 1.0f;
         }
+    }
+
+    public void SetUpPreferenceToStats()
+    {
+        preference.SetUpStats(stats);
+        StatsUpdate();
     }
 }
