@@ -58,5 +58,7 @@ public class Player : Unit
         physicalAtkPower = stats.Calculate_PhysicalAttackPower();
         abstractAtkPower = stats.Calculate_AbstractAttackPower();
         globalAtkPower = stats.Calculate_GlobalAttackPower();
+
+        toughness = stats.Calculate_Toughness();
     }
 }

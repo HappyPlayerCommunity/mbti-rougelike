@@ -451,6 +451,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
         // 护盾会令吹飞效果减半。
         float blowupResistance = unit.Shield > 0.0f ? basicShieldResistance : 1.0f;
 
+        // 韧性效果会令吹飞效果等比率下降。
+        float toughness = unit.Toughness;
 
         switch (damageMovementType)
         {
@@ -462,7 +464,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 else
                     direction = (unit.transform.position - transform.position).normalized;
 
-                unit.BlowForceVelocity = blowForceSpeed * direction * blowupResistance;
+                unit.BlowForceVelocity = blowForceSpeed * direction * blowupResistance * toughness;
                 break;
         
             case DamageMovementType.Projectile:
@@ -471,7 +473,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 var direction1 = (characterPos - transform.position).normalized;
                 var direction2 = (velocity).normalized;
         
-                unit.BlowForceVelocity = blowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance;
+                unit.BlowForceVelocity = blowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance * toughness;
                 break;
         
             default:

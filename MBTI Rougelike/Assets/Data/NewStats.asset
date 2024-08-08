@@ -13,20 +13,20 @@ MonoBehaviour:
   m_Name: NewStats
   m_EditorClassIdentifier: Assembly-CSharp::Stats
   fireDamage: 0
-  movementSpeed: 0
+  movementSpeed: 100
   toughness: 0
   bondMovementSpeed: 0
   attackRange: 0
   attackEnergeCharge: 0
   iceDamage: 0
-  maxShield: 100
+  maxShield: 20
   shieldReset: 0
   buildingDurability: 0
   knockback: 0
   injuryEnergeCharge: 0
   earthDamage: 0
   maxHealth: 0
-  healthRegen: 0
+  healthRegen: 5
   experienceMultiplier: 0
   attackSpeed: 0
   physicalAttackPower: 0
@@ -55,14 +55,14 @@ MonoBehaviour:
   attackRangeINIT: 0
   attackEnergeChargeINIT: 0
   iceDamageINIT: 0
-  maxShieldINIT: 100
+  maxShieldINIT: 20
   shieldResetINIT: 0
   buildingDurabilityINIT: 0
   knockbackINIT: 0
   injuryEnergeChargeINIT: 0
   earthDamageINIT: 0
   maxHealthINIT: 0
-  healthRegenINIT: 0
+  healthRegenINIT: 1
   experienceMultiplierINIT: 0
   attackSpeedINIT: 0
   physicalAttackPowerINIT: 0

@@ -150,6 +150,7 @@ MonoBehaviour:
   staggerTimer: 0
   staggerRecordTime: 0
   staggerRate: 0
+  toughness: 1
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   attackRange: 1

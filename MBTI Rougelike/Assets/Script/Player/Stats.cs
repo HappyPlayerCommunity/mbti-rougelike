@@ -151,6 +151,7 @@ public class Stats : ScriptableObject
     private float previousPhysicalAttackPower = 0.0f;
     private float previousAbstractAttackPower = 0.0f;
     private float previousGlobalAttackPower = 0.0f;
+    private float previousToughness = 0.0f;
 
 
     public const float percentage = 0.01f;
@@ -194,7 +195,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_Toughness()
     {
-        return toughness;
+        return 1.0f / ApplyPercentageMultiplier(toughness);
     }
 
     /// <summary>
@@ -566,7 +567,12 @@ public class Stats : ScriptableObject
         {
             previousGlobalAttackPower = globalAttackPower;
             changed = true;
+        }
 
+        if (toughness != previousToughness)
+        {
+            previousToughness = toughness;
+            changed = true;
         }
 
         if (changed && OnValueChange != null)

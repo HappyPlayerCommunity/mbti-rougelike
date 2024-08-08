@@ -60,10 +60,13 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("硬直比率。用于计算显示受伤的红光，以及移动速度的减益率。")]
     public float staggerRate = 0.0f;
 
+    [SerializeField, Tooltip("韧性，对硬直的抗性")]
+    public float toughness = 1.0f;
+
     [Header("互动组件")]
     public HPController hpControllerPrefab;
     public Transform canvasTransform;
-    protected HPController hpController;
+    public HPController hpController;
     protected SpriteRenderer spriteRenderer;
 
     private Dictionary<GameObject, float> damageTimers = new Dictionary<GameObject, float>();
@@ -88,6 +91,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     protected virtual void Start()
     {
+        canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
+
         CreateHealthBar();
 
         hp = maxHp;
@@ -266,6 +271,18 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public float Toughness
+    {
+        get
+        {
+            return toughness;
+        }
+        set
+        {
+            toughness = value;
+        }
+    }
+
     public virtual void TakeDamage(int damage, float stuntime)
     {
         ResetShieldRestoreCoroutine();
@@ -284,8 +301,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         {
             hp -= damage;
             spriteRenderer.color = Color.red;
-            staggerTimer = stuntime;
-            staggerRecordTime = stuntime;
+            staggerTimer = stuntime * toughness;
+            staggerRecordTime = staggerTimer;
         }
 
         if (hp <= 0)
@@ -341,10 +358,12 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     public void Respawn()
     {
         this.HP = this.MaxHP;
+        this.Shield = this.MaxShield;
         gameObject.SetActive(true);
         //OnRespawn?.Invoke();
-
-        hpController.ResetObjectState();
+        CreateHealthBar();
+        StartHealthRegen();
+        ResetShieldRestoreCoroutine();
     }
 
     protected void StartHealthRegen()
@@ -391,8 +410,6 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
     protected void CreateHealthBar()
     {
-        canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
-
         GameObject healthBarObj = PoolManager.Instance.GetObject(hpControllerPrefab.name, hpControllerPrefab.gameObject);
         HPController healthBar = healthBarObj.GetComponent<HPController>();
         healthBar.transform.SetParent(canvasTransform, false);

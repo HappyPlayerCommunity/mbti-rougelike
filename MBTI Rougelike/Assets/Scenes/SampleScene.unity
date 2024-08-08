@@ -1233,6 +1233,7 @@ MonoBehaviour:
   staggerTimer: 0
   staggerRecordTime: 0
   staggerRate: 0
+  toughness: 0
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
 --- !u!1 &1613029562
@@ -1525,7 +1526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2187154304236326421, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8883716087494439959, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2075,7 +2076,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4506611985501209401, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8976664838760256466, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: m_GravityScale
