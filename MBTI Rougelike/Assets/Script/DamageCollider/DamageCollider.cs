@@ -69,6 +69,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     public Transform canvasTransform;
 
+    private HashSet<Collider2D> collidingObjects = new HashSet<Collider2D>();
 
     public enum HitEffectPlayMode
     {
@@ -316,21 +317,10 @@ public class DamageCollider : MonoBehaviour, IPoolable
         if (!damageCollider2D)
             return;
 
-        Vector2 colliderSize;
+        // 创建一个临时列表来保存当前的碰撞对象
+        List<Collider2D> currentCollidingObjects = new List<Collider2D>(collidingObjects);
 
-        switch (damageCollider2D)
-        {
-            case BoxCollider2D boxCollider:
-                hits = Physics2D.OverlapBoxAll(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f);
-                break;
-            case CapsuleCollider2D capsuleCollider:
-                hits = Physics2D.OverlapCapsuleAll(capsuleCollider.bounds.center, capsuleCollider.bounds.size, capsuleCollider.direction, capsuleCollider.transform.eulerAngles.z);
-                break;
-            default:
-                break;
-        }
-
-        foreach (Collider2D hit in hits)
+        foreach (Collider2D hit in currentCollidingObjects)
         {
             if (hit == damageCollider2D)
                 continue;
@@ -368,7 +358,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
                                 DamagePopupManager.Instance.Popup(PopupType.Miss, hit.transform.position);
                                 continue;
                             }
-
                         }
 
                         // 后面需要考虑到子弹单位的拥有者位死亡后，子弹还在的情况。
@@ -415,7 +404,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
                     didDamage = true;
                 }
 
-
                 // 执行击中目标
 
                 // 如果一次性碰撞事件尚未触发，则触发
@@ -431,9 +419,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 {
                     case DamageHitType.SingleHit:
                         // 单次击中碰撞体后消失
-                        //Destroy(gameObject);
                         Deactivate();
-                        return;
+                        break;
                     case DamageHitType.MultiHit:
                         // 击中多个目标但不会持续伤害，不销毁
                         break;
@@ -447,7 +434,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
         // 如果击中目标且不是【持续群体打击】类型，则销毁子弹
         if (hitted && damageHitType != DamageHitType.SustainedMultiHit)
         {
-            //Destroy(gameObject);
             Deactivate();
             return;
         }
@@ -680,6 +666,22 @@ public class DamageCollider : MonoBehaviour, IPoolable
             damagePopup.transform.SetParent(canvasTransform, false);
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
             damagePopup.GetComponent<RectTransform>().position = screenPosition;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other != damageCollider2D)
+        {
+            collidingObjects.Add(other);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (collidingObjects.Contains(other))
+        {
+            collidingObjects.Remove(other);
         }
     }
 }

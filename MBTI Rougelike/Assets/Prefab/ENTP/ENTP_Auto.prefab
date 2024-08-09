@@ -140,6 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 125242476704997490}
   - component: {fileID: 4191177479539466285}
+  - component: {fileID: -1727574664349341918}
   m_Layer: 0
   m_Name: ENTP_Auto
   m_TagString: Untagged
@@ -182,12 +183,13 @@ MonoBehaviour:
   damageTags:
   - Enemy
   isAttachedPos: 0
-  stunTime: 0
+  staggerTime: 1
   isLifeTimeBindingWithState: 0
   blowForceSpeed: 0
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
   hitEffectPlayMode: 0
   damageType: 1
+  damageElementType: 0
   canvasTransform: {fileID: 0}
   damageHitType: 0
   damageTriggerTime: 100
@@ -207,3 +209,30 @@ MonoBehaviour:
   ownerStatus: {fileID: 0}
   applyStatus: {fileID: 0}
   damagePopupPrefab: {fileID: 5598179215281603740, guid: 9406a451fdf15664e884b89e2cffb7e7, type: 3}
+--- !u!50 &-1727574664349341918
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7517808580061423951}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1878403270185017695}
   - component: {fileID: 1793247509628571725}
+  - component: {fileID: 1364260795822122117}
   m_Layer: 0
   m_Name: MeleeEnemy_Damage_Collider_1
   m_TagString: Untagged
@@ -52,11 +53,15 @@ MonoBehaviour:
   damageTags:
   - Player
   isAttachedPos: 0
-  stunTime: 0
+  staggerTime: 1
+  isLifeTimeBindingWithState: 0
   blowForceSpeed: 0
   hitEffectPrefab: {fileID: 4191014965251029583, guid: 76a865e944a60d54881ae9c480db5ea8, type: 3}
   hitEffectPlayMode: 0
   damageType: 0
+  damageElementType: 0
+  canvasTransform: {fileID: 0}
+  damageHitType: 0
   damageTriggerTime: 100
   timer: 0
   velocity: {x: 0, y: 0}
@@ -71,6 +76,36 @@ MonoBehaviour:
   initSource: {fileID: 0}
   damageMovementType: 1
   spriteRenderer: {fileID: 0}
+  ownerStatus: {fileID: 0}
+  applyStatus: {fileID: 0}
+  damagePopupPrefab: {fileID: 0}
+--- !u!50 &1364260795822122117
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161389626845162144}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &8407462781873523849
 GameObject:
   m_ObjectHideFlags: 0

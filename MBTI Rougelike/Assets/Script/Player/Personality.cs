@@ -158,6 +158,11 @@ public class Personality : MonoBehaviour
                                 break;
                         }
 
+                        var collider = damageCollider.GetComponentInChildren<Collider2D>();
+                        if (collider != null)
+                        {
+                            collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
+                        }
                         // 以前的实现方法，备存一下。
 
                         //// 如果瞄准方向是向左的，则需要将角度加180度，因为Sprite【默认面向右侧】
@@ -170,6 +175,8 @@ public class Personality : MonoBehaviour
                         //sprite.transform.localEulerAngles = aimDirection.y > 0.0f ? new Vector3(0.0f, 0.0f, angle) : new Vector3(0.0f, 0.0f, -angle);
 
                     }
+
+
 
                     float scatterAngleHalf = scatterAngle / 2.0f;
 
@@ -228,9 +235,9 @@ public class Personality : MonoBehaviour
                     damageCollider.ownerStatus = selfStatus;
                 }
 
-                if (damageCollider.GetComponentInChildren<SpriteRenderer>())
+                var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
+                if (sprite != null)
                 {
-                    var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
                     float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), aimDirection);
 
                     switch (ultimateSkill.GetRenderMode)
@@ -253,6 +260,14 @@ public class Personality : MonoBehaviour
                             break;
                         default:
                             break;
+                    }
+
+                    var collider = damageCollider.GetComponentInChildren<Collider2D>();
+                    Debug.Log("collider" + collider);
+                    if (collider != null)
+                    {
+                        Debug.Log("Hello?");
+                        collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
                     }
                 }
             }
