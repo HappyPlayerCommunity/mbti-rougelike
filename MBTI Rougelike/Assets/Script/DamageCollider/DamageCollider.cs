@@ -320,13 +320,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
         switch (damageCollider2D)
         {
-            case BoxCollider2D collider2D:
-                colliderSize = (collider2D.size * spriteRenderer.transform.localScale).Absolute();
-                hits = Physics2D.OverlapBoxAll(transform.position, colliderSize, 0.0f);
+            case BoxCollider2D boxCollider:
+                hits = Physics2D.OverlapBoxAll(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f);
                 break;
-            case CapsuleCollider2D collider2D:
-                colliderSize = (collider2D.size * spriteRenderer.transform.localScale).Absolute();
-                hits = Physics2D.OverlapCapsuleAll(transform.position, colliderSize, collider2D.direction, collider2D.transform.eulerAngles.z);
+            case CapsuleCollider2D capsuleCollider:
+                hits = Physics2D.OverlapCapsuleAll(capsuleCollider.bounds.center, capsuleCollider.bounds.size, capsuleCollider.direction, capsuleCollider.transform.eulerAngles.z);
                 break;
             default:
                 break;
