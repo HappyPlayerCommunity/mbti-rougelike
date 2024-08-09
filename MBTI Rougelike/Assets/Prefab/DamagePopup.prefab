@@ -150,7 +150,7 @@ MonoBehaviour:
   damageText: {fileID: 3850268722301994270}
   lifetime: 1
   lifetimer: 0
-  floatSpeed: 10
+  floatSpeed: 30
   rectTransform: {fileID: 5696240815847511757}
   renderPosition: {x: 0, y: 0, z: 0}
   outlineSize: 0.3

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Windows;
 
 /// <summary>
 /// 人格类。用来管理各个人格的普攻（Auto），特技（Sp），大招（Ult），被动等各种效果。
@@ -17,6 +19,9 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("普攻的生成位置。")]
     private Transform normalAttack_InitPosition;
 
+    private bool isNormalAttackCharging = false;
+    private float chargingTimer1 = 0.0f;
+    private float chargingRate1 = 0.0f;
 
     [Header("特殊技能（特技）")]
     [SerializeField, Tooltip("该技能的数据。")]
@@ -27,6 +32,10 @@ public class Personality : MonoBehaviour
 
     [SerializeField, Tooltip("特技的生成位置。")]
     private Transform specialSkill_InitPosition;
+
+    private bool isSpecialSkillCharging = false;
+    private float chargingTimer2 = 0.0f;
+    private float chargingRate2 = 0.0f;
 
 
     [Header("终极技能（大招）")]
@@ -53,6 +62,9 @@ public class Personality : MonoBehaviour
     [Tooltip("状态管理机。")]
     public StatusManager statusManager;
 
+    [Tooltip("固定位置生成的伤害块的的退回Offset，防止生成的【伤害块】过于靠前")]
+    public float adjustBackOffset = 3.0f;
+
     protected Coroutine energeChargeCoroutine;
 
     public float UltimateEnerge
@@ -66,6 +78,19 @@ public class Personality : MonoBehaviour
         get { return maxUltimateEnerge; }
         set { maxUltimateEnerge = value; }
     }
+
+    public float ChargingRate1
+    {
+        get { return chargingRate1; }
+        set { chargingRate1 = value; }
+    }
+
+    public float ChargingRate2
+    {
+        get { return chargingRate2; }
+        set { chargingRate2 = value; }
+    }
+
 
     //大招
 
@@ -97,17 +122,17 @@ public class Personality : MonoBehaviour
 
         if (!statusManager.IsSlienced())
         {
-            SkillUpdate(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, Input.GetMouseButton(0), true); //左键
-            SkillUpdate(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, Input.GetMouseButton(1), false); //右键
+            HandleSkillControlScheme(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, UnityEngine.Input.GetMouseButton(0), true); //左键
+            HandleSkillControlScheme(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, UnityEngine.Input.GetMouseButton(1), false); //右键
 
             UltimateSkillUpdate();
         }
     }
 
-    protected virtual void SkillUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto)
+    protected virtual void SkillUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto, float chargingRate = 1.0f)
     {
-        Vector3 mousePos = Input.mousePosition;
-        var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = UnityEngine.Input.mousePosition;
+        var mouseWorldPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
         mouseWorldPos.z = 0.0f;
         Vector3 aimDirection = aim.aimDirection;
 
@@ -130,10 +155,39 @@ public class Personality : MonoBehaviour
                     string poolKey = skill.DamageCollider.name;
                     GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, skill.DamageCollider.gameObject);
                     DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
-                    damageCollider.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-                    damageCollider.owner = player;
 
                     var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
+                    var collider = damageCollider.GetComponentInChildren<Collider2D>();
+
+                    // 计算生成位置
+                    Vector3 spawnPosition = initPos.position;
+                    if (skill.ControlScheme == Skill.SkillControlScheme.ChargeRelease)
+                    {
+                        SkillChargingRateUpdate(damageCollider, chargingRate);
+                    }
+
+                    damageCollider.owner = player;
+
+                    if (skill.FixPos)
+                    {
+                        switch (collider)
+                        {
+                            case BoxCollider2D boxCollider:
+                                float boxWidth = boxCollider.size.x * sprite.transform.localScale.x;
+                                float boxOffset = boxCollider.offset.x * sprite.transform.localScale.x;
+
+                                float distanceFromPlayer = boxWidth * 0.5f + boxOffset;
+                                float finalAdjustBack = adjustBackOffset * chargingRate;
+
+                                spawnPosition = playerTransform.position + aimDirection.normalized * (distanceFromPlayer - finalAdjustBack);
+                                break;
+                            default:
+                                // Todo: 其他类型的collider
+                                break;
+                        }
+                    }
+
+                    damageCollider.Activate(spawnPosition, Quaternion.Euler(0.0f, 0.0f, 0.0f));
 
                     if (sprite)
                     {
@@ -158,7 +212,6 @@ public class Personality : MonoBehaviour
                                 break;
                         }
 
-                        var collider = damageCollider.GetComponentInChildren<Collider2D>();
                         if (collider != null)
                         {
                             collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
@@ -204,7 +257,7 @@ public class Personality : MonoBehaviour
 
     protected virtual void UltimateSkillUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && ultimateEnerge >= maxUltimateEnerge)
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Space) && ultimateEnerge >= maxUltimateEnerge)
         {
             ultimateEnerge = 0.0f;
 
@@ -263,10 +316,8 @@ public class Personality : MonoBehaviour
                     }
 
                     var collider = damageCollider.GetComponentInChildren<Collider2D>();
-                    Debug.Log("collider" + collider);
                     if (collider != null)
                     {
-                        Debug.Log("Hello?");
                         collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
                     }
                 }
@@ -317,6 +368,80 @@ public class Personality : MonoBehaviour
                 ultimateEnerge += stats.Calculate_AutoCharge();
                 ultimateEnerge = Mathf.Min(ultimateEnerge, maxUltimateEnerge);
             }
+        }
+    }
+
+    private void HandleSkillControlScheme(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto)
+    {
+        switch (skill.ControlScheme)
+        {
+            case Skill.SkillControlScheme.Continuous:
+                SkillUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto);
+                break;
+            case Skill.SkillControlScheme.ChargeRelease:
+                if (isAuto)
+                    ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer1, ref chargingRate1, ref isNormalAttackCharging);
+                else
+                    ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer2, ref chargingRate2, ref isSpecialSkillCharging);
+                break;
+            case Skill.SkillControlScheme.Toggle:
+                if (input && currentReloadingTimer <= 0.0f)
+                {
+                    SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void SkillChargingRateUpdate(DamageCollider damageCollider, float chargingRate)
+    {
+        damageCollider.damage += (int)(damageCollider.ChargingDamage * chargingRate);
+
+        damageCollider.BlowForceSpeed += damageCollider.ChargingBlowForceSpeed * chargingRate;
+
+        //damageCollider.Velocity = damageCollider.Velocity * chargingRate;
+
+        //damageCollider.MaxTimer = damageCollider.MaxTimer * chargingRate;
+        //damageCollider.Timer = damageCollider.MaxTimer;
+
+        damageCollider.StaggerTime += damageCollider.ChargingStaggerTime * chargingRate;
+
+        switch (damageCollider.damageMovementType)
+        {
+            case DamageCollider.DamageMovementType.Passive:
+                damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
+                break;
+            case DamageCollider.DamageMovementType.Projectile:
+                damageCollider.MaxTimer += damageCollider.ChargingMaxTimer * chargingRate;
+                damageCollider.Timer = damageCollider.MaxTimer;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void ChargeReleaseUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto, ref float chargingTimer, ref float chargingRate, ref bool isCharging)
+    {
+        if (input && currentReloadingTimer <= 0.0f && !isCharging)
+        {
+            // Start charging
+            isCharging = true;
+            chargingTimer = 0.0f;
+        }
+        else if (!input && isCharging)
+        {
+            // Release attack
+            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, chargingRate);
+            isCharging = false;
+            chargingTimer = 0.0f;
+            chargingRate = 0.0f;
+        }
+        else if (isCharging)
+        {
+            chargingTimer += Time.deltaTime;
+            chargingRate = Mathf.Clamp(chargingTimer / skill.MaxChargingTime, 0.1f, 1.0f); // 0.1f是最低充能比率，1.0f是最高充能比率。
         }
     }
 }

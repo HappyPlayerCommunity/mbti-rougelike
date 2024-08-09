@@ -49,6 +49,12 @@ public class Skill : ScriptableObject
     [SerializeField, Tooltip("此技能会为自己添加的状态。")]
     private Status selfStatus;
 
+    [SerializeField, Tooltip("此技能的最大充能时间，超过此数值后不会再进一步强化此技能。")]
+    private float maxChargingTime;
+
+    [SerializeField, Tooltip("此技能的生成位置是否是固定的，而不是依靠Aim里的initPos")]
+    private bool fixPos;
+
 
     public DamageCollider DamageCollider
     {
@@ -95,6 +101,23 @@ public class Skill : ScriptableObject
     public Status SelfStatus
     {
         get { return selfStatus; }
-        //set { selfStatus = value; }
+        set { selfStatus = value; }
+    }
+
+    public SkillControlScheme ControlScheme
+    {
+        get { return controlScheme; }
+        set { controlScheme = value; }
+    }
+
+    public float MaxChargingTime
+    {
+        get { return maxChargingTime; }
+        set { maxChargingTime = value; }
+    }
+    public bool FixPos
+    {
+        get { return fixPos; }
+        set { fixPos = value; }
     }
 }

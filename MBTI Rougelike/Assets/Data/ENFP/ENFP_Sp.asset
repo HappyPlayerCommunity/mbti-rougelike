@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f327d7c8417428439099d04d2214334, type: 3}
-  m_Name: ENFP_Atk
+  m_Name: ENFP_Sp
   m_EditorClassIdentifier: 
-  damageCollider: {fileID: 1168946432406153740, guid: 10810244db5f5c542896176765a79d0c, type: 3}
-  reloadingTime: 1
+  damageCollider: {fileID: 3737656460835953957, guid: 2765e6b2446004546bf6419d3e924d0e, type: 3}
+  reloadingTime: 5
   scatterAngle: 0
   damageColliderSpeed: 0
   maxChargeCount: 0
@@ -21,6 +21,5 @@ MonoBehaviour:
   controlScheme: 1
   renderMode: 0
   selfStatus: {fileID: 0}
-  maxChargingTime: 2
-  fixPos: 1
-  fixedDistance: 0
+  maxChargingTime: 1
+  fixPos: 0

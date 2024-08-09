@@ -71,6 +71,27 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     private HashSet<Collider2D> collidingObjects = new HashSet<Collider2D>();
 
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的最大伤害值")]
+    protected int chargingDamage = 0;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的击飞力。")]
+    protected float chargingBlowForceSpeed = 0.0f;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的最大体积")]
+    protected Vector3 chargingLocalScale = Vector3.one;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的最大硬直施加时间")]
+    protected float chargingStaggerTime = 0.0f;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的最大持续时间")]
+    protected float chargingMaxTimer = 0.0f;
+
+
+
+
+
+
     public enum HitEffectPlayMode
     {
         HitPoint,  //在【伤害块】与【击中目标】的中间播放
@@ -125,10 +146,14 @@ public class DamageCollider : MonoBehaviour, IPoolable
     private Vector3 initSpriteLocalScale;
     private float initBlowForceSpeed;
     protected float initMaxTimer;
+    protected int initDamage = 0;
+    protected int initStaggerTime = 0;
+
 
     private string poolKey;
 
     const float basicShieldResistance = 0.5f;
+
 
 
     [Header("互动组件")]
@@ -211,6 +236,42 @@ public class DamageCollider : MonoBehaviour, IPoolable
         set { blowForceSpeed = value; }
     }
 
+    public float StaggerTime
+    {
+        get { return staggerTime; }
+        set { staggerTime = value; }
+    }
+
+    public int ChargingDamage
+    {
+        get { return chargingDamage; }
+        set { chargingDamage = value; }
+    }
+
+    public float ChargingBlowForceSpeed
+    {
+        get { return chargingBlowForceSpeed; }
+        set { chargingBlowForceSpeed = value; }
+    }
+    public Vector3 ChargingLocalScale
+    {
+        get { return chargingLocalScale; }
+        set { chargingLocalScale = value; }
+    }
+
+    public float ChargingStaggerTime
+    {
+        get { return chargingStaggerTime; }
+        set { chargingStaggerTime = value; }
+    }
+
+    public float ChargingMaxTimer
+    {
+        get { return chargingMaxTimer; }
+        set { chargingMaxTimer = value; }
+    }
+
+
     private void Awake()
     {
         poolKey = gameObject.name;
@@ -226,6 +287,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
         initSpriteLocalScale = spriteRenderer.transform.localScale;
         initBlowForceSpeed = blowForceSpeed;
         initMaxTimer = maxTimer;
+        initDamage = damage;
+        initStaggerTime = Mathf.RoundToInt(staggerTime);
         damageCollider2D.isTrigger = true;
         awaked = true;
         canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
@@ -584,6 +647,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
         blowForceSpeed = initBlowForceSpeed;
         maxTimer = initMaxTimer;
+        damage = initDamage;
+        staggerTime = initStaggerTime;
 
         OnStart();
     }
