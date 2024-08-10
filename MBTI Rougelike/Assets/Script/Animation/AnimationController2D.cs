@@ -46,7 +46,19 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     public void OnAnimationEnd()
     {
         animationFinished = true;
-        gameObject.SetActive(false);
+
+        // 临时代码。
+        // 一个伤害块可能同时拥有AnimationController2D和DamageCollider组件。重复回收会导致错误。
+        // 后续可能需要一个更完善的解决方案，来处理这种多重回收对象池的情况。
+        if (gameObject.GetComponentInParent<DamageCollider>())
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            Deactivate();
+        }
+
         //var damageCollider = gameObject.GetComponent<DamageCollider>();
         //if (damageCollider)
         //{
@@ -80,7 +92,6 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     public void Deactivate()
     {
         gameObject.SetActive(false);
-
         PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
 }

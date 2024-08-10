@@ -30,7 +30,7 @@ public class AttackHelper : MonoBehaviour
         // 计算生成位置
         Vector3 spawnPosition = initPos.position;
 
-        if (controlScheme == Skill.SkillControlScheme.ChargeRelease)
+        if (controlScheme == SkillControlScheme.ChargeRelease)
         {
             SkillChargingRateUpdate(damageCollider, chargingRate);
         }
@@ -55,6 +55,8 @@ public class AttackHelper : MonoBehaviour
                     break;
             }
         }
+
+        damageCollider.InitPos = aimDirection.normalized * (initPos.position - damageCollider.owner.transform.position).magnitude;
 
         damageCollider.Activate(spawnPosition, Quaternion.Euler(0.0f, 0.0f, 0.0f));
 

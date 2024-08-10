@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SkillControlScheme
+{
+    Continuous,         //按住按键，会持续自动使用技能，类似于机枪。
+    ChargeRelease,      //按住按键为“蓄力”，松开时使用技能。
+    Toggle,             //按下按键触发效果，再次释放需要松开并再次按下。
+    None                //用于标识一些自动攻击。
+}
+
+public enum SkillCreateType
+{
+    DamageCollider,     //生成伤害块的技能
+    Turret              //生成炮塔的技能
+}
+
 /// <summary>
 /// 存放技能各种数据的脚本对象。简单技能的数据都储存于此。一些复杂的技能可能需要在Personality类中实现。
 /// </summary>
 [CreateAssetMenu(fileName = "NewSkillData", menuName = "Skill Data")]
 public class Skill : ScriptableObject
 {
-    public enum SkillControlScheme
-    {
-        Continuous,         //按住按键，会持续自动使用技能，类似于机枪。
-        ChargeRelease,      //按住按键为“蓄力”，松开时使用技能。
-        Toggle,             //按下按键触发效果，再次释放需要松开并再次按下。
-        None                //用于标识一些自动攻击。
-    }
-
     public enum RenderMode
     {
         HorizontalFlip,
@@ -56,6 +62,11 @@ public class Skill : ScriptableObject
     [SerializeField, Tooltip("此技能的生成位置是否是固定的，而不是依靠Aim里的initPos")]
     private bool fixPos;
 
+    [SerializeField, Tooltip("该技能生成的炮塔。")]
+    private Turret turret;
+
+    [SerializeField, Tooltip("该技能的生成类型。是生成伤害块，还是生成炮塔？")]
+    private SkillCreateType skillType = SkillCreateType.DamageCollider;
 
     public DamageCollider DamageCollider
     {
@@ -120,5 +131,15 @@ public class Skill : ScriptableObject
     {
         get { return fixPos; }
         set { fixPos = value; }
+    }
+    public SkillCreateType SkillType
+    {
+        get { return skillType; }
+        set { skillType = value; }
+    }
+    public Turret Turret
+    {
+        get { return turret; }
+        set { turret = value; }
     }
 }

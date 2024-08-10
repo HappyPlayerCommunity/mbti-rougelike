@@ -287,26 +287,39 @@ public class Personality : MonoBehaviour
 
     private void HandleSkillControlScheme(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto)
     {
-        switch (skill.ControlScheme)
+        switch (skill.SkillType)
         {
-            case Skill.SkillControlScheme.Continuous:
-                SkillUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto);
-                break;
-            case Skill.SkillControlScheme.ChargeRelease:
-                if (isAuto)
-                    ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer1, ref chargingRate1, ref isNormalAttackCharging);
-                else
-                    ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer2, ref chargingRate2, ref isSpecialSkillCharging);
-                break;
-            case Skill.SkillControlScheme.Toggle:
-                if (input && currentReloadingTimer <= 0.0f)
+            case SkillCreateType.DamageCollider:
+
+                switch (skill.ControlScheme)
                 {
-                    SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto);
+                    case SkillControlScheme.Continuous:
+                        SkillUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto);
+                        break;
+                    case SkillControlScheme.ChargeRelease:
+                        if (isAuto)
+                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer1, ref chargingRate1, ref isNormalAttackCharging);
+                        else
+                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer2, ref chargingRate2, ref isSpecialSkillCharging);
+                        break;
+                    case SkillControlScheme.Toggle:
+                        if (input && currentReloadingTimer <= 0.0f)
+                        {
+                            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto);
+                        }
+                        break;
+                    default:
+                        break;
                 }
+                break;
+            case SkillCreateType.Turret:
+                SpawnTurret(skill, ref currentReloadingTimer, initPos, input, isAuto);
                 break;
             default:
                 break;
         }
+
+
     }
 
     private void SkillChargingRateUpdate(DamageCollider damageCollider, float chargingRate)
@@ -356,6 +369,30 @@ public class Personality : MonoBehaviour
         {
             chargingTimer += Time.deltaTime;
             chargingRate = Mathf.Clamp(chargingTimer / skill.MaxChargingTime, 0.1f, 1.0f); // 0.1f是最低充能比率，1.0f是最高充能比率。
+        }
+    }
+
+    private void SpawnTurret(Skill skill, ref float currReloadingTimer, Transform initPos, bool input, bool isAuto)
+    {
+        if (input && currReloadingTimer <= 0.0f)
+        {
+            string poolKey = skill.Turret.name;
+            GameObject turretObj = PoolManager.Instance.GetObject(poolKey, skill.Turret.gameObject);
+
+            Turret turret = turretObj.GetComponent<Turret>();
+
+            turret.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+
+            // 重置冷却时间
+            currReloadingTimer = skill.ReloadingTime;
+            if (isAuto)
+            {
+                currReloadingTimer *= stats.Calculate_AttackSpeed();
+            }
+            else
+            {
+                currReloadingTimer *= stats.Calculate_SpecialCooldown();
+            }
         }
     }
 }

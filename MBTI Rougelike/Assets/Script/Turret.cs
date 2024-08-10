@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turret : Building
+public class Turret : Building, IPoolable
 {
     public float detectionRadius = 5.0f; // 检测半径
     public DamageCollider damageCollider; // 伤害块预制件
@@ -18,8 +18,15 @@ public class Turret : Building
     public Player player;
 
     public float damageColliderSpeed = 5.0f;
+    private string poolKey;
 
     Skill.RenderMode damageColliderRenderMode = Skill.RenderMode.NoneFlip;
+
+    public string PoolKey
+    {
+        get { return poolKey; }
+        set { poolKey = value; }
+    }
 
     protected override void Start()
     {
@@ -27,7 +34,7 @@ public class Turret : Building
         player = GameObject.FindObjectOfType<Player>();
     }
 
-    void Update()
+    protected override void OnUpdate()
     {
         // 更新发射冷却时间
         attackTimer -= Time.deltaTime;
@@ -71,5 +78,42 @@ public class Turret : Building
     void Attack(Vector3 direction)
     {
         AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, direction, scatterAngle, isFixPos, damageColliderRenderMode, player, damageColliderSpeed);
+    }
+
+    /// <summary>
+    /// 继承自IPoolable接口的方法。用于对象池物体的初始化。
+    /// </summary>
+    public void ResetObjectState()
+    {
+        hp = maxHp;
+        shield = maxShield;
+        velocity = Vector3.zero;
+        blowForceVelocity = Vector3.zero;
+
+        spriteRenderer.color = Color.white;
+        staggerTimer = 0.0f;
+        staggerRecordTime = 0.0f;
+
+        //Debug.Log("Enemy ResetObjectState?");
+    }
+
+    /// <summary>
+    /// 当对象从对象池中取出时，调用这个方法来初始化
+    /// </summary>
+    public void Activate(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
+        gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// 调用这个方法将对象塞回对象池
+    /// </summary>
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
+
+        PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
 }
