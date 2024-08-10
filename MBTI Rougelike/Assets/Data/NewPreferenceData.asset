@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68915a2f561fda44aa873a96cfcf2cc, type: 3}
   m_Name: NewPreferenceData
   m_EditorClassIdentifier: 
-  Extraversion: 100
-  Introversion: 20
-  Sensing: 500
-  Intuition: 500
-  Thinking: 20
+  Extraversion: 0
+  Introversion: 0
+  Sensing: 0
+  Intuition: 0
+  Thinking: 0
   Feeling: 0
-  Judging: 50
+  Judging: 0
   Perceiving: 0
