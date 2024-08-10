@@ -734,24 +734,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
         return false;
     }
 
-
-    protected void ShowDamagePopup(int damage, Vector3 position)
-    {
-        if (damagePopupPrefab)
-        {
-            GameObject popupObj = PoolManager.Instance.GetObject(damagePopupPrefab.name, damagePopupPrefab.gameObject);
-            DamagePopup damagePopup = popupObj.GetComponent<DamagePopup>();
-            damagePopup.Activate(position, Quaternion.identity);
-
-            //GameObject popup = Instantiate(damagePopupPrefab, position, Quaternion.identity);
-            //DamagePopup damagePopup = popup.GetComponent<DamagePopup>();
-            damagePopup.SetDamage(damage);
-            damagePopup.transform.SetParent(canvasTransform, false);
-            Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
-            damagePopup.GetComponent<RectTransform>().position = screenPosition;
-        }
-    }
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other != damageCollider2D)

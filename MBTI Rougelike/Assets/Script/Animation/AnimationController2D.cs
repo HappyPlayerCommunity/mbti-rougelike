@@ -13,6 +13,10 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     public bool animationFinished = false;
     public string poolKey;
 
+    public bool controlByMaxTime = false;
+    public float maxTime;
+    public float timer;
+
     public Animator GetAnimator()
     {
         return animator;
@@ -35,6 +39,15 @@ public class AnimationController2D : MonoBehaviour, IPoolable
         if (isAttached)
         {
             transform.position = attachedTransform.position;
+        }
+
+        if (controlByMaxTime)
+        {
+            timer -= Time.deltaTime;
+            if (timer <= 0.0f)
+            {
+                OnAnimationEnd();
+            }
         }
     }
 
@@ -73,6 +86,7 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     public void ResetObjectState()
     {
         animationFinished = false;
+        timer = maxTime;
     }
 
     /// <summary>
@@ -82,7 +96,6 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     {
         transform.position = position;
         transform.rotation = rotation;
-
         gameObject.SetActive(true);
     }
 

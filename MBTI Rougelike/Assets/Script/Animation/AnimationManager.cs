@@ -7,6 +7,7 @@ public enum Animation
 {
     ShieldBreak = 0,
     ShieldRestore = 1,
+    UltraSun = 2,
 }
 
 /// <summary>

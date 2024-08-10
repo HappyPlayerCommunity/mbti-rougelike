@@ -613,6 +613,7 @@ MonoBehaviour:
   animationController2Ds:
   - {fileID: 4704608658279154130, guid: e726aa42170dfb34a805a93a8e1a6dbd, type: 3}
   - {fileID: 368009371002521452, guid: dd6385695d9030c4e81883e08cc06a4e, type: 3}
+  - {fileID: 260402918487197255, guid: da342000ab258f54485cdc6a4fedfee7, type: 3}
 --- !u!4 &477298247
 Transform:
   m_ObjectHideFlags: 0
@@ -1693,7 +1694,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 69732acb4d1e79d4fb136cd4452a6aca, type: 2}
     - target: {fileID: 8883716087494439959, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 8883716087494439959, guid: 5795ca83e0640e74ca730d4501fc39f4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2239,7 +2240,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4506611985501209401, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8425808833404993618, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: preference
@@ -2318,6 +2319,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8294932286601738745, guid: 86b3fb692e8743b4090709f856415df5, type: 3}
+      propertyPath: ultimateSkill
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8294932286601738745, guid: 86b3fb692e8743b4090709f856415df5, type: 3}
+      propertyPath: ultSpecialImplementation
+      value: 
+      objectReference: {fileID: 1427639486662207979, guid: db9cc181c5488e240aab9e126ee97ca5, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

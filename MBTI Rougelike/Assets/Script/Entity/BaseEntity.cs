@@ -352,6 +352,15 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public virtual void GetHealing(int healAmount)
+    {
+        hp += healAmount;
+        if (hp > maxHp)
+        {
+            hp = maxHp;
+        }
+    }
+
     public virtual void Die()
     {
         hpController.Deactivate();
