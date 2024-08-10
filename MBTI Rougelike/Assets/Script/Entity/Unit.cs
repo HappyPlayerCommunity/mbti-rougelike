@@ -34,8 +34,6 @@ public class Unit : BaseEntity
     [SerializeField, Tooltip("此单位能闪避伤害块的概率。")]
     protected float dodgeRate;
 
-    [SerializeField, Tooltip("此单位的状态管理器，用来结算各种状态。")]
-    protected StatusManager statusManager;
 
     //或许应该攻击技能动作剥离出去，单开一个类。
 
@@ -51,18 +49,9 @@ public class Unit : BaseEntity
         }
     }
 
-    public StatusManager StatusManager
-    {
-        get
-        {
-            return statusManager;
-        }
-    }
-
     protected override void Start()
     {
         base.Start();
-        statusManager = GetComponent<StatusManager>();
     }
 
     public bool IsActioning
@@ -73,6 +62,6 @@ public class Unit : BaseEntity
 
     public override bool CanTakeDamageFrom(GameObject collider)
     {
-        return base.CanTakeDamageFrom(collider) && !statusManager.IsInvincible();
+        return base.CanTakeDamageFrom(collider) && (!statusManager || !statusManager.IsInvincible());
     }
 }

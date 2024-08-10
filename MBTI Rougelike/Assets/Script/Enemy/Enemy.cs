@@ -59,6 +59,8 @@ public class Enemy : Unit, IPoolable
 
         attackTimer -= Time.deltaTime;
 
+        
+
         switch (unitAi.CurrentState)
         {
             case UnitAI.State.Idle:
@@ -89,13 +91,27 @@ public class Enemy : Unit, IPoolable
         var distanceVec = player.transform.position - transform.position;
         Vector3 direction = Vector3.Normalize(distanceVec);
         float distance = Vector3.Distance(player.transform.position, transform.position);
-        velocity = movementSpeed * direction;
+
+        if(statusManager.IsRooted())
+        {
+            velocity = Vector3.zero;
+        }
+        else
+        {
+            velocity = movementSpeed * direction;
+        }
         VelocityUpdate();
     }
 
     public void Attack()
     {
-        var distanceVec = player.transform.position - transform.position;
+
+        if (statusManager.IsSlienced())
+        {
+            return;
+        }
+
+            var distanceVec = player.transform.position - transform.position;
         Vector3 direction = Vector3.Normalize(distanceVec);
         float distance = Vector3.Distance(player.transform.position, transform.position);
 

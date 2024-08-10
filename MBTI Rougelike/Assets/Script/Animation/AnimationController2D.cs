@@ -36,7 +36,7 @@ public class AnimationController2D : MonoBehaviour, IPoolable
 
     private void Update()
     {
-        if (isAttached)
+        if (isAttached && attachedTransform)
         {
             transform.position = attachedTransform.position;
         }

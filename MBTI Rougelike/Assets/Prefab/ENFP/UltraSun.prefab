@@ -53,6 +53,9 @@ MonoBehaviour:
   healAmount: 10
   stunTime: 0.5
   sunPosition: {x: 0.5, y: 0.85}
+  sunAnim: {fileID: 260402918487197255, guid: da342000ab258f54485cdc6a4fedfee7, type: 3}
+  hitAnim: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
+  healAnim: {fileID: 2671232215383034676, guid: fc92db3498562d7409939a85d47a0ba4, type: 3}
 --- !u!1 &7388248453329891296
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,7 +26,8 @@ public class Skill : ScriptableObject
     {
         HorizontalFlip,
         AllFlip,
-        NoneFlip
+        NoneFlip,
+        Lock
     }
 
     [SerializeField, Tooltip("该技能生成的伤害块。")]

@@ -31,7 +31,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected float stopBlowThreadshold = 0.5f;
 
     [SerializeField, Tooltip("此数值决定了【吹飞速度】的下降率")]
-    protected float blowSpeedReduceRate = 0.1f;
+    protected float blowSpeedReduceRate = 0.99f;
 
     [SerializeField, Tooltip("该实体的当前护盾。")]
     protected int shield;
@@ -69,6 +69,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("此实体造成伤害时的暴击概率。")]
     protected float critDamageRate;
 
+    [SerializeField, Tooltip("此单位的状态管理器，用来结算各种状态。")]
+    protected StatusManager statusManager;
+
     [Header("互动组件")]
     public HPController hpControllerPrefab;
     public Transform canvasTransform;
@@ -98,6 +101,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected virtual void Start()
     {
         canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
+        statusManager = GetComponent<StatusManager>();
 
         CreateHealthBar();
 
@@ -314,6 +318,15 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
             critDamageRate = value;
         }
     }
+
+    public StatusManager StatusManager
+    {
+        get
+        {
+            return statusManager;
+        }
+    }
+
 
     public virtual void TakeDamage(int damage, float stuntime)
     {

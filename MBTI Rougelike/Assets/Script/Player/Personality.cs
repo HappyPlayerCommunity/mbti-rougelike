@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.Windows;
 
 /// <summary>
@@ -16,8 +17,8 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("该技能的当前冷却计时器。不大于0才能使用。")]
     private float normalAttack_CurretReloadingTimer;
 
-    [SerializeField, Tooltip("普攻的生成位置。")]
-    private Transform normalAttack_InitPosition;
+    [Tooltip("普攻的生成位置。")]
+    public Transform normalAttack_InitPosition;
 
     private bool isNormalAttackCharging = false;
     private float chargingTimer1 = 0.0f;
@@ -30,8 +31,8 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("该技能的当前冷却计时器。不大于0才能使用。")]
     private float specialSkill_CurretReloadingTimer;
 
-    [SerializeField, Tooltip("特技的生成位置。")]
-    private Transform specialSkill_InitPosition;
+    [Tooltip("特技的生成位置。")]
+    public Transform specialSkill_InitPosition;
 
     private bool isSpecialSkillCharging = false;
     private float chargingTimer2 = 0.0f;
@@ -45,8 +46,8 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("当前大招充能。充满到100才能释放大招，并消耗所有能量。")]
     private float ultimateEnerge = 0.0f;
 
-    [SerializeField, Tooltip("大招的生成位置。")]
-    private Transform ultSkill_InitPosition;
+    [Tooltip("大招的生成位置。")]
+    public Transform ultSkill_InitPosition;
 
     [SerializeField, Tooltip("该大招能生成的伤害块")]
     private float maxUltimateEnerge = 100.0f;
@@ -227,6 +228,9 @@ public class Personality : MonoBehaviour
                         {
                             sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
                         }
+                        break;
+                    case Skill.RenderMode.Lock:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
                         break;
                     default:
                         break;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class UltraSun : MonoBehaviour
 {
@@ -31,6 +32,19 @@ public class UltraSun : MonoBehaviour
 
     public Vector2 sunPosition = new Vector2(0.5f, 0.85f);
 
+
+    [SerializeField, Tooltip("太阳开始发光时的动画。")]
+    public AnimationController2D sunAnim;
+
+    [SerializeField, Tooltip("太阳击中敌人时的动画。")]
+    public AnimationController2D hitAnim;
+
+    [SerializeField, Tooltip("太阳回复友军时的动画。")]
+    public AnimationController2D healAnim;
+
+    Player player;
+
+
     void Start()
     {
         // 计算目标位置（屏幕中心上方）
@@ -39,6 +53,8 @@ public class UltraSun : MonoBehaviour
 
         // 开始移动到目标位置
         StartCoroutine(MoveToTarget());
+
+        player = GameObject.FindObjectOfType<Player>();
     }
 
     private void Update()
@@ -72,7 +88,12 @@ public class UltraSun : MonoBehaviour
     {
         yield return new WaitForSeconds(wait);
 
-        AnimationManager.Instance.PlayAnimation(Animation.UltraSun, transform);
+        if (sunAnim)
+        {
+            GameObject hitEffect = PoolManager.Instance.GetObject(sunAnim.name, sunAnim.gameObject);
+            AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
+            anim.Activate(transform.position, Quaternion.identity);
+        }
 
         while (elapsedTime < duration)
         {
@@ -101,10 +122,20 @@ public class UltraSun : MonoBehaviour
         foreach (GameObject enemyObj in enemies)
         {
             var enemy = enemyObj.GetComponent<Enemy>();
+
+            //后续补全：伤害类型，暴击等
+
             if (enemy != null)
             {
                 DamagePopupManager.Instance.Popup(PopupType.Damage, enemy.transform.position, damageAmount, false);
                 enemy.TakeDamage(damageAmount, stunTime);
+
+                if (hitAnim)
+                {
+                    GameObject hitEffect = PoolManager.Instance.GetObject(hitAnim.name, hitAnim.gameObject);
+                    AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
+                    anim.Activate(enemy.transform.position, Quaternion.identity);
+                }
             }
         }
     }
@@ -114,11 +145,18 @@ public class UltraSun : MonoBehaviour
         // 羁绊系统实现之后补全治疗效果，现在只治疗玩家。
         //GameObject[] allies = GameObject.FindGameObjectsWithTag("Ally");
 
-        Player player = GameObject.FindObjectOfType<Player>();
         if (player)
         {
             DamagePopupManager.Instance.Popup(PopupType.Healing, player.transform.position, healAmount, false);
             player.GetHealing(healAmount);
+
+            if (healAnim)
+            {
+                GameObject hitEffect = PoolManager.Instance.GetObject(healAnim.name, healAnim.gameObject);
+                AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
+                anim.attachedTransform = player.transform;
+                anim.Activate(player.transform.position, Quaternion.identity);
+            }
         }
     }
 }
