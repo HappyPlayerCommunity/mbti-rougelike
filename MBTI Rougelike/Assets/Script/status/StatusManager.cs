@@ -36,13 +36,11 @@ public class StatusManager : MonoBehaviour
 
     public void AddStatus(Status status)
     {
-        //需要检测不能是否是同样的buff类型，且如何结算。
+        Status newStatus = Instantiate(status);
+        newStatus.OnApply(gameObject);
 
-        AddFlagUpdate(status);
-
-        status.OnApply(gameObject);
-
-        activeStatus.Add(status);
+        AddFlagUpdate(newStatus);
+        activeStatus.Add(newStatus);
     }
 
     /// <summary>
@@ -75,6 +73,16 @@ public class StatusManager : MonoBehaviour
     public bool IsSlienced()
     {
         return silenceCount > 0;
+    }
+
+    public bool IsStunned()
+    {
+        return false;
+    }
+
+    public List<Status> ActiveStatus()
+    {
+        return activeStatus;
     }
 
     public void AddFlagUpdate(Status status)

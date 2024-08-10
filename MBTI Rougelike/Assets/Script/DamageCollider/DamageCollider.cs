@@ -461,6 +461,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                             {
                                 var unit = (Unit)entity;
 
+                                // 如果【碰撞体】是Unit类型，则结算【闪避】和【吹飞】效果。
                                 if (TryHit(unit))
                                 {
                                     BlowUpEntity(unit);
@@ -516,11 +517,14 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
                         didDamage = true;
 
-                        // 如果【碰撞体】是Unit类型，则结算【闪避】和【吹飞】效果。
+                        if (applyStatus && entity.StatusManager)
+                        {
+                            entity.StatusManager.AddStatus(applyStatus);
 
+                            //Debug.Log(entity.StatusManager.ActiveStatus());
+
+                        }
                     }
-
-
                 }
 
                 // 执行击中目标

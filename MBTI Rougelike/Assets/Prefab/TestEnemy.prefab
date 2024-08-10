@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 4691985066896393618}
   - component: {fileID: 8502305885786276776}
   - component: {fileID: -4295607793491414615}
+  - component: {fileID: -7215711161818661344}
   m_Layer: 6
   m_Name: TestEnemy
   m_TagString: Enemy
@@ -153,6 +154,7 @@ MonoBehaviour:
   toughness: 1
   crit: 0
   critDamageRate: 0
+  statusManager: {fileID: 0}
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   hpController: {fileID: 0}
@@ -165,7 +167,6 @@ MonoBehaviour:
   initAttackMovementSpeed: 0
   isActioning: 0
   dodgeRate: 0
-  statusManager: {fileID: 0}
   player: {fileID: 0}
   artTransform: {fileID: 2115127078010498206}
 --- !u!114 &3564827861202140205
@@ -272,3 +273,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &-7215711161818661344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8779559174516582916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb211aaf791fa69408d4dbd287455e4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeStatus: []
+  rootCount: 0
+  chargeBanCount: 0
+  invincibleCount: 0
+  silenceCount: 0

@@ -69,6 +69,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     [SerializeField, Tooltip("此实体造成伤害时的暴击概率。")]
     protected float critDamageRate;
 
+    [SerializeField, Tooltip("此单位的状态管理器，用来结算各种状态。")]
+    protected StatusManager statusManager;
+
     [Header("互动组件")]
     public HPController hpControllerPrefab;
     public Transform canvasTransform;
@@ -98,6 +101,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected virtual void Start()
     {
         canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
+        statusManager = GetComponent<StatusManager>();
 
         CreateHealthBar();
 
@@ -314,6 +318,15 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
             critDamageRate = value;
         }
     }
+
+    public StatusManager StatusManager
+    {
+        get
+        {
+            return statusManager;
+        }
+    }
+
 
     public virtual void TakeDamage(int damage, float stuntime)
     {
