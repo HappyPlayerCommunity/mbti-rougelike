@@ -187,7 +187,7 @@ public class Personality : MonoBehaviour
             selfStatus.modifyPowerRate = stats.Calculate_StatusPower();
             selfStatus.modifyDurationRate = stats.Calculate_StatusDuration();
             selfStatus.stats = stats;
-            player.StatusManager.AddStatus(selfStatus);
+            selfStatus = player.StatusManager.AddStatus(selfStatus);
         }
         
         Vector3 aimDirection = aim.aimDirection;

@@ -15,8 +15,6 @@ public class SummonSunFlower : PersonalitySpecialImplementation
             return;
         }
 
-
-        Debug.Log("personality.aim.transform.position" + personality.aim.transform.position);
         GameObject ultraSun = Instantiate(sunFlowerPrefab, personality.ultSkill_InitPosition.position, Quaternion.identity);
     }
 }

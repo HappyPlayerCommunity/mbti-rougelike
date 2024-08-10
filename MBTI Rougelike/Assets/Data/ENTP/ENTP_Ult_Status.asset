@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d3ddf8688dd7884691ac835163fb231, type: 3}
   m_Name: ENTP_Ult_Status
   m_EditorClassIdentifier: 
-  duration: 4
+  duration: 6
   timer: -0.0041042403
   root: 1
   ultChargeBan: 1
   invincible: 0
   silence: 0
-  modifyDurationRate: 1.5
+  modifyPowerRate: 1
+  modifyDurationRate: 1
+  stats: {fileID: 11400000, guid: 4702e21f9b56e34459599b2c66d1bbc0, type: 2}
   attackSpeedBonus: 1000
   attackRangedBonus: 100
-  stats: {fileID: 11400000, guid: 4702e21f9b56e34459599b2c66d1bbc0, type: 2}
