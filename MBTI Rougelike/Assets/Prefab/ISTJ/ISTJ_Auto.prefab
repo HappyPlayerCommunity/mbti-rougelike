@@ -46,16 +46,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0982b1d45c1a1af40a875949f5969b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 15
+  damage: 20
   maxTimer: 0.5
   collideTags:
   - Enemy
+  - Turret
   damageTags:
   - Enemy
   isAttachedPos: 1
   staggerTime: 1
   isLifeTimeBindingWithState: 0
-  blowForceSpeed: 20
+  blowForceSpeed: 10
   hitEffectPrefab: {fileID: 0}
   hitEffectPlayMode: 1
   damageType: 0
@@ -63,9 +64,11 @@ MonoBehaviour:
   canvasTransform: {fileID: 0}
   chargingDamage: 0
   chargingBlowForceSpeed: 0
-  chargingLocalScale: {x: 1, y: 1, z: 1}
+  chargingLocalScale: {x: 0, y: 0, z: 0}
   chargingStaggerTime: 0
   chargingMaxTimer: 0
+  blowTurret: 1
+  blowTurretForceSpeed: 5
   damageHitType: 2
   damageTriggerTime: 100
   timer: 0

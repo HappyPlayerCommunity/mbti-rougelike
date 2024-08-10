@@ -459,19 +459,18 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         hpController = healthBar;
     }
 
-    protected void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        // 处理碰撞逻辑，例如反弹或分离
-        Vector3 separationDirection = (transform.position - collision.transform.position).normalized;
-        //rb.AddForce(separationDirection * 10.0f); // 添加分离力
     }
 
-    protected void OnCollisionStay2D(Collision2D collision)
+    protected virtual void OnCollisionStay2D(Collision2D collision)
     {
-        // 持续处理碰撞逻辑，例如保持分离
-        Vector3 separationDirection = (transform.position - collision.transform.position).normalized;
-        //rb.AddForce(separationDirection * 10.0f * Time.deltaTime); // 添加分离力
     }
+
+    protected virtual void OnCollisionExit2D(Collision2D collision)
+    {
+    }
+
     public bool IsStaggered()
     {
         return staggerTimer > 0.0f;

@@ -51,6 +51,9 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("该大招能生成的伤害块")]
     private float maxUltimateEnerge = 100.0f;
 
+    [SerializeField, Tooltip("某些非常规技能的特殊逻辑实现方法")]
+    private PersonalitySpecialImplementation ultSpecialImplementation;
+
 
     [Header("互动组件")]
     [Tooltip("人格八维数据。")]
@@ -66,6 +69,8 @@ public class Personality : MonoBehaviour
     public float adjustBackOffset = 3.0f;
 
     protected Coroutine energeChargeCoroutine;
+
+
 
     public float UltimateEnerge
     {
@@ -122,10 +127,10 @@ public class Personality : MonoBehaviour
 
         if (!statusManager.IsSlienced())
         {
-            HandleSkillControlScheme(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, UnityEngine.Input.GetMouseButton(0), true); //左键
-            HandleSkillControlScheme(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, UnityEngine.Input.GetMouseButton(1), false); //右键
+            HandleSkillTypeAndControlScheme(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, UnityEngine.Input.GetMouseButton(0), true); //左键
+            HandleSkillTypeAndControlScheme(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, UnityEngine.Input.GetMouseButton(1), false); //右键
 
-            UltimateSkillUpdate();
+            HandleUltiamteTypeAndControlScheme();
         }
     }
 
@@ -171,74 +176,71 @@ public class Personality : MonoBehaviour
 
     protected virtual void UltimateSkillUpdate()
     {
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Space) && ultimateEnerge >= maxUltimateEnerge)
+        ultimateEnerge = 0.0f;
+        
+        Status selfStatus = null;
+        
+        if (ultimateSkill.SelfStatus)
         {
-            ultimateEnerge = 0.0f;
-
-            Status selfStatus = null;
-
-            if (ultimateSkill.SelfStatus)
-            {
-                selfStatus = ultimateSkill.SelfStatus;
-                selfStatus.modifyPowerRate = stats.Calculate_StatusPower();
-                selfStatus.modifyDurationRate = stats.Calculate_StatusDuration();
-                selfStatus.stats = stats;
-                player.StatusManager.AddStatus(selfStatus);
-            }
-
-            Vector3 aimDirection = aim.aimDirection;
-
-            if (ultimateSkill.DamageCollider)
-            {
-                string poolKey = ultimateSkill.DamageCollider.name;
-                GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, ultimateSkill.DamageCollider.gameObject);
-                DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
-                damageCollider.Activate(ultSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-
-                damageCollider.owner = player;
-
-                if (selfStatus != null)
-                {
-                    damageCollider.ownerStatus = selfStatus;
-                }
-
-                var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
-                if (sprite != null)
-                {
-                    float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), aimDirection);
-
-                    switch (ultimateSkill.GetRenderMode)
-                    {
-                        case Skill.RenderMode.HorizontalFlip:
-                            sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
-
-                            if (aimDirection.x < 0.0f)
-                            {
-                                sprite.transform.localScale = new Vector3(sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
-                            }
-                            break;
-                        case Skill.RenderMode.AllFlip:
-                            sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
-
-                            if (aimDirection.x < 0.0f)
-                            {
-                                sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                    var collider = damageCollider.GetComponentInChildren<Collider2D>();
-                    if (collider != null)
-                    {
-                        collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
-                    }
-                }
-            }
-
-            player.BlowForceVelocity = aimDirection * ultimateSkill.SelfBlowForce;
+            selfStatus = ultimateSkill.SelfStatus;
+            selfStatus.modifyPowerRate = stats.Calculate_StatusPower();
+            selfStatus.modifyDurationRate = stats.Calculate_StatusDuration();
+            selfStatus.stats = stats;
+            player.StatusManager.AddStatus(selfStatus);
         }
+        
+        Vector3 aimDirection = aim.aimDirection;
+        
+        if (ultimateSkill.DamageCollider)
+        {
+            string poolKey = ultimateSkill.DamageCollider.name;
+            GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, ultimateSkill.DamageCollider.gameObject);
+            DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
+            damageCollider.Activate(ultSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+        
+            damageCollider.owner = player;
+        
+            if (selfStatus != null)
+            {
+                damageCollider.ownerStatus = selfStatus;
+            }
+        
+            var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
+            if (sprite != null)
+            {
+                float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), aimDirection);
+        
+                switch (ultimateSkill.GetRenderMode)
+                {
+                    case Skill.RenderMode.HorizontalFlip:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+        
+                        if (aimDirection.x < 0.0f)
+                        {
+                            sprite.transform.localScale = new Vector3(sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
+                        }
+                        break;
+                    case Skill.RenderMode.AllFlip:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+        
+                        if (aimDirection.x < 0.0f)
+                        {
+                            sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+        
+                var collider = damageCollider.GetComponentInChildren<Collider2D>();
+                if (collider != null)
+                {
+                    collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
+                }
+            }
+        }
+        
+        player.BlowForceVelocity = aimDirection * ultimateSkill.SelfBlowForce;
     }
 
     public void AttackChargeEnerge(float amount, float boostRate = 1.0f)
@@ -285,7 +287,7 @@ public class Personality : MonoBehaviour
         }
     }
 
-    private void HandleSkillControlScheme(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto)
+    private void HandleSkillTypeAndControlScheme(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto)
     {
         switch (skill.SkillType)
         {
@@ -318,8 +320,24 @@ public class Personality : MonoBehaviour
             default:
                 break;
         }
+    }
 
+    private void HandleUltiamteTypeAndControlScheme()
+    {
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Space) && ultimateEnerge >= maxUltimateEnerge)
+        {
+            // 判定大招是否为特殊逻辑实现
+            if (ultSpecialImplementation)
+            {
+                ultSpecialImplementation.ExecuteSpecialImplementation(this);
+            }
+            else
+            {
+                UltimateSkillUpdate();
+            }
 
+            ultimateEnerge = 0.0f;
+        }
     }
 
     private void SkillChargingRateUpdate(DamageCollider damageCollider, float chargingRate)

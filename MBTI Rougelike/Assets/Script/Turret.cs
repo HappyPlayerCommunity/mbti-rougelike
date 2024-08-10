@@ -116,4 +116,17 @@ public class Turret : Building, IPoolable
 
         PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
+
+    //protected override void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Enemy"))
+    //    {
+    //        Debug.Log("Hello?");
+    //        Rigidbody2D turretRigidbody = GetComponent<Rigidbody2D>();
+
+    //        // 抵消敌人的推力
+    //        Vector2 oppositeForce = -collision.relativeVelocity * turretRigidbody.mass;
+    //        turretRigidbody.AddForce(oppositeForce);
+    //    }
+    //}
 }

@@ -88,7 +88,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
     protected float chargingMaxTimer = 0.0f;
 
 
+    [SerializeField, Tooltip("是否可以击飞炮塔。")]
+    protected bool blowTurret = false;
 
+    [SerializeField, Tooltip("伤害块施加给炮塔的【吹飞力度】。")]
+    protected float blowTurretForceSpeed;
 
 
 
@@ -412,7 +416,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
                             if (TryHit(unit))
                             {
-                                BlowUnit(unit);
+                                BlowUpEntity(unit);
                             }
                             else
                             {
@@ -491,6 +495,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
                         // 持续对接触的目标造成伤害，不销毁
                         break;
                 }
+
+                if (blowTurret && hit.tag == "Turret")
+                {
+                    BlowUpEntity(hit.GetComponent<Turret>(), true);
+                }
             }
         }
 
@@ -513,13 +522,22 @@ public class DamageCollider : MonoBehaviour, IPoolable
         }
     }
 
-    protected virtual void BlowUnit(Unit unit)
+    protected virtual void BlowUpEntity(BaseEntity entity, bool ignore = false)
     {
         // 护盾会令吹飞效果减半。
-        float blowupResistance = unit.Shield > 0.0f ? basicShieldResistance : 1.0f;
+        float blowupResistance = entity.Shield > 0.0f ? basicShieldResistance : 1.0f;
 
         // 韧性效果会令吹飞效果等比率下降。
-        float toughness = unit.Toughness;
+        float toughness = entity.Toughness;
+
+        float finalBlowForceSpeed = blowForceSpeed;
+        if (ignore)
+        {
+            blowupResistance = 1.0f;
+            toughness = 1.0f;
+
+            finalBlowForceSpeed = blowTurretForceSpeed;
+        }
 
         switch (damageMovementType)
         {
@@ -527,20 +545,20 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 Vector3 direction;
 
                 if (owner)
-                    direction = (unit.transform.position - owner.transform.position).normalized;
+                    direction = (entity.transform.position - owner.transform.position).normalized;
                 else
-                    direction = (unit.transform.position - transform.position).normalized;
+                    direction = (entity.transform.position - transform.position).normalized;
 
-                unit.BlowForceVelocity = blowForceSpeed * direction * blowupResistance * toughness;
+                entity.BlowForceVelocity = finalBlowForceSpeed * direction * blowupResistance * toughness;
                 break;
         
             case DamageMovementType.Projectile:
-                var characterPos = unit.transform.position;
+                var characterPos = entity.transform.position;
         
                 var direction1 = (characterPos - transform.position).normalized;
                 var direction2 = (velocity).normalized;
-        
-                unit.BlowForceVelocity = blowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance * toughness;
+
+                entity.BlowForceVelocity = finalBlowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance * toughness;
                 break;
         
             default:

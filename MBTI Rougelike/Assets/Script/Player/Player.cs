@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.ShaderKeywordFilter.FilterAttribute;
+using static UnityEngine.UI.CanvasScaler;
 
 /// <summary>
 /// 玩家类。继承自单位，用来实现一些独属于玩家的功能。
@@ -25,6 +26,9 @@ public class Player : Unit
 
     [Tooltip("能力值数据")]
     public Stats stats;
+
+    [Tooltip("玩家推建筑时的推力。")]
+    public float buildingPushForce;
 
     protected override void Start()
     {
@@ -97,4 +101,18 @@ public class Player : Unit
         preference.SetUpStats(stats);
         StatsUpdate();
     }
+
+    //protected override void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Turret"))
+    //    {
+    //        var turret = collision.gameObject.GetComponent<Turret>();
+
+    //        if (turret != null)
+    //        {
+    //            Vector2 pushDirection = (collision.transform.position - transform.position).normalized;
+    //            turret.BlowForceVelocity = pushDirection * buildingPushForce;
+    //        }
+    //    }
+    //}
 }

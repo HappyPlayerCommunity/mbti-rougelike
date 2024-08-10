@@ -193,9 +193,11 @@ MonoBehaviour:
   canvasTransform: {fileID: 0}
   chargingDamage: 0
   chargingBlowForceSpeed: 0
-  chargingLocalScale: {x: 1, y: 1, z: 1}
+  chargingLocalScale: {x: 0, y: 0, z: 0}
   chargingStaggerTime: 0
   chargingMaxTimer: 0
+  blowTurret: 0
+  blowTurretForceSpeed: 0
   damageHitType: 0
   damageTriggerTime: 100
   timer: 0
