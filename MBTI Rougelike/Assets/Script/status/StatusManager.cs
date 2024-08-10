@@ -34,13 +34,15 @@ public class StatusManager : MonoBehaviour
         }
     }
 
-    public void AddStatus(Status status)
+    public Status AddStatus(Status status)
     {
         Status newStatus = Instantiate(status);
         newStatus.OnApply(gameObject);
 
         AddFlagUpdate(newStatus);
         activeStatus.Add(newStatus);
+
+        return newStatus;
     }
 
     /// <summary>
