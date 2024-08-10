@@ -52,6 +52,9 @@ MonoBehaviour:
   attachedTransform: {fileID: 0}
   animationFinished: 0
   poolKey: 
+  controlByMaxTime: 0
+  maxTime: 0
+  timer: 0
 --- !u!95 &2877239702997848412
 Animator:
   serializedVersion: 5
@@ -186,6 +189,9 @@ MonoBehaviour:
   attachedTransform: {fileID: 0}
   animationFinished: 0
   poolKey: 
+  controlByMaxTime: 0
+  maxTime: 0
+  timer: 0
 --- !u!1 &3909273865107095669
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +250,7 @@ MonoBehaviour:
   blowForceSpeed: 5
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
   hitEffectPlayMode: 1
-  damageType: 0
+  damageType: 1
   damageElementType: 0
   canvasTransform: {fileID: 0}
   chargingDamage: 20
@@ -252,6 +258,10 @@ MonoBehaviour:
   chargingLocalScale: {x: 10, y: 2, z: 1}
   chargingStaggerTime: 2
   chargingMaxTimer: 0
+  blowTurret: 0
+  blowTurretForceSpeed: 0
+  isHealingMode: 0
+  penetrability: 1
   damageHitType: 2
   damageTriggerTime: 0.1
   timer: 0

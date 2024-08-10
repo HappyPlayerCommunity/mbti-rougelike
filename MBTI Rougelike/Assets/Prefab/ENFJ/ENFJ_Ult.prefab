@@ -68,6 +68,8 @@ MonoBehaviour:
   chargingMaxTimer: 0
   blowTurret: 0
   blowTurretForceSpeed: 0
+  isHealingMode: 0
+  penetrability: 1
   damageHitType: 2
   damageTriggerTime: 0.25
   timer: 0

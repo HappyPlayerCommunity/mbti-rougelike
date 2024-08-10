@@ -79,6 +79,9 @@ public class AttackHelper : MonoBehaviour
                         sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
                     }
                     break;
+                case Skill.RenderMode.Lock:
+                    sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+                    break;
                 default:
                     break;
             }

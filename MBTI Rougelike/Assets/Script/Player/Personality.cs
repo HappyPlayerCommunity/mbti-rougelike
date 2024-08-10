@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.Windows;
 
 /// <summary>
@@ -227,6 +228,9 @@ public class Personality : MonoBehaviour
                         {
                             sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
                         }
+                        break;
+                    case Skill.RenderMode.Lock:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
                         break;
                     default:
                         break;

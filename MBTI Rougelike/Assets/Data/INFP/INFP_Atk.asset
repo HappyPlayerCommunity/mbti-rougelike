@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f327d7c8417428439099d04d2214334, type: 3}
-  m_Name: ENFP_Sp
+  m_Name: INFP_Atk
   m_EditorClassIdentifier: 
-  damageCollider: {fileID: 3737656460835953957, guid: 2765e6b2446004546bf6419d3e924d0e, type: 3}
-  reloadingTime: 5
+  damageCollider: {fileID: 71832781219710127, guid: 34681bbe9bf6ca54fa7d84098a48feeb, type: 3}
+  reloadingTime: 0.5
   scatterAngle: 0
-  damageColliderSpeed: 0
+  damageColliderSpeed: 2.5
   maxChargeCount: 0
   selfBlowForce: 0
-  controlScheme: 1
-  renderMode: 0
+  controlScheme: 0
+  renderMode: 3
   selfStatus: {fileID: 0}
-  maxChargingTime: 2
+  maxChargingTime: 0
   fixPos: 0
   turret: {fileID: 0}
   skillType: 0
