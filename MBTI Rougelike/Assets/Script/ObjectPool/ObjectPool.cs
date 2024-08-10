@@ -34,7 +34,11 @@ public class ObjectPool
         if (_pool.Count > 0)
         {
             obj = _pool.Dequeue();
-            //obj.SetActive(true);
+            if (obj.activeInHierarchy)
+            {
+                // 如果对象仍处于激活状态，则实例化一个新对象
+                obj = Object.Instantiate(_prefab);
+            }
         }
         else
         {

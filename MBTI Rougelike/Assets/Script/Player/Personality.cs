@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Windows;
 
 /// <summary>
 /// 人格类。用来管理各个人格的普攻（Auto），特技（Sp），大招（Ult），被动等各种效果。
@@ -17,6 +19,9 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("普攻的生成位置。")]
     private Transform normalAttack_InitPosition;
 
+    private bool isNormalAttackCharging = false;
+    private float chargingTimer1 = 0.0f;
+    private float chargingRate1 = 0.0f;
 
     [Header("特殊技能（特技）")]
     [SerializeField, Tooltip("该技能的数据。")]
@@ -27,6 +32,10 @@ public class Personality : MonoBehaviour
 
     [SerializeField, Tooltip("特技的生成位置。")]
     private Transform specialSkill_InitPosition;
+
+    private bool isSpecialSkillCharging = false;
+    private float chargingTimer2 = 0.0f;
+    private float chargingRate2 = 0.0f;
 
 
     [Header("终极技能（大招）")]
@@ -42,6 +51,9 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("该大招能生成的伤害块")]
     private float maxUltimateEnerge = 100.0f;
 
+    [SerializeField, Tooltip("某些非常规技能的特殊逻辑实现方法")]
+    private PersonalitySpecialImplementation ultSpecialImplementation;
+
 
     [Header("互动组件")]
     [Tooltip("人格八维数据。")]
@@ -53,7 +65,12 @@ public class Personality : MonoBehaviour
     [Tooltip("状态管理机。")]
     public StatusManager statusManager;
 
+    [Tooltip("固定位置生成的伤害块的的退回Offset，防止生成的【伤害块】过于靠前")]
+    public float adjustBackOffset = 3.0f;
+
     protected Coroutine energeChargeCoroutine;
+
+
 
     public float UltimateEnerge
     {
@@ -66,6 +83,19 @@ public class Personality : MonoBehaviour
         get { return maxUltimateEnerge; }
         set { maxUltimateEnerge = value; }
     }
+
+    public float ChargingRate1
+    {
+        get { return chargingRate1; }
+        set { chargingRate1 = value; }
+    }
+
+    public float ChargingRate2
+    {
+        get { return chargingRate2; }
+        set { chargingRate2 = value; }
+    }
+
 
     //大招
 
@@ -97,17 +127,17 @@ public class Personality : MonoBehaviour
 
         if (!statusManager.IsSlienced())
         {
-            SkillUpdate(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, Input.GetMouseButton(0), true); //左键
-            SkillUpdate(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, Input.GetMouseButton(1), false); //右键
+            HandleSkillTypeAndControlScheme(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, UnityEngine.Input.GetMouseButton(0), true); //左键
+            HandleSkillTypeAndControlScheme(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, UnityEngine.Input.GetMouseButton(1), false); //右键
 
-            UltimateSkillUpdate();
+            HandleUltiamteTypeAndControlScheme();
         }
     }
 
-    protected virtual void SkillUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto)
+    protected virtual void SkillUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto, float chargingRate = 1.0f)
     {
-        Vector3 mousePos = Input.mousePosition;
-        var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = UnityEngine.Input.mousePosition;
+        var mouseWorldPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
         mouseWorldPos.z = 0.0f;
         Vector3 aimDirection = aim.aimDirection;
 
@@ -127,65 +157,7 @@ public class Personality : MonoBehaviour
             {
                 if (skill.DamageCollider)
                 {
-                    string poolKey = skill.DamageCollider.name;
-                    GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, skill.DamageCollider.gameObject);
-                    DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
-                    damageCollider.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-                    damageCollider.owner = player;
-
-                    var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
-
-                    if (sprite)
-                    {
-                        float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), aimDirection);
-                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
-
-                        switch (skill.GetRenderMode)
-                        {
-                            case Skill.RenderMode.HorizontalFlip:
-                                if (aimDirection.x < 0.0f)
-                                {
-                                    sprite.transform.localScale = new Vector3(sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
-                                }
-                                break;
-                            case Skill.RenderMode.AllFlip:
-                                if (aimDirection.x < 0.0f)
-                                {
-                                    sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-
-                        var collider = damageCollider.GetComponentInChildren<Collider2D>();
-                        if (collider != null)
-                        {
-                            collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
-                        }
-                        // 以前的实现方法，备存一下。
-
-                        //// 如果瞄准方向是向左的，则需要将角度加180度，因为Sprite【默认面向右侧】
-                        //if (aimDirection.x < 0.0f)
-                        //{
-                        //    angle += 180.0f;
-                        //}
-
-                        //// 直接根据y轴方向调整旋转角度
-                        //sprite.transform.localEulerAngles = aimDirection.y > 0.0f ? new Vector3(0.0f, 0.0f, angle) : new Vector3(0.0f, 0.0f, -angle);
-
-                    }
-
-
-
-                    float scatterAngleHalf = scatterAngle / 2.0f;
-
-                    float randomAngle = Random.Range(-scatterAngleHalf, scatterAngleHalf);
-
-                    Vector3 scatterDirection = Quaternion.Euler(0, 0, randomAngle) * aimDirection;
-
-                    Vector3 finalVelocity = scatterDirection.normalized * damageColliderSpeed;
-                    damageCollider.Velocity = finalVelocity;
+                    AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle);
                 }
 
                 player.BlowForceVelocity = aimDirection * skill.SelfBlowForce; //for now, 负数可以做向后退的技能。
@@ -204,76 +176,71 @@ public class Personality : MonoBehaviour
 
     protected virtual void UltimateSkillUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && ultimateEnerge >= maxUltimateEnerge)
+        ultimateEnerge = 0.0f;
+        
+        Status selfStatus = null;
+        
+        if (ultimateSkill.SelfStatus)
         {
-            ultimateEnerge = 0.0f;
-
-            Status selfStatus = null;
-
-            if (ultimateSkill.SelfStatus)
-            {
-                selfStatus = ultimateSkill.SelfStatus;
-                selfStatus.modifyPowerRate = stats.Calculate_StatusPower();
-                selfStatus.modifyDurationRate = stats.Calculate_StatusDuration();
-                selfStatus.stats = stats;
-                player.StatusManager.AddStatus(selfStatus);
-            }
-
-            Vector3 aimDirection = aim.aimDirection;
-
-            if (ultimateSkill.DamageCollider)
-            {
-                string poolKey = ultimateSkill.DamageCollider.name;
-                GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, ultimateSkill.DamageCollider.gameObject);
-                DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
-                damageCollider.Activate(ultSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-
-                damageCollider.owner = player;
-
-                if (selfStatus != null)
-                {
-                    damageCollider.ownerStatus = selfStatus;
-                }
-
-                var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
-                if (sprite != null)
-                {
-                    float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), aimDirection);
-
-                    switch (ultimateSkill.GetRenderMode)
-                    {
-                        case Skill.RenderMode.HorizontalFlip:
-                            sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
-
-                            if (aimDirection.x < 0.0f)
-                            {
-                                sprite.transform.localScale = new Vector3(sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
-                            }
-                            break;
-                        case Skill.RenderMode.AllFlip:
-                            sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
-
-                            if (aimDirection.x < 0.0f)
-                            {
-                                sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                    var collider = damageCollider.GetComponentInChildren<Collider2D>();
-                    Debug.Log("collider" + collider);
-                    if (collider != null)
-                    {
-                        Debug.Log("Hello?");
-                        collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
-                    }
-                }
-            }
-
-            player.BlowForceVelocity = aimDirection * ultimateSkill.SelfBlowForce;
+            selfStatus = ultimateSkill.SelfStatus;
+            selfStatus.modifyPowerRate = stats.Calculate_StatusPower();
+            selfStatus.modifyDurationRate = stats.Calculate_StatusDuration();
+            selfStatus.stats = stats;
+            player.StatusManager.AddStatus(selfStatus);
         }
+        
+        Vector3 aimDirection = aim.aimDirection;
+        
+        if (ultimateSkill.DamageCollider)
+        {
+            string poolKey = ultimateSkill.DamageCollider.name;
+            GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, ultimateSkill.DamageCollider.gameObject);
+            DamageCollider damageCollider = damageColliderObj.GetComponent<DamageCollider>();
+            damageCollider.Activate(ultSkill_InitPosition.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+        
+            damageCollider.owner = player;
+        
+            if (selfStatus != null)
+            {
+                damageCollider.ownerStatus = selfStatus;
+            }
+        
+            var sprite = damageCollider.GetComponentInChildren<SpriteRenderer>();
+            if (sprite != null)
+            {
+                float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), aimDirection);
+        
+                switch (ultimateSkill.GetRenderMode)
+                {
+                    case Skill.RenderMode.HorizontalFlip:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+        
+                        if (aimDirection.x < 0.0f)
+                        {
+                            sprite.transform.localScale = new Vector3(sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
+                        }
+                        break;
+                    case Skill.RenderMode.AllFlip:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+        
+                        if (aimDirection.x < 0.0f)
+                        {
+                            sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+        
+                var collider = damageCollider.GetComponentInChildren<Collider2D>();
+                if (collider != null)
+                {
+                    collider.transform.localEulerAngles = sprite.transform.localEulerAngles;
+                }
+            }
+        }
+        
+        player.BlowForceVelocity = aimDirection * ultimateSkill.SelfBlowForce;
     }
 
     public void AttackChargeEnerge(float amount, float boostRate = 1.0f)
@@ -316,6 +283,133 @@ public class Personality : MonoBehaviour
             {
                 ultimateEnerge += stats.Calculate_AutoCharge();
                 ultimateEnerge = Mathf.Min(ultimateEnerge, maxUltimateEnerge);
+            }
+        }
+    }
+
+    private void HandleSkillTypeAndControlScheme(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto)
+    {
+        switch (skill.SkillType)
+        {
+            case SkillCreateType.DamageCollider:
+
+                switch (skill.ControlScheme)
+                {
+                    case SkillControlScheme.Continuous:
+                        SkillUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto);
+                        break;
+                    case SkillControlScheme.ChargeRelease:
+                        if (isAuto)
+                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer1, ref chargingRate1, ref isNormalAttackCharging);
+                        else
+                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer2, ref chargingRate2, ref isSpecialSkillCharging);
+                        break;
+                    case SkillControlScheme.Toggle:
+                        if (input && currentReloadingTimer <= 0.0f)
+                        {
+                            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case SkillCreateType.Turret:
+                SpawnTurret(skill, ref currentReloadingTimer, initPos, input, isAuto);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void HandleUltiamteTypeAndControlScheme()
+    {
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Space) && ultimateEnerge >= maxUltimateEnerge)
+        {
+            // 判定大招是否为特殊逻辑实现
+            if (ultSpecialImplementation)
+            {
+                ultSpecialImplementation.ExecuteSpecialImplementation(this);
+            }
+            else
+            {
+                UltimateSkillUpdate();
+            }
+
+            ultimateEnerge = 0.0f;
+        }
+    }
+
+    private void SkillChargingRateUpdate(DamageCollider damageCollider, float chargingRate)
+    {
+        damageCollider.damage += (int)(damageCollider.ChargingDamage * chargingRate);
+
+        damageCollider.BlowForceSpeed += damageCollider.ChargingBlowForceSpeed * chargingRate;
+
+        //damageCollider.Velocity = damageCollider.Velocity * chargingRate;
+
+        //damageCollider.MaxTimer = damageCollider.MaxTimer * chargingRate;
+        //damageCollider.Timer = damageCollider.MaxTimer;
+
+        damageCollider.StaggerTime += damageCollider.ChargingStaggerTime * chargingRate;
+
+        switch (damageCollider.damageMovementType)
+        {
+            case DamageCollider.DamageMovementType.Passive:
+                damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
+                break;
+            case DamageCollider.DamageMovementType.Projectile:
+                damageCollider.MaxTimer += damageCollider.ChargingMaxTimer * chargingRate;
+                damageCollider.Timer = damageCollider.MaxTimer;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void ChargeReleaseUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto, ref float chargingTimer, ref float chargingRate, ref bool isCharging)
+    {
+        if (input && currentReloadingTimer <= 0.0f && !isCharging)
+        {
+            // Start charging
+            isCharging = true;
+            chargingTimer = 0.0f;
+        }
+        else if (!input && isCharging)
+        {
+            // Release attack
+            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, chargingRate);
+            isCharging = false;
+            chargingTimer = 0.0f;
+            chargingRate = 0.0f;
+        }
+        else if (isCharging)
+        {
+            chargingTimer += Time.deltaTime;
+            chargingRate = Mathf.Clamp(chargingTimer / skill.MaxChargingTime, 0.1f, 1.0f); // 0.1f是最低充能比率，1.0f是最高充能比率。
+        }
+    }
+
+    private void SpawnTurret(Skill skill, ref float currReloadingTimer, Transform initPos, bool input, bool isAuto)
+    {
+        if (input && currReloadingTimer <= 0.0f)
+        {
+            string poolKey = skill.Turret.name;
+            GameObject turretObj = PoolManager.Instance.GetObject(poolKey, skill.Turret.gameObject);
+
+            Turret turret = turretObj.GetComponent<Turret>();
+
+            turret.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+
+            // 重置冷却时间
+            currReloadingTimer = skill.ReloadingTime;
+            if (isAuto)
+            {
+                currReloadingTimer *= stats.Calculate_AttackSpeed();
+            }
+            else
+            {
+                currReloadingTimer *= stats.Calculate_SpecialCooldown();
             }
         }
     }

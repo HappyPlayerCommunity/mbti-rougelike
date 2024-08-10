@@ -18,6 +18,9 @@ MonoBehaviour:
   damageColliderSpeed: 0
   maxChargeCount: 0
   selfBlowForce: 0
-  controlScheme: 0
+  controlScheme: 1
   renderMode: 0
   selfStatus: {fileID: 0}
+  maxChargingTime: 2
+  fixPos: 1
+  fixedDistance: 0

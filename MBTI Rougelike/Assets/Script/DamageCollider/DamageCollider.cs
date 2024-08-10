@@ -71,6 +71,31 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     private HashSet<Collider2D> collidingObjects = new HashSet<Collider2D>();
 
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的最大伤害值")]
+    protected int chargingDamage = 0;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的击飞力。")]
+    protected float chargingBlowForceSpeed = 0.0f;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的最大体积")]
+    protected Vector3 chargingLocalScale = Vector3.one;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的最大硬直施加时间")]
+    protected float chargingStaggerTime = 0.0f;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的最大持续时间")]
+    protected float chargingMaxTimer = 0.0f;
+
+
+    [SerializeField, Tooltip("是否可以击飞炮塔。")]
+    protected bool blowTurret = false;
+
+    [SerializeField, Tooltip("伤害块施加给炮塔的【吹飞力度】。")]
+    protected float blowTurretForceSpeed;
+
+
+
     public enum HitEffectPlayMode
     {
         HitPoint,  //在【伤害块】与【击中目标】的中间播放
@@ -125,10 +150,14 @@ public class DamageCollider : MonoBehaviour, IPoolable
     private Vector3 initSpriteLocalScale;
     private float initBlowForceSpeed;
     protected float initMaxTimer;
+    protected int initDamage = 0;
+    protected int initStaggerTime = 0;
+
 
     private string poolKey;
 
     const float basicShieldResistance = 0.5f;
+
 
 
     [Header("互动组件")]
@@ -211,6 +240,42 @@ public class DamageCollider : MonoBehaviour, IPoolable
         set { blowForceSpeed = value; }
     }
 
+    public float StaggerTime
+    {
+        get { return staggerTime; }
+        set { staggerTime = value; }
+    }
+
+    public int ChargingDamage
+    {
+        get { return chargingDamage; }
+        set { chargingDamage = value; }
+    }
+
+    public float ChargingBlowForceSpeed
+    {
+        get { return chargingBlowForceSpeed; }
+        set { chargingBlowForceSpeed = value; }
+    }
+    public Vector3 ChargingLocalScale
+    {
+        get { return chargingLocalScale; }
+        set { chargingLocalScale = value; }
+    }
+
+    public float ChargingStaggerTime
+    {
+        get { return chargingStaggerTime; }
+        set { chargingStaggerTime = value; }
+    }
+
+    public float ChargingMaxTimer
+    {
+        get { return chargingMaxTimer; }
+        set { chargingMaxTimer = value; }
+    }
+
+
     private void Awake()
     {
         poolKey = gameObject.name;
@@ -226,6 +291,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
         initSpriteLocalScale = spriteRenderer.transform.localScale;
         initBlowForceSpeed = blowForceSpeed;
         initMaxTimer = maxTimer;
+        initDamage = damage;
+        initStaggerTime = Mathf.RoundToInt(staggerTime);
         damageCollider2D.isTrigger = true;
         awaked = true;
         canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
@@ -349,7 +416,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
                             if (TryHit(unit))
                             {
-                                BlowUnit(unit);
+                                BlowUpEntity(unit);
                             }
                             else
                             {
@@ -428,6 +495,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
                         // 持续对接触的目标造成伤害，不销毁
                         break;
                 }
+
+                if (blowTurret && hit.tag == "Turret")
+                {
+                    BlowUpEntity(hit.GetComponent<Turret>(), true);
+                }
             }
         }
 
@@ -450,13 +522,22 @@ public class DamageCollider : MonoBehaviour, IPoolable
         }
     }
 
-    protected virtual void BlowUnit(Unit unit)
+    protected virtual void BlowUpEntity(BaseEntity entity, bool ignore = false)
     {
         // 护盾会令吹飞效果减半。
-        float blowupResistance = unit.Shield > 0.0f ? basicShieldResistance : 1.0f;
+        float blowupResistance = entity.Shield > 0.0f ? basicShieldResistance : 1.0f;
 
         // 韧性效果会令吹飞效果等比率下降。
-        float toughness = unit.Toughness;
+        float toughness = entity.Toughness;
+
+        float finalBlowForceSpeed = blowForceSpeed;
+        if (ignore)
+        {
+            blowupResistance = 1.0f;
+            toughness = 1.0f;
+
+            finalBlowForceSpeed = blowTurretForceSpeed;
+        }
 
         switch (damageMovementType)
         {
@@ -464,20 +545,20 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 Vector3 direction;
 
                 if (owner)
-                    direction = (unit.transform.position - owner.transform.position).normalized;
+                    direction = (entity.transform.position - owner.transform.position).normalized;
                 else
-                    direction = (unit.transform.position - transform.position).normalized;
+                    direction = (entity.transform.position - transform.position).normalized;
 
-                unit.BlowForceVelocity = blowForceSpeed * direction * blowupResistance * toughness;
+                entity.BlowForceVelocity = finalBlowForceSpeed * direction * blowupResistance * toughness;
                 break;
         
             case DamageMovementType.Projectile:
-                var characterPos = unit.transform.position;
+                var characterPos = entity.transform.position;
         
                 var direction1 = (characterPos - transform.position).normalized;
                 var direction2 = (velocity).normalized;
-        
-                unit.BlowForceVelocity = blowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance * toughness;
+
+                entity.BlowForceVelocity = finalBlowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance * toughness;
                 break;
         
             default:
@@ -584,6 +665,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
         blowForceSpeed = initBlowForceSpeed;
         maxTimer = initMaxTimer;
+        damage = initDamage;
+        staggerTime = initStaggerTime;
 
         OnStart();
     }
@@ -649,24 +732,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
         }
 
         return false;
-    }
-
-
-    protected void ShowDamagePopup(int damage, Vector3 position)
-    {
-        if (damagePopupPrefab)
-        {
-            GameObject popupObj = PoolManager.Instance.GetObject(damagePopupPrefab.name, damagePopupPrefab.gameObject);
-            DamagePopup damagePopup = popupObj.GetComponent<DamagePopup>();
-            damagePopup.Activate(position, Quaternion.identity);
-
-            //GameObject popup = Instantiate(damagePopupPrefab, position, Quaternion.identity);
-            //DamagePopup damagePopup = popup.GetComponent<DamagePopup>();
-            damagePopup.SetDamage(damage);
-            damagePopup.transform.SetParent(canvasTransform, false);
-            Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
-            damagePopup.GetComponent<RectTransform>().position = screenPosition;
-        }
     }
 
     void OnTriggerEnter2D(Collider2D other)

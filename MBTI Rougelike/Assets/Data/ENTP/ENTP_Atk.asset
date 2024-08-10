@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 4191177479539466285, guid: 9ce62004aef0bf74cb49a72a24a00470, type: 3}
   reloadingTime: 0.25
-  scatterAngle: 30
+  scatterAngle: 20
   damageColliderSpeed: 20
   maxChargeCount: 0
   selfBlowForce: 0
   controlScheme: 0
   renderMode: 0
   selfStatus: {fileID: 0}
+  maxChargingTime: 0
+  fixPos: 0

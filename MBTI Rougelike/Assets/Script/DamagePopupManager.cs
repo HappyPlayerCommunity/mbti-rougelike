@@ -6,7 +6,9 @@ using UnityEngine.UIElements;
 public enum PopupType
 {
     Damage = 0,
-    Miss = 1,
+    Healing = 1,
+    Miss = 2,
+
 
 
     //  后续可以为破盾，元素反应，撞墙等情况添加新的弹出类型。
@@ -49,6 +51,9 @@ public class DamagePopupManager : MonoBehaviour
         {
             case PopupType.Damage:
                 damagePopup.SetDamage(damage, isCrit);
+                break;
+            case PopupType.Healing:
+                damagePopup.SetHealing(damage, isCrit);
                 break;
             case PopupType.Miss:
                 damagePopup.SetMiss();

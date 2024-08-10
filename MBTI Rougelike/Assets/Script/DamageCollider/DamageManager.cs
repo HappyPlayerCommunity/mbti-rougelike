@@ -12,29 +12,33 @@ public class DamageManager
     {
         float returnDamage = damage; // int -> float
 
-        // 临时tips：对象池生成一些火属性伤害块后，如果直接去修改prefab为其他元素属性，对象池内的伤害块并不会自动更新。
-        // 这主要是是一个测试时才会出现的问题。实际运用时，只需要人格类在伤害块激活后，再赋予其属性即可。
-        returnDamage *= owner.GetElementDamageRate(element);
+        if (owner != null) 
+        { 
 
-        switch (damageType)
-        {
-            case DamageType.Physical:
-                returnDamage *= owner.PhysicalAtkPower * owner.GlobalAtkPower;
-                break;
-            case DamageType.Abstract:
-                returnDamage *= owner.AbstractAtkPower * owner.GlobalAtkPower;
-                break;
-            default:
-                break;
-        }
+            // 临时tips：对象池生成一些火属性伤害块后，如果直接去修改prefab为其他元素属性，对象池内的伤害块并不会自动更新。
+            // 这主要是是一个测试时才会出现的问题。实际运用时，只需要人格类在伤害块激活后，再赋予其属性即可。
+            returnDamage *= owner.GetElementDamageRate(element);
 
-        isCrit = IsCritical(owner);
-        if (isCrit)
-        {
-            Debug.Log("Critical Hit!");
-            returnDamage *= basicCritDamage * owner.CritDamageRate;
-        }
+            switch (damageType)
+            {
+                case DamageType.Physical:
+                    returnDamage *= owner.PhysicalAtkPower * owner.GlobalAtkPower;
+                    break;
+                case DamageType.Abstract:
+                    returnDamage *= owner.AbstractAtkPower * owner.GlobalAtkPower;
+                    break;
+                default:
+                    break;
+            }
 
+            isCrit = IsCritical(owner);
+            if (isCrit)
+            {
+                Debug.Log("Critical Hit!");
+                returnDamage *= basicCritDamage * owner.CritDamageRate;
+            }
+
+         }
         return (int)returnDamage;
     }
 

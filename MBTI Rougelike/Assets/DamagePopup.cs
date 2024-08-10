@@ -87,6 +87,26 @@ public class DamagePopup : MonoBehaviour, IPoolable
         }
     }
 
+    public void SetHealing(int healingAmount, bool isCrit = false)
+    {
+        damageText.text = healingAmount.ToString();
+
+        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
+
+        if (isCrit)
+        {
+            damageText.color = Color.green;
+            crited = true;
+            rectTransform.localScale = critVec;
+        }
+        else
+        {
+            damageText.color = Color.green;
+            damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
+        }
+    }
+
+
     public void SetMiss()
     {
         damageText.text = missText;
