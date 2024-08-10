@@ -18,7 +18,7 @@ public class AttackHelper : MonoBehaviour
         InitDamageCollider(damageColliderRef, initPos, 0.0f, aimDirection, scatterAngle, SkillControlScheme.None, isFixPos, 1.0f, renderMode, player, damageColliderSpeed);
     }
 
-    private static void InitDamageCollider(DamageCollider damageColliderRef, Transform initPos, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, SkillControlScheme controlScheme, bool isFixPos, float chargingRate, Skill.RenderMode renderMode, Player player, float damageColliderSpeed)
+    public static void InitDamageCollider(DamageCollider damageColliderRef, Transform initPos, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, SkillControlScheme controlScheme, bool isFixPos, float chargingRate, Skill.RenderMode renderMode, Player player, float damageColliderSpeed)
     {
         string poolKey = damageColliderRef.name;
         GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, damageColliderRef.gameObject);

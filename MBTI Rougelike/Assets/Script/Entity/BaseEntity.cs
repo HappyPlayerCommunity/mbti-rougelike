@@ -31,7 +31,7 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected float stopBlowThreadshold = 0.5f;
 
     [SerializeField, Tooltip("此数值决定了【吹飞速度】的下降率")]
-    protected float blowSpeedReduceRate = 0.1f;
+    protected float blowSpeedReduceRate = 0.99f;
 
     [SerializeField, Tooltip("该实体的当前护盾。")]
     protected int shield;

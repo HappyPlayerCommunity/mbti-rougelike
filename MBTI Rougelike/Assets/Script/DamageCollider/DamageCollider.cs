@@ -453,7 +453,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                             DamagePopupManager.Instance.Popup(PopupType.Healing, hit.transform.position, damage, false);
                             entity.GetHealing(damage);
                             entity.SetDamageTimer(gameObject, damageTriggerTime);
-                            HitAnimation(hit.transform.position);
+                            HitAnimation(hit.transform);
                         }
                         else
                         {
@@ -503,12 +503,13 @@ public class DamageCollider : MonoBehaviour, IPoolable
                                     RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, (hit.transform.position - transform.position).normalized);
                                     if (raycastHit.collider != null)
                                     {
-                                        Vector2 collisionPoint = raycastHit.point;
+                                        Transform collisionPoint = transform;
+                                        collisionPoint.position = raycastHit.point;
                                         HitAnimation(collisionPoint);
                                     }
                                     break;
                                 case HitEffectPlayMode.Target:
-                                    HitAnimation(hit.transform.position);
+                                    HitAnimation(hit.transform);
                                     break;
                                 default:
                                     break;
@@ -674,7 +675,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     }
 
-    protected virtual void HitAnimation(Vector3 position)
+    protected virtual void HitAnimation(Transform transform)
     {
         if (isHealingMode)
         {
@@ -682,8 +683,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
             {
                 GameObject hitEffect = PoolManager.Instance.GetObject(healEffectPrefab.name, healEffectPrefab.gameObject);
                 AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
-                anim.Activate(position, Quaternion.identity);
-                anim.attachedTransform = owner.transform;
+                anim.Activate(transform.position, Quaternion.identity);
+                anim.attachedTransform = transform;
             }
         }
         else
@@ -692,7 +693,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
             {
                 GameObject hitEffect = PoolManager.Instance.GetObject(hitEffectPrefab.name, hitEffectPrefab.gameObject);
                 AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
-                anim.Activate(position, Quaternion.identity);
+                anim.Activate(transform.position, Quaternion.identity);
             }
         }
 

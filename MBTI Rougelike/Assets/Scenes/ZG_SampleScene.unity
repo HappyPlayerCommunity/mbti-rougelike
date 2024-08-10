@@ -1639,14 +1639,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930087249}
-  m_BodyType: 2
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 1000000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -2597,6 +2597,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: dd196e862ceb4c54aba444307d99096f, type: 3}
+    - target: {fileID: 3439774688496294808, guid: bbfbbeabd1f389c41a7d38b1522231aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.754
+      objectReference: {fileID: 0}
     - target: {fileID: 5316403604074721068, guid: bbfbbeabd1f389c41a7d38b1522231aa, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -2617,6 +2621,10 @@ PrefabInstance:
       propertyPath: specialSkill
       value: 
       objectReference: {fileID: 11400000, guid: 7e5711294a20f4e45b047aad2688d3cc, type: 2}
+    - target: {fileID: 9219784524518261207, guid: bbfbbeabd1f389c41a7d38b1522231aa, type: 3}
+      propertyPath: ultSpecialImplementation
+      value: 
+      objectReference: {fileID: -1142354663931871835, guid: 3df39df7a94988840b86da9dd80f8bb6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

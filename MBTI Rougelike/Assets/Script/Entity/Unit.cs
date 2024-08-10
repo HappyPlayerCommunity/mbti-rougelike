@@ -62,6 +62,6 @@ public class Unit : BaseEntity
 
     public override bool CanTakeDamageFrom(GameObject collider)
     {
-        return base.CanTakeDamageFrom(collider) && !statusManager.IsInvincible();
+        return base.CanTakeDamageFrom(collider) && (!statusManager || !statusManager.IsInvincible());
     }
 }
