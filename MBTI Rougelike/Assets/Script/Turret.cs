@@ -13,12 +13,14 @@ public class Turret : Building, IPoolable
 
     public float scatterAngle = 10.0f;
 
-    bool isFixPos = false;
+    public bool isFixPos = false;
 
     public Player player;
 
     public float damageColliderSpeed = 5.0f;
     private string poolKey;
+
+    public float adjustBackOffset = 0.0f;
 
     Skill.RenderMode damageColliderRenderMode = Skill.RenderMode.NoneFlip;
 
@@ -77,7 +79,18 @@ public class Turret : Building, IPoolable
 
     void Attack(Vector3 direction)
     {
-        AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, direction, scatterAngle, isFixPos, damageColliderRenderMode, player, damageColliderSpeed);
+        if (isFixPos)
+        {
+            float initDistance = detectionRadius / 2;
+            //attackInitPos = transform;
+            attackInitPos.position = transform.position + direction * initDistance;
+
+            AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, adjustBackOffset, direction, scatterAngle, true, damageColliderRenderMode, player, damageColliderSpeed);
+        }
+        else
+        {
+            AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, 0.0f, direction, scatterAngle, isFixPos, damageColliderRenderMode, player, damageColliderSpeed);
+        }
     }
 
     /// <summary>

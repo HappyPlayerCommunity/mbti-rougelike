@@ -188,13 +188,15 @@ MonoBehaviour:
   canvasTransform: {fileID: 0}
   hpController: {fileID: 0}
   detectionRadius: 10
-  damageCollider: {fileID: 6345819366439947748, guid: c5c39135e55ce1b4a9cfee0c2463e368, type: 3}
+  damageCollider: {fileID: 4288594814808969134, guid: 13dbc25b2b27e064fa4cc589066c5584, type: 3}
   attackInitPos: {fileID: 4597528347407956847}
   attackTimer: 0
-  attackTime: 0.25
+  attackTime: 1
   scatterAngle: 20
+  isFixPos: 0
   player: {fileID: 0}
   damageColliderSpeed: 20
+  adjustBackOffset: 0
 --- !u!50 &3243219234151736972
 Rigidbody2D:
   serializedVersion: 4
