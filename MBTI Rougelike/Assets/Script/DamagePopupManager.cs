@@ -8,9 +8,8 @@ public enum PopupType
     Damage = 0,
     Healing = 1,
     Miss = 2,
-
-
-
+    ReloadingClip = 3,
+    DotDamage = 4,
     //  后续可以为破盾，元素反应，撞墙等情况添加新的弹出类型。
 }
 
@@ -20,6 +19,8 @@ public class DamagePopupManager : MonoBehaviour
 
     public DamagePopup damagePopupPrefab;
     public Transform canvasTransform;
+
+    public float randomOffsetAmount = 2.0f;
 
     private void Awake()
     {
@@ -58,12 +59,23 @@ public class DamagePopupManager : MonoBehaviour
             case PopupType.Miss:
                 damagePopup.SetMiss();
                 break;
+            case PopupType.ReloadingClip:
+                damagePopup.SetReloadingClip();
+                break;
+            case PopupType.DotDamage:
+                damagePopup.SetDotDamage(damage, isCrit);
+                break;
             default:
                 break;
         }
 
         damagePopup.transform.SetParent(canvasTransform, false);
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
+
+        Vector3 randomOffset = Vector3.zero;
+        randomOffset.x = Random.Range(-randomOffsetAmount, randomOffsetAmount);
+        randomOffset.y = Random.Range(-randomOffsetAmount, randomOffsetAmount);
+
         damagePopup.GetComponent<RectTransform>().position = screenPosition;
     }
 }

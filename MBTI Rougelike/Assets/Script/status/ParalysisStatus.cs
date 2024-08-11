@@ -22,7 +22,7 @@ public class ParalysisStatus : Status
 
     public override void OnExpire(GameObject target)
     {
-        target.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+        //target.GetComponentInChildren<SpriteRenderer>().color = Color.white;
         base.OnExpire(target);
     }
 }

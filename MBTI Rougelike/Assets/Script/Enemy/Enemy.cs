@@ -79,6 +79,12 @@ public class Enemy : Unit, IPoolable
             default:
                 break;
         }
+
+
+        if (statusManager && statusManager.ActiveStatuses().Count > 0)
+        {
+            Debug.Log("Enemy" + statusManager.ActiveStatuses()[0]);
+        }
     }
 
     public void Idle()

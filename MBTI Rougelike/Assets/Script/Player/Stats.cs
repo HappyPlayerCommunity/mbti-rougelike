@@ -464,7 +464,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_StatusImpact()
     {
-        return statusImpact;
+        return ApplyPercentageMultiplier(statusImpact);
     }
 
     /// <summary>
