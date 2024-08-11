@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
-  maxTimer: 0.5
+  maxTimer: 1
   collideTags:
   - Enemy
   damageTags:
@@ -67,6 +67,7 @@ MonoBehaviour:
   chargingLocalScale: {x: 0, y: 0, z: 0}
   chargingStaggerTime: 0
   chargingMaxTimer: 0
+  chargingPenetrability: 0
   blowTurret: 0
   blowTurretForceSpeed: 0
   isHealingMode: 0

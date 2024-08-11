@@ -319,7 +319,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
     }
 
-    void Start()
+    protected virtual void Start()
     {
         OnStart();
     }
@@ -750,7 +750,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     //    }
     //}
 
-    void OnStart()
+    protected virtual void OnStart()
     {
         BeforeStart();
 
