@@ -22,14 +22,18 @@ public class StatusManager : MonoBehaviour
     void Update()
     {
         float deltaTime = Time.deltaTime;
-        for (int i = activeStatuses.Count - 1; i >= 0; i--)
+
+        // 需要考虑其他线程的状态更新，需要复制一份状态列表。
+        List<Status> statusesCopy = new List<Status>(activeStatuses);
+
+        foreach (var status in statusesCopy)
         {
-            activeStatuses[i].OnUpdate(gameObject, deltaTime);
-            if (activeStatuses[i].IsExpired())
+            status.OnUpdate(gameObject, deltaTime);
+            if (status.IsExpired())
             {
-                activeStatuses[i].OnExpire(gameObject);
-                RemoveFlagUpdate(activeStatuses[i]);
-                activeStatuses.RemoveAt(i);
+                status.OnExpire(gameObject);
+                RemoveFlagUpdate(status);
+                activeStatuses.Remove(status);
             }
         }
     }
@@ -84,12 +88,15 @@ public class StatusManager : MonoBehaviour
 
     public void RemoveAllStatus()
     {
-        for (int i = activeStatuses.Count - 1; i >= 0; i--)
+        List<Status> statusesToRemove = new List<Status>(activeStatuses);
+
+        foreach (var status in statusesToRemove)
         {
-            activeStatuses[i].OnExpire(gameObject);
-            RemoveFlagUpdate(activeStatuses[i]);
-            activeStatuses.RemoveAt(i);
+            status.OnExpire(gameObject);
+            RemoveFlagUpdate(status);
         }
+
+        activeStatuses.Clear(); // 清空所有状态
     }
 
     public bool IsRooted()

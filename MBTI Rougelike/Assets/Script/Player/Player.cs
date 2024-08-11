@@ -51,7 +51,7 @@ public class Player : Unit
         personality.InjuryChargeEnerge(damage, boostCharge); // 受伤充能比率还得具体设计。
     }
 
-    private void StatsUpdate()
+    public void StatsUpdate()
     {
         maxHp = Mathf.RoundToInt(stats.Calculate_MaxHealth());
         hpRegen = Mathf.RoundToInt(stats.Calculate_HealthRegen());

@@ -11,6 +11,8 @@ public class StatusIntpUlt : Status
     public float fireRate = 0.1f; // 每次发射的间隔时间
     public int totalCircles = 5; // 总共旋转的圈数
 
+    private float toungness = float.MaxValue;
+
     public override void OnUpdate(GameObject target, float deltaTime)
     {
         base.OnUpdate(target, deltaTime);
@@ -23,17 +25,20 @@ public class StatusIntpUlt : Status
         MonoBehaviour monoBehaviour = target.GetComponent<MonoBehaviour>();
         player = target.GetComponent<Player>();
 
-
         if (monoBehaviour != null)
         {
             monoBehaviour.StartCoroutine(FireBullets());
         }
-
+        stats.toughness += toungness;
+        player.StatsUpdate();
     }
 
     public override void OnExpire(GameObject target)
     {
         base.OnExpire(target);
+        stats.toughness -= toungness;
+        var player = target.GetComponent<Player>();
+        player.StatsUpdate();
     }
 
     private IEnumerator FireBullets()

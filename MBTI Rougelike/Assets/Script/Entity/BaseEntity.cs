@@ -395,7 +395,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         hpController.Deactivate();
         gameObject.SetActive(false);
 
-        statusManager.RemoveAllStatus();
+        if (statusManager)
+            statusManager.RemoveAllStatus();
     }
 
     public float BlowSpeedReduceUpdate(float speed)

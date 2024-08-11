@@ -20,7 +20,7 @@ public abstract class UnitAI : MonoBehaviour
     protected State currentState;
 
     protected Unit unit;
-    protected Transform player;
+    protected Transform playerTrans;
     protected Transform currentTarget;
 
     [SerializeField, Tooltip("检测到玩家的范围。")]
@@ -37,13 +37,17 @@ public abstract class UnitAI : MonoBehaviour
 
     protected virtual void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        var player = GameObject.FindWithTag("Player");
+        if (player)
+        {
+            playerTrans = player.transform;
+        }
         unit = GetComponent<Unit>();
     }
 
     protected virtual void Update()
     {
-        if (player == null) //for now
+        if (playerTrans == null) //for now
             return;
 
         switch (currentState)
@@ -51,7 +55,7 @@ public abstract class UnitAI : MonoBehaviour
             case State.Idle:
                 Idle();
 
-                if (Vector3.Distance(transform.position, player.position) < detectionRange)
+                if (Vector3.Distance(transform.position, playerTrans.position) < detectionRange)
                 {
                     currentState = State.Chase;
                 }

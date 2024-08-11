@@ -59,7 +59,7 @@ MonoBehaviour:
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
   healEffectPrefab: {fileID: 0}
   hitEffectPlayMode: 0
-  damageType: 0
+  damageType: 1
   damageElementType: 0
   canvasTransform: {fileID: 0}
   chargingDamage: 0

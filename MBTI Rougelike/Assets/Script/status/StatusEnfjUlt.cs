@@ -17,11 +17,15 @@ public class StatusEnfjUlt : Status
         base.OnApply(target);
 
         stats.movementSpeed += movementSpeedBonus * modifyPowerRate;
+        var player = target.GetComponent<Player>();
+        player.StatsUpdate();
     }
 
     public override void OnExpire(GameObject target)
     {
         base.OnExpire(target);
         stats.movementSpeed -= movementSpeedBonus * modifyPowerRate;
+        var player = target.GetComponent<Player>();
+        player.StatsUpdate();
     }
 }

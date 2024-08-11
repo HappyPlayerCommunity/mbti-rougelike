@@ -125,7 +125,24 @@ public class Personality : MonoBehaviour
         get { return normalAttack_CurretReloadingTimer; }
         set { normalAttack_CurretReloadingTimer = value; }
     }
-    
+
+    public float NormalAttack_CurretReloadingTime
+    {
+        get { return normalAttack.ReloadingTime; }
+        set { normalAttack.ReloadingTime = value; }
+    }
+
+    public float SpecialSkill_CurretReloadingTimer
+    {
+        get { return specialSkill_CurretReloadingTimer; }
+        set { specialSkill_CurretReloadingTimer = value; }
+    }
+
+    public float SpecialSkill_CurretReloadingTime
+    {
+        get { return specialSkill.ReloadingTime; }
+        set { specialSkill.ReloadingTime = value; }
+    }
 
     //大招
 
@@ -153,19 +170,22 @@ public class Personality : MonoBehaviour
         normalAttack_CurretReloadingTimer -= Time.deltaTime;
         specialSkill_CurretReloadingTimer -= Time.deltaTime;
 
-        if (player.IsStaggered())
-        {
-            return;
-        }
+
 
         player.IsActioning = false;
 
         if (!statusManager.IsSlienced())
         {
+            HandleUltiamteTypeAndControlScheme(); //大招可以无视硬直释放。
+
+            if (player.IsStaggered())
+            {
+                return;
+            }
+
             HandleSkillTypeAndControlScheme(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, UnityEngine.Input.GetMouseButton(0), true, ref normalAttackClip, normalAttack_MultiInitPositions); //左键
             HandleSkillTypeAndControlScheme(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, UnityEngine.Input.GetMouseButton(1), false, ref specialSkillClip, specialSkill_MultiInitPositions); //右键
 
-            HandleUltiamteTypeAndControlScheme();
         }
     }
 
@@ -226,6 +246,8 @@ public class Personality : MonoBehaviour
                 {
                     if (skill.DamageCollider)
                     {
+                        Debug.Log("SkillUpdate" + chargingRate);
+
                         var finalDamageCollider = AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle);
 
                         if (selfStatus != null)
@@ -465,7 +487,7 @@ public class Personality : MonoBehaviour
         else if (!input && isCharging)
         {
             // Release attack
-            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, ref clip, multiInitPos);
+            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, ref clip, multiInitPos, chargingRate);
             isCharging = false;
             chargingTimer = 0.0f;
             chargingRate = 0.0f;
