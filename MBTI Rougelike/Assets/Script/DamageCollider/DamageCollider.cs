@@ -524,16 +524,10 @@ public class DamageCollider : MonoBehaviour, IPoolable
                             {
                                 var player = (Player)owner;
                                 entity.StatusManager.AddStatus(applyStatus, player.stats);
-                                Debug.Log("Add status to entity");
-
-                                //status.modifyPowerRate = stats.Calculate_StatusPower();
-                                //status.modifyDurationRate = stats.Calculate_StatusDuration();
-                                //status.stats = stats;
                             }
                             else
                             {
                                 entity.StatusManager.AddStatus(applyStatus, null);
-                                Debug.Log("Add status to entity");
                             }
 
                             //Debug.Log(entity.StatusManager.ActiveStatus());

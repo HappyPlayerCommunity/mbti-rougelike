@@ -66,8 +66,6 @@ public class StatusManager : MonoBehaviour
 
             finalStatus.stats = stats;
 
-            Debug.Log("after activeStatuses" + activeStatuses[0]);
-
             return finalStatus;
         }
     }

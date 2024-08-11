@@ -108,6 +108,24 @@ public class Personality : MonoBehaviour
         set { chargingRate2 = value; }
     }
 
+    public Skill NormalAttack
+    {
+        get { return normalAttack; }
+        set { normalAttack = value; }
+    }
+
+    public int NormalAttackClip
+    {
+        get { return normalAttackClip; }
+        set { normalAttackClip = value; }
+    }
+
+    public float NormalAttack_CurretReloadingTimer
+    {
+        get { return normalAttack_CurretReloadingTimer; }
+        set { normalAttack_CurretReloadingTimer = value; }
+    }
+    
 
     //大招
 
@@ -170,8 +188,26 @@ public class Personality : MonoBehaviour
         if (holding) // 在后面改为绑定按键
         {
             player.IsActioning = true;
+
             if (currentReloadingTimer <= 0.0f)
             {
+                Status selfStatus = null;
+                if (isAuto)
+                {
+                    selfStatus = normalAttack.SelfStatus;
+
+                    if (selfStatus)
+                        selfStatus = player.StatusManager.AddStatus(normalAttack.SelfStatus, stats);
+                }
+                else
+                {
+                    selfStatus = specialSkill.SelfStatus;
+
+                    if (selfStatus)
+                        selfStatus = player.StatusManager.AddStatus(specialSkill.SelfStatus, stats);
+
+                }
+
                 if (skill.MultiDamageColliders.Count > 0 && multiInitPos.Count > 0) // 该技能会生成多个伤害块。
                 {
                     for (int i = 0; i < skill.MultiDamageColliders.Count; i++)
@@ -179,16 +215,27 @@ public class Personality : MonoBehaviour
                         DamageCollider damageCollider = skill.MultiDamageColliders[i];
                         Transform transform = multiInitPos[i];
                         // 有需要的话还可以扩展不同角度的散射。
-                        AttackHelper.InitDamageCollider(damageCollider, transform, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, damageColliderSpeed);
+                        var finalDamageCollider = AttackHelper.InitDamageCollider(damageCollider, transform, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, damageColliderSpeed);
+                        if (selfStatus != null)
+                        {
+                            finalDamageCollider.ownerStatus = selfStatus;
+                        }
                     }
                 }
                 else
                 {
                     if (skill.DamageCollider)
                     {
-                        AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle);
+                        var finalDamageCollider = AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle);
+
+                        if (selfStatus != null)
+                        {
+                            finalDamageCollider.ownerStatus = selfStatus;
+                        }
                     }
                 }
+
+
 
                 player.BlowForceVelocity = aimDirection * skill.SelfBlowForce; //for now, 负数可以做向后退的技能。
 
@@ -223,10 +270,6 @@ public class Personality : MonoBehaviour
         
         if (ultimateSkill.SelfStatus)
         {
-            //selfStatus = ultimateSkill.SelfStatus;
-            //selfStatus.modifyPowerRate = stats.Calculate_StatusPower();
-            //selfStatus.modifyDurationRate = stats.Calculate_StatusDuration();
-            //selfStatus.stats = stats;
             selfStatus = player.StatusManager.AddStatus(ultimateSkill.SelfStatus, stats);
         }
         

@@ -1153,7 +1153,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 8779559174516582916, guid: f2635c698e51b6c488d4bd5996b39964, type: 3}
   enemyPerWave: 10
   betweenWavesInterval: 3
-  spawnInterval: 30
+  spawnInterval: 1
   totalWaves: 10
   currentWave: 0
   resetTestingButton: {fileID: 138940784}
@@ -2577,6 +2577,18 @@ PrefabInstance:
       propertyPath: normalAttack
       value: 
       objectReference: {fileID: 11400000, guid: 3577bbd221ba77b44b075afbdbc88fa0, type: 2}
+    - target: {fileID: 8214688163654490928, guid: 7e4eb581841aad6469990ee3745c5419, type: 3}
+      propertyPath: specialSkill
+      value: 
+      objectReference: {fileID: 11400000, guid: 35bc08cca4f053742a14e4ae2b625127, type: 2}
+    - target: {fileID: 8214688163654490928, guid: 7e4eb581841aad6469990ee3745c5419, type: 3}
+      propertyPath: ultimateSkill
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e696dcf69a9da14fbf1fd222b48ac40, type: 2}
+    - target: {fileID: 8214688163654490928, guid: 7e4eb581841aad6469990ee3745c5419, type: 3}
+      propertyPath: ultSpecialImplementation
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8214688163654490928, guid: 7e4eb581841aad6469990ee3745c5419, type: 3}
       propertyPath: normalAttack_MultiInitPositions.Array.size
       value: 2

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -36,6 +37,9 @@ public abstract class Status : ScriptableObject
     [Tooltip("此状态的持续时间变化率。")]
     public float modifyDurationRate = 1.0f;
 
+    [Tooltip("此状态的持续时间变化率。")]
+    public bool lockDuration = false;
+
     [Tooltip("此状态的表现动画。")]
     public AnimationController2D statusAnimPrefab;
 
@@ -44,7 +48,10 @@ public abstract class Status : ScriptableObject
 
     public virtual void OnApply(GameObject target)
     {
-        timer = duration * modifyDurationRate;
+        if (lockDuration)
+            timer = duration;
+        else
+            timer = duration * modifyDurationRate;
     }
 
     public virtual void OnUpdate(GameObject target, float deltaTime)
