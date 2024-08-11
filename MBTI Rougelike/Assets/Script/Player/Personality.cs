@@ -246,8 +246,6 @@ public class Personality : MonoBehaviour
                 {
                     if (skill.DamageCollider)
                     {
-                        Debug.Log("SkillUpdate" + chargingRate);
-
                         var finalDamageCollider = AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle);
 
                         if (selfStatus != null)

@@ -90,6 +90,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("该伤害通过蓄力可增加的最大持续时间")]
     protected float chargingMaxTimer = 0.0f;
 
+    [SerializeField, Tooltip("该伤害通过蓄力可增加的穿透数量。")]
+    protected int chargingPenetrability = 0;
+
     [SerializeField, Tooltip("是否可以击飞炮塔。")]
     protected bool blowTurret = false;
 
@@ -165,8 +168,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
     private string poolKey;
 
     const float basicShieldResistance = 0.5f;
-
-
 
     [Header("互动组件")]
     public Collider2D damageCollider2D;
@@ -277,10 +278,21 @@ public class DamageCollider : MonoBehaviour, IPoolable
         set { chargingStaggerTime = value; }
     }
 
+    public int ChargingPenetrability
+    {
+        get { return chargingPenetrability; }
+        set { chargingPenetrability = value; }
+    }
+
     public float ChargingMaxTimer
     {
         get { return chargingMaxTimer; }
         set { chargingMaxTimer = value; }
+    }
+    public int Penetrability
+    {
+        get { return penetrability; }
+        set { penetrability = value; }
     }
 
 

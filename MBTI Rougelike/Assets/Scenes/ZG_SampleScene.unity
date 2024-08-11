@@ -2098,12 +2098,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 681458897849019930, guid: 8e94f9a2fc5a2c74498f5c5b5564f177, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2619661509913464065, guid: 8e94f9a2fc5a2c74498f5c5b5564f177, type: 3}
       propertyPath: normalAttack
       value: 
       objectReference: {fileID: 11400000, guid: 473ab073c183354479971101700c4743, type: 2}
+    - target: {fileID: 2619661509913464065, guid: 8e94f9a2fc5a2c74498f5c5b5564f177, type: 3}
+      propertyPath: normalAttack_MultiInitPositions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5871137467683649908, guid: 8e94f9a2fc5a2c74498f5c5b5564f177, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.73
@@ -2799,7 +2803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2288110448233699500, guid: 86b3fb692e8743b4090709f856415df5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2400842148223999299, guid: 86b3fb692e8743b4090709f856415df5, type: 3}
       propertyPath: m_LocalPosition.x

@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7878929431220582853}
@@ -182,16 +182,17 @@ MonoBehaviour:
   damageType: 1
   damageElementType: 0
   canvasTransform: {fileID: 0}
-  chargingDamage: 0
+  chargingDamage: 90
   chargingBlowForceSpeed: 5
-  chargingLocalScale: {x: 3, y: 3, z: 0}
+  chargingLocalScale: {x: 1, y: 1, z: 0}
   chargingStaggerTime: 2
   chargingMaxTimer: 3
+  chargingPenetrability: 10
   blowTurret: 0
   blowTurretForceSpeed: 0
   isHealingMode: 0
   penetrability: 1
-  damageHitType: 1
+  damageHitType: 0
   damageTriggerTime: 2
   timer: 0
   velocity: {x: 0, y: 0}

@@ -126,18 +126,21 @@ public class AttackHelper : MonoBehaviour
         //damageCollider.Timer = damageCollider.MaxTimer;
 
         damageCollider.StaggerTime += damageCollider.ChargingStaggerTime * chargingRate;
+        damageCollider.Penetrability += (int)(damageCollider.ChargingPenetrability * chargingRate);
+        damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
 
-        switch (damageCollider.damageMovementType)
-        {
-            case DamageCollider.DamageMovementType.Passive:
-                damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
-                break;
-            case DamageCollider.DamageMovementType.Projectile:
-                damageCollider.MaxTimer += damageCollider.ChargingMaxTimer * chargingRate;
-                damageCollider.Timer = damageCollider.MaxTimer;
-                break;
-            default:
-                break;
-        }
+        //先统一变大把。。。
+        //switch (damageCollider.damageMovementType)
+        //{
+        //    case DamageCollider.DamageMovementType.Passive:
+        //        damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
+        //        break;
+        //    case DamageCollider.DamageMovementType.Projectile:
+        //        damageCollider.MaxTimer += damageCollider.ChargingMaxTimer * chargingRate;
+        //        damageCollider.Timer = damageCollider.MaxTimer;
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 }
