@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.ShaderKeywordFilter.FilterAttribute;
 using static UnityEngine.UI.CanvasScaler;
 
 /// <summary>
