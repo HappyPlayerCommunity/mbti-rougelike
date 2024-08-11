@@ -82,6 +82,16 @@ public class StatusManager : MonoBehaviour
         activeStatuses.Remove(status);
     }
 
+    public void RemoveAllStatus()
+    {
+        for (int i = activeStatuses.Count - 1; i >= 0; i--)
+        {
+            activeStatuses[i].OnExpire(gameObject);
+            RemoveFlagUpdate(activeStatuses[i]);
+            activeStatuses.RemoveAt(i);
+        }
+    }
+
     public bool IsRooted()
     {
         return rootCount > 0;

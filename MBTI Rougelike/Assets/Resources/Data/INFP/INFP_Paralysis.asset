@@ -19,6 +19,9 @@ MonoBehaviour:
   invincible: 0
   silence: 1
   modifyPowerRate: 1
+  modifyImpactRate: 1
   modifyDurationRate: 1
+  lockDuration: 0
+  statusAnimPrefab: {fileID: 5392953412596885765, guid: 84f79bedac471514b80c9a866481ac93, type: 3}
   stats: {fileID: 0}
   thunderVulnerable: 1

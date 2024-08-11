@@ -518,7 +518,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
                         didDamage = true;
 
-                        if (applyStatus && entity.StatusManager)
+                        if (applyStatus && entity.StatusManager && entity.IsAlive())
                         {
                             if (owner is Player)
                             {

@@ -43,6 +43,8 @@ public abstract class Status : ScriptableObject
     [Tooltip("此状态的表现动画。")]
     public AnimationController2D statusAnimPrefab;
 
+    protected AnimationController2D recordAnim;
+
     [Header("互动组件")]
     public Stats stats;
 
@@ -83,9 +85,9 @@ public abstract class Status : ScriptableObject
         if (statusAnimPrefab)
         {
             GameObject statusEffect = PoolManager.Instance.GetObject(statusAnimPrefab.name, statusAnimPrefab.gameObject);
-            var playAnim = statusEffect.GetComponent<AnimationController2D>();
-            playAnim.attachedTransform = target.transform;
-            playAnim.Activate(target.transform.position, Quaternion.identity);
+            recordAnim = statusEffect.GetComponent<AnimationController2D>();
+            recordAnim.attachedTransform = target.transform;
+            recordAnim.Activate(target.transform.position, Quaternion.identity);
         }
     }
 }

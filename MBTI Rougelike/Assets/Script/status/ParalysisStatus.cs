@@ -18,11 +18,13 @@ public class ParalysisStatus : Status
     public override void OnApply(GameObject target)
     {
         base.OnApply(target);
+        PlayAnimation(target);
     }
 
     public override void OnExpire(GameObject target)
     {
         //target.GetComponentInChildren<SpriteRenderer>().color = Color.white;
         base.OnExpire(target);
+        recordAnim.OnAnimationEnd();
     }
 }

@@ -376,6 +376,11 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public bool IsAlive()
+    {
+        return hp > 0;
+    }
+
     public virtual void GetHealing(int healAmount)
     {
         hp += healAmount;
@@ -389,6 +394,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     {
         hpController.Deactivate();
         gameObject.SetActive(false);
+
+        statusManager.RemoveAllStatus();
     }
 
     public float BlowSpeedReduceUpdate(float speed)
