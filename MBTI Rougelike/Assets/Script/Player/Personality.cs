@@ -19,9 +19,17 @@ public class Personality : MonoBehaviour
     [Tooltip("普攻的生成位置。")]
     public Transform normalAttack_InitPosition;
 
+    [Tooltip("复数普攻的生成位置合集。")]
+    public List<Transform> normalAttack_MultiInitPositions;
+
     private bool isNormalAttackCharging = false;
     private float chargingTimer1 = 0.0f;
     private float chargingRate1 = 0.0f;
+    private int normalAttackClip = 0;
+
+    [SerializeField, Tooltip("该技能特殊的子弹生成逻辑。")]
+    private PersonalitySpecialImplementation normalAttackDamageColliderInitImpl;
+
 
     [Header("特殊技能（特技）")]
     [SerializeField, Tooltip("该技能的数据。")]
@@ -33,9 +41,13 @@ public class Personality : MonoBehaviour
     [Tooltip("特技的生成位置。")]
     public Transform specialSkill_InitPosition;
 
+    [Tooltip("复数特技的生成位置合集。")]
+    public List<Transform> specialSkill_MultiInitPositions;
+
     private bool isSpecialSkillCharging = false;
     private float chargingTimer2 = 0.0f;
     private float chargingRate2 = 0.0f;
+    private int specialSkillClip = 0;
 
 
     [Header("终极技能（大招）")]
@@ -96,6 +108,41 @@ public class Personality : MonoBehaviour
         set { chargingRate2 = value; }
     }
 
+    public Skill NormalAttack
+    {
+        get { return normalAttack; }
+        set { normalAttack = value; }
+    }
+
+    public int NormalAttackClip
+    {
+        get { return normalAttackClip; }
+        set { normalAttackClip = value; }
+    }
+
+    public float NormalAttack_CurretReloadingTimer
+    {
+        get { return normalAttack_CurretReloadingTimer; }
+        set { normalAttack_CurretReloadingTimer = value; }
+    }
+
+    public float NormalAttack_CurretReloadingTime
+    {
+        get { return normalAttack.ReloadingTime; }
+        set { normalAttack.ReloadingTime = value; }
+    }
+
+    public float SpecialSkill_CurretReloadingTimer
+    {
+        get { return specialSkill_CurretReloadingTimer; }
+        set { specialSkill_CurretReloadingTimer = value; }
+    }
+
+    public float SpecialSkill_CurretReloadingTime
+    {
+        get { return specialSkill.ReloadingTime; }
+        set { specialSkill.ReloadingTime = value; }
+    }
 
     //大招
 
@@ -111,6 +158,11 @@ public class Personality : MonoBehaviour
         stats = player.stats;
         statusManager = GetComponent<StatusManager>();
         StartEnergeCharge();
+
+        normalAttackClip = normalAttack.MaxClip;
+
+        specialSkillClip = specialSkill.MaxClip;
+
     }
 
     void Update()
@@ -118,23 +170,26 @@ public class Personality : MonoBehaviour
         normalAttack_CurretReloadingTimer -= Time.deltaTime;
         specialSkill_CurretReloadingTimer -= Time.deltaTime;
 
-        if (player.IsStaggered())
-        {
-            return;
-        }
+
 
         player.IsActioning = false;
 
         if (!statusManager.IsSlienced())
         {
-            HandleSkillTypeAndControlScheme(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, UnityEngine.Input.GetMouseButton(0), true); //左键
-            HandleSkillTypeAndControlScheme(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, UnityEngine.Input.GetMouseButton(1), false); //右键
+            HandleUltiamteTypeAndControlScheme(); //大招可以无视硬直释放。
 
-            HandleUltiamteTypeAndControlScheme();
+            if (player.IsStaggered())
+            {
+                return;
+            }
+
+            HandleSkillTypeAndControlScheme(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, UnityEngine.Input.GetMouseButton(0), true, ref normalAttackClip, normalAttack_MultiInitPositions); //左键
+            HandleSkillTypeAndControlScheme(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, UnityEngine.Input.GetMouseButton(1), false, ref specialSkillClip, specialSkill_MultiInitPositions); //右键
+
         }
     }
 
-    protected virtual void SkillUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto, float chargingRate = 1.0f)
+    protected virtual void SkillUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto, ref int clip, List<Transform> multiInitPos, float chargingRate = 1.0f)
     {
         Vector3 mousePos = UnityEngine.Input.mousePosition;
         var mouseWorldPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
@@ -153,12 +208,54 @@ public class Personality : MonoBehaviour
         if (holding) // 在后面改为绑定按键
         {
             player.IsActioning = true;
+
             if (currentReloadingTimer <= 0.0f)
             {
-                if (skill.DamageCollider)
+                Status selfStatus = null;
+                if (isAuto)
                 {
-                    AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle);
+                    selfStatus = normalAttack.SelfStatus;
+
+                    if (selfStatus)
+                        selfStatus = player.StatusManager.AddStatus(normalAttack.SelfStatus, stats);
                 }
+                else
+                {
+                    selfStatus = specialSkill.SelfStatus;
+
+                    if (selfStatus)
+                        selfStatus = player.StatusManager.AddStatus(specialSkill.SelfStatus, stats);
+
+                }
+
+                if (skill.MultiDamageColliders.Count > 0 && multiInitPos.Count > 0) // 该技能会生成多个伤害块。
+                {
+                    for (int i = 0; i < skill.MultiDamageColliders.Count; i++)
+                    {
+                        DamageCollider damageCollider = skill.MultiDamageColliders[i];
+                        Transform transform = multiInitPos[i];
+                        // 有需要的话还可以扩展不同角度的散射。
+                        var finalDamageCollider = AttackHelper.InitDamageCollider(damageCollider, transform, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, damageColliderSpeed);
+                        if (selfStatus != null)
+                        {
+                            finalDamageCollider.ownerStatus = selfStatus;
+                        }
+                    }
+                }
+                else
+                {
+                    if (skill.DamageCollider)
+                    {
+                        var finalDamageCollider = AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle);
+
+                        if (selfStatus != null)
+                        {
+                            finalDamageCollider.ownerStatus = selfStatus;
+                        }
+                    }
+                }
+
+
 
                 player.BlowForceVelocity = aimDirection * skill.SelfBlowForce; //for now, 负数可以做向后退的技能。
 
@@ -168,6 +265,17 @@ public class Personality : MonoBehaviour
                     currentReloadingTimer = reloadingTime * stats.Calculate_AttackSpeed();
                 else
                     currentReloadingTimer = reloadingTime * stats.Calculate_SpecialCooldown();
+
+                if (skill.MaxClip > 0) //最大弹夹数大于0的技能，才应用弹夹机制。
+                {
+                    clip -= 1;
+                    if (clip <= 0)// 重置弹夹。
+                    {
+                        clip = skill.MaxClip;
+                        DamagePopupManager.Instance.Popup(PopupType.ReloadingClip, transform.position, 0, false);
+                        currentReloadingTimer = skill.ClipReloadingTime;
+                    }
+                }
             }
         }
 
@@ -182,15 +290,11 @@ public class Personality : MonoBehaviour
         
         if (ultimateSkill.SelfStatus)
         {
-            selfStatus = ultimateSkill.SelfStatus;
-            selfStatus.modifyPowerRate = stats.Calculate_StatusPower();
-            selfStatus.modifyDurationRate = stats.Calculate_StatusDuration();
-            selfStatus.stats = stats;
-            selfStatus = player.StatusManager.AddStatus(selfStatus);
+            selfStatus = player.StatusManager.AddStatus(ultimateSkill.SelfStatus, stats);
         }
         
         Vector3 aimDirection = aim.aimDirection;
-        
+
         if (ultimateSkill.DamageCollider)
         {
             string poolKey = ultimateSkill.DamageCollider.name;
@@ -290,7 +394,7 @@ public class Personality : MonoBehaviour
         }
     }
 
-    private void HandleSkillTypeAndControlScheme(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto)
+    private void HandleSkillTypeAndControlScheme(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto, ref int clip, List<Transform> multiInitPos)
     {
         switch (skill.SkillType)
         {
@@ -299,18 +403,18 @@ public class Personality : MonoBehaviour
                 switch (skill.ControlScheme)
                 {
                     case SkillControlScheme.Continuous:
-                        SkillUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto);
+                        SkillUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref clip, multiInitPos);
                         break;
                     case SkillControlScheme.ChargeRelease:
                         if (isAuto)
-                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer1, ref chargingRate1, ref isNormalAttackCharging);
+                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer1, ref chargingRate1, ref isNormalAttackCharging, ref clip, multiInitPos);
                         else
-                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer2, ref chargingRate2, ref isSpecialSkillCharging);
+                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer2, ref chargingRate2, ref isSpecialSkillCharging, ref clip, multiInitPos);
                         break;
                     case SkillControlScheme.Toggle:
                         if (input && currentReloadingTimer <= 0.0f)
                         {
-                            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto);
+                            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, ref clip, multiInitPos);
                         }
                         break;
                     default:
@@ -370,7 +474,7 @@ public class Personality : MonoBehaviour
         }
     }
 
-    private void ChargeReleaseUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto, ref float chargingTimer, ref float chargingRate, ref bool isCharging)
+    private void ChargeReleaseUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto, ref float chargingTimer, ref float chargingRate, ref bool isCharging, ref int clip, List<Transform> multiInitPos)
     {
         if (input && currentReloadingTimer <= 0.0f && !isCharging)
         {
@@ -381,7 +485,7 @@ public class Personality : MonoBehaviour
         else if (!input && isCharging)
         {
             // Release attack
-            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, chargingRate);
+            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, ref clip, multiInitPos, chargingRate);
             isCharging = false;
             chargingTimer = 0.0f;
             chargingRate = 0.0f;
@@ -415,5 +519,10 @@ public class Personality : MonoBehaviour
                 currReloadingTimer *= stats.Calculate_SpecialCooldown();
             }
         }
+    }
+
+    private void createDamageCollider()
+    {
+
     }
 }

@@ -7,17 +7,17 @@ using static Skill;
 public class AttackHelper : MonoBehaviour
 {
 
-    public static void InitSkillDamageCollider(Skill skill, Transform initPos, float chargingRate, Player player, float adjustBackOffset, Vector3 aimDirection, float scatterAngle)
+    public static DamageCollider InitSkillDamageCollider(Skill skill, Transform initPos, float chargingRate, Player player, float adjustBackOffset, Vector3 aimDirection, float scatterAngle)
     {
-        InitDamageCollider(skill.DamageCollider, initPos, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, skill.DamageColliderSpeed);
+        return InitDamageCollider(skill.DamageCollider, initPos, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, skill.DamageColliderSpeed);
     }
 
-    public static void InitTurretDamageCollider(DamageCollider damageColliderRef, Transform initPos, Vector3 aimDirection, float scatterAngle, bool isFixPos, Skill.RenderMode renderMode, Player player, float damageColliderSpeed)
+    public static DamageCollider InitTurretDamageCollider(DamageCollider damageColliderRef, Transform initPos, Vector3 aimDirection, float scatterAngle, bool isFixPos, Skill.RenderMode renderMode, Player player, float damageColliderSpeed)
     {
-        InitDamageCollider(damageColliderRef, initPos, 0.0f, aimDirection, scatterAngle, SkillControlScheme.None, isFixPos, 1.0f, renderMode, player, damageColliderSpeed);
+        return InitDamageCollider(damageColliderRef, initPos, 0.0f, aimDirection, scatterAngle, SkillControlScheme.None, isFixPos, 1.0f, renderMode, player, damageColliderSpeed);
     }
 
-    public static void InitDamageCollider(DamageCollider damageColliderRef, Transform initPos, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, SkillControlScheme controlScheme, bool isFixPos, float chargingRate, Skill.RenderMode renderMode, Player player, float damageColliderSpeed)
+    public static DamageCollider InitDamageCollider(DamageCollider damageColliderRef, Transform initPos, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, SkillControlScheme controlScheme, bool isFixPos, float chargingRate, Skill.RenderMode renderMode, Player player, float damageColliderSpeed)
     {
         string poolKey = damageColliderRef.name;
         GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, damageColliderRef.gameObject);
@@ -110,6 +110,8 @@ public class AttackHelper : MonoBehaviour
 
         Vector3 finalVelocity = scatterDirection.normalized * damageColliderSpeed;
         damageCollider.Velocity = finalVelocity;
+
+        return damageCollider;
     }
 
     private static void SkillChargingRateUpdate(DamageCollider damageCollider, float chargingRate)
@@ -124,18 +126,21 @@ public class AttackHelper : MonoBehaviour
         //damageCollider.Timer = damageCollider.MaxTimer;
 
         damageCollider.StaggerTime += damageCollider.ChargingStaggerTime * chargingRate;
+        damageCollider.Penetrability += (int)(damageCollider.ChargingPenetrability * chargingRate);
+        damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
 
-        switch (damageCollider.damageMovementType)
-        {
-            case DamageCollider.DamageMovementType.Passive:
-                damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
-                break;
-            case DamageCollider.DamageMovementType.Projectile:
-                damageCollider.MaxTimer += damageCollider.ChargingMaxTimer * chargingRate;
-                damageCollider.Timer = damageCollider.MaxTimer;
-                break;
-            default:
-                break;
-        }
+        //先统一变大把。。。
+        //switch (damageCollider.damageMovementType)
+        //{
+        //    case DamageCollider.DamageMovementType.Passive:
+        //        damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
+        //        break;
+        //    case DamageCollider.DamageMovementType.Projectile:
+        //        damageCollider.MaxTimer += damageCollider.ChargingMaxTimer * chargingRate;
+        //        damageCollider.Timer = damageCollider.MaxTimer;
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 }

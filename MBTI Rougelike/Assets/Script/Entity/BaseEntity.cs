@@ -327,6 +327,17 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public float MovementSpeed
+    {
+        get
+        {
+            return movementSpeed;
+        }
+        set
+        {
+            movementSpeed = value;
+        }
+    }
 
     public virtual void TakeDamage(int damage, float stuntime)
     {
@@ -365,6 +376,11 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public bool IsAlive()
+    {
+        return hp > 0;
+    }
+
     public virtual void GetHealing(int healAmount)
     {
         hp += healAmount;
@@ -378,6 +394,9 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     {
         hpController.Deactivate();
         gameObject.SetActive(false);
+
+        if (statusManager)
+            statusManager.RemoveAllStatus();
     }
 
     public float BlowSpeedReduceUpdate(float speed)

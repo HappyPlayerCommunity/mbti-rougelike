@@ -13,7 +13,7 @@ public enum SkillControlScheme
 public enum SkillCreateType
 {
     DamageCollider,     //生成伤害块的技能
-    Turret              //生成炮塔的技能
+    Turret,              //生成炮塔的技能
 }
 
 /// <summary>
@@ -33,6 +33,9 @@ public class Skill : ScriptableObject
     [SerializeField, Tooltip("该技能生成的伤害块。")]
     private DamageCollider damageCollider;
 
+    [SerializeField, Tooltip("该技能可生成的多个伤害块合集。若这个列表大于0，则上面的damageCollider被弃用。")]
+    private List<DamageCollider> multiDamageColliders;
+
     [SerializeField, Tooltip("该技能的冷却时间。")]
     private float reloadingTime = 1.0f;
 
@@ -47,6 +50,12 @@ public class Skill : ScriptableObject
 
     [SerializeField, Tooltip("该技能对自身产生的吹飞力，用于制作位移技能。")]
     private float selfBlowForce = 0.0f;
+
+    [SerializeField, Tooltip("此技能的伤害块的【弹夹】数量；为0的技能则不应有此机制。")]
+    private int maxClip = 0;
+
+    [SerializeField, Tooltip("此技能的伤害块的【弹夹】数量；为0的技能则不应有此机制。")]
+    private float clipReloadingTime = 2.0f;
 
     [SerializeField, Tooltip("技能的操作模式，例如是按住连续释放，按住蓄力松开释放，或需要反复按下释放等。")]
     SkillControlScheme controlScheme;
@@ -69,10 +78,17 @@ public class Skill : ScriptableObject
     [SerializeField, Tooltip("该技能的生成类型。是生成伤害块，还是生成炮塔？")]
     private SkillCreateType skillType = SkillCreateType.DamageCollider;
 
+
     public DamageCollider DamageCollider
     {
         get { return damageCollider; }
         set { damageCollider = value; }
+    }
+
+    public List<DamageCollider> MultiDamageColliders
+    {
+        get { return multiDamageColliders; }
+        set { multiDamageColliders = value; }
     }
 
     public float ReloadingTime
@@ -142,5 +158,17 @@ public class Skill : ScriptableObject
     {
         get { return turret; }
         set { turret = value; }
+    }
+
+    public int MaxClip
+    {
+        get { return maxClip; }
+        set { maxClip = value; }
+    }
+
+    public float ClipReloadingTime
+    {
+        get { return clipReloadingTime; }
+        set { clipReloadingTime = value; }
     }
 }

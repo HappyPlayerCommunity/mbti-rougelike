@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9f68983f8c4de8449ef3fd7968a9866, type: 3}
+  m_Name: INTP_Ult_Status
+  m_EditorClassIdentifier: 
+  duration: 3
+  timer: 0
+  root: 1
+  ultChargeBan: 1
+  invincible: 0
+  silence: 0
+  modifyPowerRate: 1
+  modifyImpactRate: 1
+  modifyDurationRate: 1
+  lockDuration: 1
+  statusAnimPrefab: {fileID: 0}
+  stats: {fileID: 11400000, guid: 72e15512bd894a341a9279e6ea602389, type: 2}
+  skill: {fileID: 11400000, guid: 3577bbd221ba77b44b075afbdbc88fa0, type: 2}
+  firePoint: {fileID: 0}
+  player: {fileID: 0}
+  fireRate: 0.00625
+  totalCircles: 10

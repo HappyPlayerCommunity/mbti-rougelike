@@ -157,5 +157,6 @@ MonoBehaviour:
   outlineColor: {r: 0, g: 0, b: 0, a: 1}
   initLocalScale: {x: 0, y: 0, z: 0}
   missText: Miss
+  reloadingText: Reloading
   crited: 0
   critVec: {x: 2, y: 2, z: 2}

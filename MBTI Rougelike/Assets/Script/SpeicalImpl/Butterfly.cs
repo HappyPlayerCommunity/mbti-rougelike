@@ -33,9 +33,9 @@ public class Butterfly : DamageCollider
     public float refindTimer = 0.0f;
 
 
-
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         // 启动协程延迟追踪
         activateHomingAfterDelayCoroutine = StartCoroutine(ActivateHomingAfterDelay());
     }

@@ -13,7 +13,7 @@ public class MeleeEnemyAI : UnitAI
 
     protected override void Chase()
     {
-        if (Vector3.Distance(transform.position, player.position) < attackRange)
+        if (Vector3.Distance(transform.position, playerTrans.position) < attackRange)
         {
             currentState = State.Attack;
         }
@@ -21,7 +21,7 @@ public class MeleeEnemyAI : UnitAI
 
     protected override void Attack()
     {
-        if (Vector3.Distance(transform.position, player.position) > attackRange)
+        if (Vector3.Distance(transform.position, playerTrans.position) > attackRange)
         {
             currentState = State.Chase;
         }

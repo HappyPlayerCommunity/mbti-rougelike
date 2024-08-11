@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireDamage: 0
   movementSpeed: 0
-  toughness: 0
+  toughness: 3.4028235e+38
   bondMovementSpeed: 0
-  attackRange: 0
+  attackRange: 100
   attackEnergeCharge: 0
   iceDamage: 0
   maxShield: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
   maxHealth: 0
   healthRegen: 0
   experienceMultiplier: 0
-  attackSpeed: 0
+  attackSpeed: 1000
   physicalAttackPower: 0
   windDamage: 0
   dodge: 0

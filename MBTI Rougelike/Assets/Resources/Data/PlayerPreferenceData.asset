@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68915a2f561fda44aa873a96cfcf2cc, type: 3}
   m_Name: PlayerPreferenceData
   m_EditorClassIdentifier: 
-  Extraversion: 100
+  Extraversion: 0
   Introversion: 0
   Sensing: 0
   Intuition: 0

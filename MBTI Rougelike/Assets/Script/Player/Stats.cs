@@ -192,7 +192,7 @@ public class Stats : ScriptableObject
     }
 
     /// <summary>
-    /// 【未实现】韧性系统还未实现。试图和护盾结合出类似哈迪斯的霸体效果。
+    /// 【初步实现】
     /// </summary>
     public float Calculate_Toughness()
     {
@@ -464,7 +464,7 @@ public class Stats : ScriptableObject
     /// </summary>
     public float Calculate_StatusImpact()
     {
-        return statusImpact;
+        return ApplyPercentageMultiplier(statusImpact);
     }
 
     /// <summary>

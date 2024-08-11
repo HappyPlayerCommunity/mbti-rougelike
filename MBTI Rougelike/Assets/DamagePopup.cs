@@ -19,10 +19,15 @@ public class DamagePopup : MonoBehaviour, IPoolable
 
     public Vector3 initLocalScale;
     public string missText = "Miss";
+    public string reloadingText = "Reloading";
 
     public bool crited = false;
 
     public Vector3 critVec = new Vector3(2.0f, 2.0f, 2.0f);
+
+    public Color dotDamageColor = new Color(1.0f, 0.0f, 1.0f); //purple
+
+    private Vector3 randomUpVec = new Vector3(3.0f, 3.0f, 0.0f);
 
     public string PoolKey
     {
@@ -42,11 +47,13 @@ public class DamagePopup : MonoBehaviour, IPoolable
 
         initLocalScale = rectTransform.localScale;
         lifetimer = lifetime;
+
+        randomUpVec = new Vector3(Random.Range(-randomUpVec.x, randomUpVec.x), Random.Range(0.0f, randomUpVec.y), 0.0f);
     }
 
     private void Update()
     {
-        rectTransform.position += Vector3.up * floatSpeed * Time.deltaTime;
+        rectTransform.position += (Vector3.up + randomUpVec).normalized * floatSpeed * Time.deltaTime;
 
         float t = 1.0f - (lifetimer / lifetime);
         if (crited)
@@ -87,6 +94,25 @@ public class DamagePopup : MonoBehaviour, IPoolable
         }
     }
 
+    public void SetDotDamage(int damage, bool isCrit = false)
+    {
+        damageText.text = damage.ToString();
+
+        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
+
+        if (isCrit)
+        {
+            damageText.color = Color.yellow;
+            crited = true;
+            rectTransform.localScale = critVec;
+        }
+        else
+        {
+            damageText.color = dotDamageColor;
+            damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
+        }
+    }
+
     public void SetHealing(int healingAmount, bool isCrit = false)
     {
         damageText.text = healingAmount.ToString();
@@ -110,6 +136,16 @@ public class DamagePopup : MonoBehaviour, IPoolable
     public void SetMiss()
     {
         damageText.text = missText;
+        damageText.color = Color.green;
+
+        damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
+        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
+    }
+
+    public void SetReloadingClip()
+    {
+        damageText.text = reloadingText;
+        damageText.color = Color.white;
 
         damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
         damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);

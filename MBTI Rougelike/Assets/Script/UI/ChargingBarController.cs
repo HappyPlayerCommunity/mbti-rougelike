@@ -31,16 +31,21 @@ public class ChargingBarController : MonoBehaviour
 
     void Update()
     {
-        // 。。。可以优化一下。
-        if (isAuto)
-            chargingBar.fillAmount = Mathf.Clamp01(personality.ChargingRate1);
+        if (personality.player.IsAlive())
+        {
+            if (isAuto)
+                chargingBar.fillAmount = Mathf.Clamp01(personality.ChargingRate1);
+            else
+                chargingBar.fillAmount = Mathf.Clamp01(personality.ChargingRate2);
+
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(personality.transform.position + offset);
+            rectTransform.position = screenPosition;
+
+            chargingBar.color = Color.Lerp(transparent, orange, chargingBar.fillAmount);
+        }
         else
-            chargingBar.fillAmount = Mathf.Clamp01(personality.ChargingRate2);
-
-
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint(personality.transform.position + offset);
-        rectTransform.position = screenPosition;
-
-        chargingBar.color = Color.Lerp(transparent, orange, chargingBar.fillAmount);
+        {
+            chargingBar.color = Color.Lerp(transparent, orange, 0.0f);
+        }
     }
 }

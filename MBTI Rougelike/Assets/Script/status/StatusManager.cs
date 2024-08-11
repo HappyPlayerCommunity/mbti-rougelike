@@ -5,7 +5,7 @@ using UnityEngine;
 public class StatusManager : MonoBehaviour
 {
     [SerializeField, Tooltip("当前激活的所有状态。")]
-    private List<Status> activeStatus = new List<Status>();
+    private List<Status> activeStatuses = new List<Status>();
 
     [SerializeField, Tooltip("禁足标识数。如果此数值大于0，则玩家无法移动。")]
     int rootCount = 0;
@@ -22,27 +22,56 @@ public class StatusManager : MonoBehaviour
     void Update()
     {
         float deltaTime = Time.deltaTime;
-        for (int i = activeStatus.Count - 1; i >= 0; i--)
+
+        // 需要考虑其他线程的状态更新，需要复制一份状态列表。
+        List<Status> statusesCopy = new List<Status>(activeStatuses);
+
+        foreach (var status in statusesCopy)
         {
-            activeStatus[i].OnUpdate(gameObject, deltaTime);
-            if (activeStatus[i].IsExpired())
+            status.OnUpdate(gameObject, deltaTime);
+            if (status.IsExpired())
             {
-                activeStatus[i].OnExpire(gameObject);
-                RemoveFlagUpdate(activeStatus[i]);
-                activeStatus.RemoveAt(i);
+                status.OnExpire(gameObject);
+                RemoveFlagUpdate(status);
+                activeStatuses.Remove(status);
             }
         }
     }
 
-    public Status AddStatus(Status status)
+    public Status AddStatus(Status newStatus, Stats stats)
     {
-        Status newStatus = Instantiate(status);
-        newStatus.OnApply(gameObject);
+        Status existingStatus = activeStatuses.Find(status => status.GetType() == newStatus.GetType());
 
-        AddFlagUpdate(newStatus);
-        activeStatus.Add(newStatus);
+        if (stats)
+        {
+            newStatus.modifyPowerRate = stats.Calculate_StatusPower();
+            newStatus.modifyImpactRate = stats.Calculate_StatusImpact();
+            newStatus.modifyDurationRate = stats.Calculate_StatusDuration();
+            newStatus.stats = stats;
+        }
 
-        return newStatus;
+        if (existingStatus) //已有同类状态，执行叠加逻辑。
+        {
+            existingStatus.OnStack(newStatus);
+            existingStatus.stats = stats;
+
+            return existingStatus;
+        }
+        else // 新状态
+        {
+
+            //Debug.Log("before activeStatuses" + activeStatuses[0]);
+
+            Status finalStatus = Instantiate(newStatus);
+
+            finalStatus.OnApply(gameObject);
+            AddFlagUpdate(finalStatus);
+            activeStatuses.Add(finalStatus);
+
+            finalStatus.stats = stats;
+
+            return finalStatus;
+        }
     }
 
     /// <summary>
@@ -54,7 +83,20 @@ public class StatusManager : MonoBehaviour
         RemoveFlagUpdate(status);
 
         status.OnExpire(gameObject);
-        activeStatus.Remove(status);
+        activeStatuses.Remove(status);
+    }
+
+    public void RemoveAllStatus()
+    {
+        List<Status> statusesToRemove = new List<Status>(activeStatuses);
+
+        foreach (var status in statusesToRemove)
+        {
+            status.OnExpire(gameObject);
+            RemoveFlagUpdate(status);
+        }
+
+        activeStatuses.Clear(); // 清空所有状态
     }
 
     public bool IsRooted()
@@ -82,9 +124,9 @@ public class StatusManager : MonoBehaviour
         return false;
     }
 
-    public List<Status> ActiveStatus()
+    public List<Status> ActiveStatuses()
     {
-        return activeStatus;
+        return activeStatuses;
     }
 
     public void AddFlagUpdate(Status status)
