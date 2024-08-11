@@ -133,16 +133,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2590e76ec54b6b348a8b85cc338a81b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 500
-  maxHp: 500
+  hp: 100
+  maxHp: 100
   hpRegen: 0
   velocity: {x: 0, y: 0, z: 0}
   blowForceVelocity: {x: 0, y: 0, z: 0}
   movementSpeed: 1
   stopBlowThreadshold: 0.01
   blowSpeedReduceRate: 0.99
-  shield: 0
-  maxShield: 200
+  shield: 50
+  maxShield: 50
   shieldReset: 1
   physicalAtkPower: 1
   abstractAtkPower: 1

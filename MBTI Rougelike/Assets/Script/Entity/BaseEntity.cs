@@ -327,6 +327,17 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public float MovementSpeed
+    {
+        get
+        {
+            return movementSpeed;
+        }
+        set
+        {
+            movementSpeed = value;
+        }
+    }
 
     public virtual void TakeDamage(int damage, float stuntime)
     {

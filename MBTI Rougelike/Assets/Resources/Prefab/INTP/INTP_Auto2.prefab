@@ -87,7 +87,7 @@ MonoBehaviour:
   damageMovementType: 1
   spriteRenderer: {fileID: 0}
   ownerStatus: {fileID: 0}
-  applyStatus: {fileID: 0}
+  applyStatus: {fileID: 11400000, guid: 17fbeb8482b07d6449c382841330a06d, type: 2}
   damagePopupPrefab: {fileID: 5598179215281603740, guid: 9406a451fdf15664e884b89e2cffb7e7, type: 3}
 --- !u!50 &6293199428581944545
 Rigidbody2D:

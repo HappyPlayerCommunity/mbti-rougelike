@@ -9,7 +9,6 @@ public class PoisonStatus : Status
     public float positionTime = 1.0f;
     public float positionTimer = 0.0f;
 
-    // Start is called before the first frame update
     public override void OnUpdate(GameObject target, float deltaTime)
     {
         //临时标识，后续添加特效。
@@ -53,7 +52,6 @@ public class PoisonStatus : Status
 
     public override void OnExpire(GameObject target)
     {
-        //target.GetComponentInChildren<SpriteRenderer>().color = Color.white;
         base.OnExpire(target);
     }
 }

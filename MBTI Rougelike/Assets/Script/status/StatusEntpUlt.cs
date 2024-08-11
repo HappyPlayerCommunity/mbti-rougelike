@@ -15,18 +15,16 @@ public class StatusEntpUlt : Status
 
     public override void OnApply(GameObject target)
     {
-       base.OnApply(target);
-        Debug.Log("Apply?");
+        base.OnApply(target);
 
         stats.attackSpeed += attackSpeedBonus * modifyPowerRate;
-       stats.attackRange += attackRangedBonus * modifyPowerRate;
+        stats.attackRange += attackRangedBonus * modifyPowerRate;
     }
 
     public override void OnExpire(GameObject target)
     {
         base.OnExpire(target);
 
-        Debug.Log("Call?");
         stats.attackSpeed -= attackSpeedBonus * modifyPowerRate;
         stats.attackRange -= attackRangedBonus * modifyPowerRate;
     }

@@ -39,7 +39,6 @@ public abstract class Status : ScriptableObject
     [Tooltip("此状态的表现动画。")]
     public AnimationController2D statusAnimPrefab;
 
-
     [Header("互动组件")]
     public Stats stats;
 
