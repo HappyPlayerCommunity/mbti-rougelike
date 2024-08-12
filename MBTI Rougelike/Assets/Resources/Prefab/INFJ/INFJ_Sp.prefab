@@ -176,7 +176,7 @@ MonoBehaviour:
   staggerTime: 1
   isLifeTimeBindingWithState: 0
   blowForceSpeed: 0
-  hitEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 7558108337230234113, guid: 35b8133082ab17b4c84f4be8c95bb4a8, type: 3}
   healEffectPrefab: {fileID: 0}
   hitEffectPlayMode: 0
   damageType: 1
@@ -197,6 +197,7 @@ MonoBehaviour:
   timer: 0
   velocity: {x: 0, y: 0}
   initPos: {x: 0, y: 0, z: 0}
+  initInterval: {x: 0, y: 0, z: 0}
   owner: {fileID: 0}
   onceHitEventTrigger: 0
   hits: []

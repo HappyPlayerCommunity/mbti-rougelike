@@ -55,7 +55,7 @@ public class Skill : ScriptableObject
     private int maxClip = 0;
 
     [SerializeField, Tooltip("此技能的伤害块的【弹夹】数量；为0的技能则不应有此机制。")]
-    private float clipReloadingTime = 2.0f;
+    private float clipReloadingTime = 1.0f;
 
     [SerializeField, Tooltip("技能的操作模式，例如是按住连续释放，按住蓄力松开释放，或需要反复按下释放等。")]
     SkillControlScheme controlScheme;
@@ -71,6 +71,9 @@ public class Skill : ScriptableObject
 
     [SerializeField, Tooltip("此技能的生成位置是否是固定的，而不是依靠Aim里的initPos")]
     private bool fixPos;
+
+    [SerializeField, Tooltip("此技能是空投的，它将在鼠标位置生成伤害块/炮塔。")]
+    private bool airdropSpawn = false;
 
     [SerializeField, Tooltip("该技能生成的炮塔。")]
     private Turret turret;
@@ -149,6 +152,11 @@ public class Skill : ScriptableObject
         get { return fixPos; }
         set { fixPos = value; }
     }
+    public bool AirDropSpawn
+    {
+        get { return airdropSpawn; }
+        set { airdropSpawn = value; }
+    }   
     public SkillCreateType SkillType
     {
         get { return skillType; }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Turret : Building, IPoolable
@@ -13,14 +14,21 @@ public class Turret : Building, IPoolable
 
     public float scatterAngle = 10.0f;
 
-    bool isFixPos = false;
+    public bool isFixPos = false;
 
     public Player player;
 
     public float damageColliderSpeed = 5.0f;
     private string poolKey;
 
+    public float adjustBackOffset = 0.0f;
+
+    public bool mousetGuiding = false;
+
     Skill.RenderMode damageColliderRenderMode = Skill.RenderMode.NoneFlip;
+
+    [Tooltip("炮塔的攻速，0~1。越低攻速越快。")]
+    public float attackTimeRate = 1.0f;
 
     public string PoolKey
     {
@@ -41,15 +49,25 @@ public class Turret : Building, IPoolable
 
         if (attackTimer <= 0.0f)
         {
-            Collider2D nearestEnemy = FindNearestEnemy();
-            if (nearestEnemy != null)
+            if (mousetGuiding && player.IsAlive() && Input.GetMouseButton(0))
             {
-                Vector3 direction = (nearestEnemy.transform.position - transform.position).normalized;
+                Vector3 mouseScreenPosition = Input.mousePosition;
+                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+                mouseWorldPosition.z = 0.0f;
+                Vector3 direction = (mouseWorldPosition - transform.position).normalized;
                 Attack(direction);
-                attackTimer = attackTime;
-                //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             }
+            else 
+            {
+                Collider2D nearestEnemy = FindNearestEnemy();
+                if (nearestEnemy != null)
+                {
+                    Vector3 direction = (nearestEnemy.transform.position - transform.position).normalized;
+                    Attack(direction);
+                }
+            }
+
+            attackTimer = attackTime * attackTimeRate;
         }
     }
 
@@ -77,7 +95,17 @@ public class Turret : Building, IPoolable
 
     void Attack(Vector3 direction)
     {
-        AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, direction, scatterAngle, isFixPos, damageColliderRenderMode, player, damageColliderSpeed);
+        if (isFixPos)
+        {
+            float initDistance = detectionRadius / 2;
+            //attackInitPos = transform;
+            attackInitPos.position = transform.position + direction * initDistance;
+            AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, adjustBackOffset, direction, scatterAngle, true, damageColliderRenderMode, player, damageColliderSpeed);
+        }
+        else
+        {
+            AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, 0.0f, direction, scatterAngle, isFixPos, damageColliderRenderMode, player, damageColliderSpeed);
+        }
     }
 
     /// <summary>
