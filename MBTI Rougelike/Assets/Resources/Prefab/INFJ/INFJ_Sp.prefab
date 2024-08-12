@@ -170,7 +170,7 @@ MonoBehaviour:
   maxTimer: 5
   collideTags:
   - Enemy
-  damageTags:
+  effectTags:
   - Enemy
   isAttachedPos: 0
   staggerTime: 1
@@ -178,7 +178,7 @@ MonoBehaviour:
   blowForceSpeed: 0
   hitEffectPrefab: {fileID: 7558108337230234113, guid: 35b8133082ab17b4c84f4be8c95bb4a8, type: 3}
   healEffectPrefab: {fileID: 0}
-  hitEffectPlayMode: 0
+  hitEffectPlayMode: 1
   damageType: 1
   damageElementType: 0
   canvasTransform: {fileID: 0}

@@ -212,7 +212,7 @@ MonoBehaviour:
   maxTimer: 0.6
   collideTags:
   - Enemy
-  damageTags:
+  effectTags:
   - Enemy
   isAttachedPos: 0
   staggerTime: 1
@@ -229,6 +229,7 @@ MonoBehaviour:
   chargingLocalScale: {x: 0, y: 0, z: 0}
   chargingStaggerTime: 0
   chargingMaxTimer: 0
+  chargingPenetrability: 0
   blowTurret: 0
   blowTurretForceSpeed: 0
   isHealingMode: 0
@@ -238,6 +239,7 @@ MonoBehaviour:
   timer: 0
   velocity: {x: 0, y: 0}
   initPos: {x: 0, y: 0, z: 0}
+  initInterval: {x: 0, y: 0, z: 0}
   owner: {fileID: 0}
   onceHitEventTrigger: 0
   hits: []

@@ -238,11 +238,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0982b1d45c1a1af40a875949f5969b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
+  damage: 0
   maxTimer: 0.5
   collideTags:
   - Enemy
-  damageTags:
+  effectTags:
   - Enemy
   isAttachedPos: 1
   staggerTime: 1
@@ -254,11 +254,12 @@ MonoBehaviour:
   damageType: 1
   damageElementType: 0
   canvasTransform: {fileID: 0}
-  chargingDamage: 20
+  chargingDamage: 10
   chargingBlowForceSpeed: 10
   chargingLocalScale: {x: 10, y: 2, z: 1}
   chargingStaggerTime: 2
   chargingMaxTimer: 0
+  chargingSpeedBoost: 0
   chargingPenetrability: 0
   blowTurret: 0
   blowTurretForceSpeed: 0

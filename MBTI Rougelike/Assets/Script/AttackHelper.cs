@@ -35,7 +35,13 @@ public class AttackHelper : MonoBehaviour
         }
 
         damageCollider.owner = player;
-        Vector3 creatorPosition = initPos.GetComponentInParent<BaseEntity>().transform.position;
+
+        Vector3 creatorPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        var baseEntity = initPos.GetComponentInParent<BaseEntity>();
+        if (baseEntity != null)
+            creatorPosition = initPos.GetComponentInParent<BaseEntity>().transform.position;
+        else
+            creatorPosition = initPos.position;
 
         if (isFixPos)
         {
@@ -113,7 +119,7 @@ public class AttackHelper : MonoBehaviour
         Vector3 scatterDirection = Quaternion.Euler(0, 0, randomAngle) * aimDirection;
 
         Vector3 finalVelocity = scatterDirection.normalized * damageColliderSpeed;
-        damageCollider.Velocity = finalVelocity;
+        damageCollider.Velocity = finalVelocity * (1.0f + (damageCollider.ChargingSpeedBoost * chargingRate));
 
         return damageCollider;
     }
@@ -124,7 +130,11 @@ public class AttackHelper : MonoBehaviour
 
         damageCollider.BlowForceSpeed += damageCollider.ChargingBlowForceSpeed * chargingRate;
 
-        //damageCollider.Velocity = damageCollider.Velocity * chargingRate;
+        //Debug.Log("chargingRate" + chargingRate);
+
+        //Debug.Log("damageCollider.Velocity 1" + damageCollider.Velocity.magnitude);
+        //damageCollider.Velocity = damageCollider.Velocity.normalized * (damageCollider.Velocity.magnitude * (1.0f + (damageCollider.ChargingSpeedBoost * chargingRate)));
+        //Debug.Log("damageCollider.Velocity 2" + damageCollider.Velocity.magnitude);
 
         //damageCollider.MaxTimer = damageCollider.MaxTimer * chargingRate;
         //damageCollider.Timer = damageCollider.MaxTimer;

@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f327d7c8417428439099d04d2214334, type: 3}
-  m_Name: ENTP_Ult
+  m_Name: ISFJ_Atk
   m_EditorClassIdentifier: 
-  damageCollider: {fileID: 0}
+  damageCollider: {fileID: 7036665320681873346, guid: 04805b079fcee2e4589682b7a53df757, type: 3}
   multiDamageColliders: []
   reloadingTime: 1
-  scatterAngle: 0.15
-  damageColliderSpeed: 1
+  scatterAngle: 0
+  damageColliderSpeed: 3
   maxChargeCount: 0
   selfBlowForce: 0
   maxClip: 0
   clipReloadingTime: 1
-  controlScheme: 0
+  controlScheme: 1
   renderMode: 0
-  selfStatus: {fileID: 11400000, guid: dc38ef630a0832c4a864daf1ce1c4a66, type: 2}
-  maxChargingTime: 0
+  selfStatus: {fileID: 0}
+  maxChargingTime: 1
   fixPos: 0
   airdropSpawn: 0
   turret: {fileID: 0}
