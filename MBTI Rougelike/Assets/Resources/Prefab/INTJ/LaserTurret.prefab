@@ -193,10 +193,11 @@ MonoBehaviour:
   attackTimer: 0
   attackTime: 1
   scatterAngle: 20
-  isFixPos: 0
+  isFixPos: 1
   player: {fileID: 0}
-  damageColliderSpeed: 20
-  adjustBackOffset: 0
+  damageColliderSpeed: 0
+  adjustBackOffset: 1
+  mousetGuiding: 1
 --- !u!50 &3243219234151736972
 Rigidbody2D:
   serializedVersion: 4

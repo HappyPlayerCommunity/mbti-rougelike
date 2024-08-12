@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
-using UnityEngine.Windows;
 
 /// <summary>
 /// 人格类。用来管理各个人格的普攻（Auto），特技（Sp），大招（Ult），被动等各种效果。
@@ -250,8 +249,6 @@ public class Personality : MonoBehaviour
                         }
                     }
                 }
-
-
 
                 player.BlowForceVelocity = aimDirection * skill.SelfBlowForce; //for now, 负数可以做向后退的技能。
 
@@ -502,7 +499,18 @@ public class Personality : MonoBehaviour
 
             Turret turret = turretObj.GetComponent<Turret>();
 
-            turret.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+            if (skill.AirDropSpawn)
+            {
+                Vector3 mouseScreenPosition = Input.mousePosition;
+                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+                mouseWorldPosition.z = 0.0f;
+                turret.Activate(mouseWorldPosition, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+            }
+            else
+            {
+                turret.Activate(initPos.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+            }
+
 
             // 重置冷却时间
             currReloadingTimer = skill.ReloadingTime;
