@@ -194,7 +194,7 @@ MonoBehaviour:
   damageType: 0
   damageElementType: 0
   canvasTransform: {fileID: 0}
-  chargingDamage: 100
+  chargingDamage: 50
   chargingBlowForceSpeed: 10
   chargingLocalScale: {x: 0, y: 0, z: 0}
   chargingStaggerTime: 0

@@ -107,7 +107,7 @@ MonoBehaviour:
   damageCollider: {fileID: 7036665320681873346, guid: 0fe7a643908182644b27d6c7ebf7eb63, type: 3}
   attackInitPos: {fileID: 6436937951761908465}
   attackTimer: 0
-  attackTime: 1
+  attackTime: 2
   scatterAngle: 5
   isFixPos: 0
   player: {fileID: 0}

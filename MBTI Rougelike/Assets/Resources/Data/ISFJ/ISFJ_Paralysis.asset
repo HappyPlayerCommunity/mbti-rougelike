@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39ac28443c937e41b74a16c399ab866, type: 3}
   m_Name: ISFJ_Paralysis
   m_EditorClassIdentifier: 
-  duration: 0.5
+  duration: 1
   timer: -0.0029881154
   root: 1
   ultChargeBan: 0
