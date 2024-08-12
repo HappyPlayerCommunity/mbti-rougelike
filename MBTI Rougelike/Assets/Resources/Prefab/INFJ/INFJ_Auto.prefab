@@ -170,7 +170,7 @@ MonoBehaviour:
   maxTimer: 3
   collideTags:
   - Enemy
-  damageTags:
+  effectTags:
   - Enemy
   isAttachedPos: 0
   staggerTime: 1
@@ -183,7 +183,7 @@ MonoBehaviour:
   damageElementType: 0
   canvasTransform: {fileID: 0}
   chargingDamage: 90
-  chargingBlowForceSpeed: 5
+  chargingBlowForceSpeed: 15
   chargingLocalScale: {x: 1, y: 1, z: 0}
   chargingStaggerTime: 2
   chargingMaxTimer: 3
@@ -197,6 +197,7 @@ MonoBehaviour:
   timer: 0
   velocity: {x: 0, y: 0}
   initPos: {x: 0, y: 0, z: 0}
+  initInterval: {x: 0, y: 0, z: 0}
   owner: {fileID: 0}
   onceHitEventTrigger: 0
   hits: []

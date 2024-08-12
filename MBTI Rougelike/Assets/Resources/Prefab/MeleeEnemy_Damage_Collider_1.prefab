@@ -50,13 +50,14 @@ MonoBehaviour:
   maxTimer: 2
   collideTags:
   - Player
-  damageTags:
+  effectTags:
   - Player
   isAttachedPos: 0
   staggerTime: 1
   isLifeTimeBindingWithState: 0
   blowForceSpeed: 0
   hitEffectPrefab: {fileID: 4191014965251029583, guid: 76a865e944a60d54881ae9c480db5ea8, type: 3}
+  healEffectPrefab: {fileID: 0}
   hitEffectPlayMode: 0
   damageType: 0
   damageElementType: 0
@@ -66,6 +67,8 @@ MonoBehaviour:
   chargingLocalScale: {x: 1, y: 1, z: 1}
   chargingStaggerTime: 0
   chargingMaxTimer: 0
+  chargingSpeedBoost: 0
+  chargingPenetrability: 0
   blowTurret: 0
   blowTurretForceSpeed: 0
   isHealingMode: 0
@@ -75,6 +78,7 @@ MonoBehaviour:
   timer: 0
   velocity: {x: 0, y: 0}
   initPos: {x: 0, y: 0, z: 0}
+  initInterval: {x: 0, y: 0, z: 0}
   owner: {fileID: 0}
   onceHitEventTrigger: 0
   hits: []

@@ -136,23 +136,23 @@ public class Butterfly : DamageCollider
         }
 
         collideTags.Clear();
-        damageTags.Clear();
+        effectTags.Clear();
 
         if (isHealingMode)
         {
             spriteRenderer.color = healColor;
 
             collideTags.Add("Bond");
-            damageTags.Add("Bond");
+            effectTags.Add("Bond");
             collideTags.Add("Player");
-            damageTags.Add("Player");
+            effectTags.Add("Player");
         }
         else
         {
             spriteRenderer.color = attackColor;
 
             collideTags.Add("Enemy");
-            damageTags.Add("Enemy");
+            effectTags.Add("Enemy");
         }
 
         activateHomingAfterDelayCoroutine = StartCoroutine(ActivateHomingAfterDelay());
@@ -174,23 +174,23 @@ public class Butterfly : DamageCollider
     {
         isHealingMode = !isHealingMode;
         collideTags.Clear();
-        damageTags.Clear();
+        effectTags.Clear();
 
         if (isHealingMode)
         {
             spriteRenderer.color = healColor;
 
             collideTags.Add("Bond");
-            damageTags.Add("Bond");
+            effectTags.Add("Bond");
             collideTags.Add("Player");
-            damageTags.Add("Player");
+            effectTags.Add("Player");
         }
         else
         {
             spriteRenderer.color = attackColor;
 
             collideTags.Add("Enemy");
-            damageTags.Add("Enemy");
+            effectTags.Add("Enemy");
         }
 
         FindNearestTarget();

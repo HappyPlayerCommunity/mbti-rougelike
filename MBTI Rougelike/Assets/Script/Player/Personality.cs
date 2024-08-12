@@ -440,32 +440,32 @@ public class Personality : MonoBehaviour
         }
     }
 
-    private void SkillChargingRateUpdate(DamageCollider damageCollider, float chargingRate)
-    {
-        damageCollider.damage += (int)(damageCollider.ChargingDamage * chargingRate);
+    //private void SkillChargingRateUpdate(DamageCollider damageCollider, float chargingRate)
+    //{
+    //    damageCollider.damage += (int)(damageCollider.ChargingDamage * chargingRate);
 
-        damageCollider.BlowForceSpeed += damageCollider.ChargingBlowForceSpeed * chargingRate;
+    //    damageCollider.BlowForceSpeed += damageCollider.ChargingBlowForceSpeed * chargingRate;
 
-        //damageCollider.Velocity = damageCollider.Velocity * chargingRate;
+    //    //damageCollider.Velocity = damageCollider.Velocity * chargingRate;
 
-        //damageCollider.MaxTimer = damageCollider.MaxTimer * chargingRate;
-        //damageCollider.Timer = damageCollider.MaxTimer;
+    //    //damageCollider.MaxTimer = damageCollider.MaxTimer * chargingRate;
+    //    //damageCollider.Timer = damageCollider.MaxTimer;
 
-        damageCollider.StaggerTime += damageCollider.ChargingStaggerTime * chargingRate;
+    //    damageCollider.StaggerTime += damageCollider.ChargingStaggerTime * chargingRate;
 
-        switch (damageCollider.damageMovementType)
-        {
-            case DamageCollider.DamageMovementType.Passive:
-                damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
-                break;
-            case DamageCollider.DamageMovementType.Projectile:
-                damageCollider.MaxTimer += damageCollider.ChargingMaxTimer * chargingRate;
-                damageCollider.Timer = damageCollider.MaxTimer;
-                break;
-            default:
-                break;
-        }
-    }
+    //    switch (damageCollider.damageMovementType)
+    //    {
+    //        case DamageCollider.DamageMovementType.Passive:
+    //            damageCollider.spriteRenderer.transform.localScale += damageCollider.ChargingLocalScale * chargingRate;
+    //            break;
+    //        case DamageCollider.DamageMovementType.Projectile:
+    //            damageCollider.MaxTimer += damageCollider.ChargingMaxTimer * chargingRate;
+    //            damageCollider.Timer = damageCollider.MaxTimer;
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
 
     private void ChargeReleaseUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto, ref float chargingTimer, ref float chargingRate, ref bool isCharging, ref int clip, List<Transform> multiInitPos)
     {

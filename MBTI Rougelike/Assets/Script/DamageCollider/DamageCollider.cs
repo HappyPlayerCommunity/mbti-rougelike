@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.GraphicsBuffer;
 
 public enum DamageType
@@ -23,6 +25,13 @@ public enum DamageElementType
     Water
 }
 
+public enum DamageHealingType
+{
+    Damage,             //击中目标造成伤害
+    Healing,            //击中目标造成治疗
+    DamageAndHealing    //击中目标，根据其标签，造成伤害或治疗。
+}
+
 /// <summary>
 /// 【伤害块】的基类，包含了绝大多数常见的伤害块行为；一些行为复杂的【伤害块】可以另开子类实现。
 /// </summary>
@@ -38,8 +47,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("会产生【碰撞判定】的其他物体tag。")]
     protected List<string> collideTags;
 
-    [SerializeField, Tooltip("会产生【伤害判定】的其他物体tag。")]
-    protected List<string> damageTags;
+    [SerializeField, Tooltip("会产生【伤害判定】/【治疗判定】的其他物体tag。")]
+    protected List<string> effectTags;
 
     [SerializeField, Tooltip("该伤害块是否依附于某个位置，而不是自己移动。")]
     protected bool isAttachedPos = false;
@@ -89,6 +98,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     [SerializeField, Tooltip("该伤害通过蓄力可增加的最大持续时间")]
     protected float chargingMaxTimer = 0.0f;
+
+    [SerializeField, Tooltip("该伤害通过蓄力可增加弹道飞行速度。")]
+    protected float chargingSpeedBoost = 0.0f;
 
     [SerializeField, Tooltip("该伤害通过蓄力可增加的穿透数量。")]
     protected int chargingPenetrability = 0;
@@ -196,8 +208,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     public List<string> DamageTags
     {
-        get { return damageTags; }
-        set { damageTags = value; }
+        get { return effectTags; }
+        set { effectTags = value; }
     }
 
     public float Timer
@@ -285,6 +297,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
     {
         get { return chargingStaggerTime; }
         set { chargingStaggerTime = value; }
+    }
+    public float ChargingSpeedBoost
+    {
+        get { return chargingSpeedBoost; }
+        set { chargingSpeedBoost = value; }
     }
 
     public int ChargingPenetrability
@@ -456,151 +473,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
             // 检测【伤害块】是否可以与【碰撞体】互动————PS：这不意味着造成伤害，可能击中墙壁，敌人的子弹等。
             if (TagCollidingCheck(hit))
             {
-                // 标记已经击中目标
-                hitted = true;
-
-                //检测【伤害块】是否可以对【碰撞体】造成伤害
-                if (TagDamageCheck(hit))
-                {
-                    var entity = hit.gameObject.GetComponent<BaseEntity>();
-
-                    //确定该实体是否能受到伤害。
-                    if (entity && entity.CanTakeDamageFrom(gameObject))
-                    {
-                        //注册此伤害行为。
-                        DamageManager.RegisterDamage(gameObject, entity);
-
-                        if(isHealingMode)
-                        {
-                            DamagePopupManager.Instance.Popup(PopupType.Healing, hit.transform.position, damage, false);
-                            entity.GetHealing(damage);
-                            entity.SetDamageTimer(gameObject, damageTriggerTime);
-                            HitAnimation(hit.transform);
-                        }
-                        else
-                        {
-                            if (entity is Unit)
-                            {
-                                var unit = (Unit)entity;
-
-                                // 如果【碰撞体】是Unit类型，则结算【闪避】和【吹飞】效果。
-                                if (TryHit(unit))
-                                {
-                                    BlowUpEntity(unit);
-                                }
-                                else
-                                {
-                                    // 使【伤害块】短时间无法再对该目标造成伤害。
-                                    entity.SetDamageTimer(gameObject, damageTriggerTime);
-                                    DamagePopupManager.Instance.Popup(PopupType.Miss, hit.transform.position);
-                                    continue;
-                                }
-                            }
-
-                            // 后面需要考虑到子弹单位的拥有者位死亡后，子弹还在的情况。
-                            // 以目前对象池的逻辑，拥有者不在了死亡以后，它们并没有被销毁，而是在对象池内，依然可以访问owner。
-
-                            // 暴击默认为false，如果暴击，则会在CalculateDamage中修改。
-                            bool isCrit = false;
-                            int finalDamage = DamageManager.CalculateDamage(damageType, damage, owner, ref isCrit, damageElementType);
-
-                            // 对实体造成伤害并设置击晕时间
-                            entity.TakeDamage(finalDamage, staggerTime);
-
-                            DamagePopupManager.Instance.Popup(PopupType.Damage, hit.transform.position, finalDamage, isCrit);
-
-                            // 令该实体保存一个对此【伤害块】的计时器，短时间无法再对其造成伤害。
-                            entity.SetDamageTimer(gameObject, damageTriggerTime);
-
-                            if (owner is Player)
-                            {
-                                var player = (Player)owner;
-                                float boostCharge = player.stats.Calculate_AttackEnergeCharge();
-                                player.personality.AttackChargeEnerge(finalDamage, boostCharge); // 受伤充能比率还得具体设计。
-                            }
-
-                            switch (hitEffectPlayMode)
-                            {
-                                case HitEffectPlayMode.HitPoint: // hmm，不太完善。
-                                    RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, (hit.transform.position - transform.position).normalized);
-                                    if (raycastHit.collider != null)
-                                    {
-                                        Transform collisionPoint = transform;
-                                        collisionPoint.position = raycastHit.point;
-                                        HitAnimation(collisionPoint);
-                                    }
-                                    break;
-                                case HitEffectPlayMode.Target:
-                                    HitAnimation(hit.transform);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-
-                        didDamage = true;
-
-                        if (applyStatus && entity.StatusManager && entity.IsAlive())
-                        {
-                            if (owner is Player)
-                            {
-                                var player = (Player)owner;
-                                entity.StatusManager.AddStatus(applyStatus, player.stats);
-                            }
-                            else
-                            {
-                                entity.StatusManager.AddStatus(applyStatus, null);
-                            }
-
-                            //Debug.Log(entity.StatusManager.ActiveStatus());
-
-                        }
-                    }
-                }
-
-                // 执行击中目标
-
-                // 如果一次性碰撞事件尚未触发，则触发
-                // 可以插入一些特殊结算，比如击中目标后产生爆炸，分裂子弹，反弹等。
-                if (!onceHitEventTrigger)
-                {
-                    OnceCollideEvents(hit);
-                    onceHitEventTrigger = true;
-                }
-
-                CollideEvents(hit);
-
-                if (blowTurret && hit.tag == "Turret")
-                {
-                    BlowUpEntity(hit.GetComponent<Turret>(), true);
-                }
-
-                // 根据伤害类型决定是否销毁子弹（后续可以优化进子弹池）
-                switch (damageHitType)
-                {
-                    case DamageHitType.SingleHit:
-                        // 单次击中碰撞体后消失
-                        if (didDamage)
-                        {
-                            penetrability -= 1;
-                            if (penetrability <= 0)
-                            {
-                                Deactivate();
-                                return;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        break;
-                    case DamageHitType.MultiHit:
-                        // 击中多个目标但不会持续伤害，不销毁
-                        break;
-                    case DamageHitType.SustainedMultiHit:
-                        // 持续对接触的目标造成伤害，不销毁
-                        break;
-                }
+                EffectToObject(hit);
             }
         }
 
@@ -652,16 +525,16 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
                 entity.BlowForceVelocity = finalBlowForceSpeed * direction * blowupResistance * toughness;
                 break;
-        
+
             case DamageMovementType.Projectile:
                 var characterPos = entity.transform.position;
-        
+
                 var direction1 = (characterPos - transform.position).normalized;
                 var direction2 = (velocity).normalized;
 
                 entity.BlowForceVelocity = finalBlowForceSpeed * (direction1 + (Vector3)direction2) * blowupResistance * toughness;
                 break;
-        
+
             default:
                 break;
         }
@@ -678,7 +551,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     protected bool TagDamageCheck(Collider2D hit)
     {
-        foreach (var tag in damageTags)
+        foreach (var tag in effectTags)
             if (TagHelper.CompareTag(hit, tag))
                 return true;
 
@@ -788,7 +661,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 case DamageMovementType.Passive:
                     // 静态：每1点增加1%的碰撞体积；
                     spriteRenderer.transform.localScale *= attackRangeBouns;
-                break;
+                    break;
                 case DamageMovementType.Projectile:
                     // 动态：每1点增加1%的持续时间，变相增加了射程。
                     maxTimer *= attackRangeBouns;
@@ -834,6 +707,161 @@ public class DamageCollider : MonoBehaviour, IPoolable
         if (collidingObjects.Contains(other))
         {
             collidingObjects.Remove(other);
+        }
+    }
+
+    protected void EffectToObject(Collider2D hit)
+    {
+        // 标记已经击中目标
+        hitted = true;
+
+        //检测【伤害块】是否可以对【碰撞体】造成伤害/治疗。
+        if (TagDamageCheck(hit))
+        {
+            var entity = hit.gameObject.GetComponent<BaseEntity>();
+
+            //确定该实体现在是否能受到伤害/治疗。
+            if (entity && entity.CanTakeDamageFrom(gameObject))
+            {
+                //执行伤害/治疗逻辑。
+                DamageToObject(entity, hit);
+            }
+        }
+
+        // 执行击中目标
+
+        // 如果一次性碰撞事件尚未触发，则触发
+        // 可以插入一些特殊结算，比如击中目标后产生爆炸，分裂子弹，反弹等。
+        if (!onceHitEventTrigger)
+        {
+            OnceCollideEvents(hit);
+            onceHitEventTrigger = true;
+        }
+
+        CollideEvents(hit);
+
+        if (blowTurret && hit.tag == "Turret")
+        {
+            BlowUpEntity(hit.GetComponent<Turret>(), true);
+        }
+
+        // 根据伤害类型决定是否销毁子弹（后续可以优化进子弹池）
+        switch (damageHitType)
+        {
+            case DamageHitType.SingleHit:
+                // 单次击中碰撞体后消失
+                if (didDamage)
+                {
+                    penetrability -= 1;
+                    if (penetrability <= 0)
+                    {
+                        Deactivate();
+                        return;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                break;
+            case DamageHitType.MultiHit:
+                // 击中多个目标但不会持续伤害，不销毁
+                break;
+            case DamageHitType.SustainedMultiHit:
+                // 持续对接触的目标造成伤害，不销毁
+                break;
+        }
+    }
+
+    protected virtual void DamageToObject(BaseEntity entity, Collider2D hit)
+    {
+        //注册此伤害行为。
+        DamageManager.RegisterDamage(gameObject, entity);
+
+        if (isHealingMode)
+        {
+            DamagePopupManager.Instance.Popup(PopupType.Healing, hit.transform.position, damage, false);
+            entity.GetHealing(damage);
+            entity.SetDamageTimer(gameObject, damageTriggerTime);
+            HitAnimation(hit.transform);
+        }
+        else
+        {
+            if (entity is Unit)
+            {
+                var unit = (Unit)entity;
+
+                // 如果【碰撞体】是Unit类型，则结算【闪避】和【吹飞】效果。
+                if (TryHit(unit))
+                {
+                    BlowUpEntity(unit);
+                }
+                else
+                {
+                    // 使【伤害块】短时间无法再对该目标造成伤害。
+                    entity.SetDamageTimer(gameObject, damageTriggerTime);
+                    DamagePopupManager.Instance.Popup(PopupType.Miss, hit.transform.position);
+                    //continue;
+                    return;
+                }
+            }
+
+            // 后面需要考虑到子弹单位的拥有者位死亡后，子弹还在的情况。
+            // 以目前对象池的逻辑，拥有者不在了死亡以后，它们并没有被销毁，而是在对象池内，依然可以访问owner。
+
+            // 暴击默认为false，如果暴击，则会在CalculateDamage中修改。
+            bool isCrit = false;
+            int finalDamage = DamageManager.CalculateDamage(damageType, damage, owner, ref isCrit, damageElementType);
+
+            // 对实体造成伤害并设置击晕时间
+            entity.TakeDamage(finalDamage, staggerTime);
+
+            DamagePopupManager.Instance.Popup(PopupType.Damage, hit.transform.position, finalDamage, isCrit);
+
+            // 令该实体保存一个对此【伤害块】的计时器，短时间无法再对其造成伤害。
+            entity.SetDamageTimer(gameObject, damageTriggerTime);
+
+            if (owner is Player)
+            {
+                var player = (Player)owner;
+                float boostCharge = player.stats.Calculate_AttackEnergeCharge();
+                player.personality.AttackChargeEnerge(finalDamage, boostCharge); // 受伤充能比率还得具体设计。
+            }
+
+            switch (hitEffectPlayMode)
+            {
+                case HitEffectPlayMode.HitPoint: // hmm，不太完善。
+                    RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, (hit.transform.position - transform.position).normalized);
+                    if (raycastHit.collider != null)
+                    {
+                        Transform collisionPoint = transform;
+                        collisionPoint.position = raycastHit.point;
+                        HitAnimation(collisionPoint);
+                    }
+                    break;
+                case HitEffectPlayMode.Target:
+                    HitAnimation(hit.transform);
+                    break;
+                default:
+                    break;
+            }
+        }
+        didDamage = true;
+
+        if (applyStatus && entity.StatusManager && entity.IsAlive())
+        {
+            if (owner is Player)
+            {
+                var player = (Player)owner;
+                entity.StatusManager.AddStatus(applyStatus, player.stats);
+            }
+            else
+            {
+                entity.StatusManager.AddStatus(applyStatus, null);
+            }
+
+            //Debug.Log(entity.StatusManager.ActiveStatus());
+
         }
     }
 }

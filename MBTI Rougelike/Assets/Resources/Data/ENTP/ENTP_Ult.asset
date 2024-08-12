@@ -13,11 +13,19 @@ MonoBehaviour:
   m_Name: ENTP_Ult
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 0}
+  multiDamageColliders: []
   reloadingTime: 1
   scatterAngle: 0.15
   damageColliderSpeed: 1
   maxChargeCount: 0
   selfBlowForce: 0
+  maxClip: 0
+  clipReloadingTime: 1
   controlScheme: 0
   renderMode: 0
   selfStatus: {fileID: 11400000, guid: dc38ef630a0832c4a864daf1ce1c4a66, type: 2}
+  maxChargingTime: 0
+  fixPos: 0
+  airdropSpawn: 0
+  turret: {fileID: 0}
+  skillType: 0

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f327d7c8417428439099d04d2214334, type: 3}
-  m_Name: INFJ_Auto
+  m_Name: INFJ_Atk
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 7582043518813241843, guid: 7e9ac1edc9c62c249a23dc76d536f27d, type: 3}
   multiDamageColliders: []

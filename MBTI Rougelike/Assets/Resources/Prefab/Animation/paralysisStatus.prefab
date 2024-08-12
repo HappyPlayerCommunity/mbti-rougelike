@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5392953412596885765}
   - component: {fileID: 3633823227193975535}
   m_Layer: 0
-  m_Name: paralysisStatus
+  m_Name: ParalysisStatus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

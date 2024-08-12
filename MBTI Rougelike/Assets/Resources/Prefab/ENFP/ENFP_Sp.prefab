@@ -232,13 +232,14 @@ MonoBehaviour:
   maxTimer: 0.5
   collideTags:
   - Enemy
-  damageTags:
+  effectTags:
   - Enemy
   isAttachedPos: 1
   staggerTime: 2
   isLifeTimeBindingWithState: 0
   blowForceSpeed: 5
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
+  healEffectPrefab: {fileID: 0}
   hitEffectPlayMode: 1
   damageType: 1
   damageElementType: 0
@@ -248,6 +249,8 @@ MonoBehaviour:
   chargingLocalScale: {x: 5, y: 5, z: 1}
   chargingStaggerTime: 3
   chargingMaxTimer: 0
+  chargingSpeedBoost: 0
+  chargingPenetrability: 0
   blowTurret: 0
   blowTurretForceSpeed: 0
   isHealingMode: 0
@@ -257,6 +260,7 @@ MonoBehaviour:
   timer: 0
   velocity: {x: 0, y: 0}
   initPos: {x: 0, y: 0, z: 0}
+  initInterval: {x: 0, y: 0, z: 0}
   owner: {fileID: 0}
   onceHitEventTrigger: 0
   hits: []
@@ -268,7 +272,7 @@ MonoBehaviour:
   damageMovementType: 0
   spriteRenderer: {fileID: 0}
   ownerStatus: {fileID: 0}
-  applyStatus: {fileID: 0}
+  applyStatus: {fileID: 11400000, guid: 30c3133e25ca40b439520e54808809f8, type: 2}
   damagePopupPrefab: {fileID: 0}
 --- !u!50 &2213129741917159012
 Rigidbody2D:
