@@ -66,6 +66,8 @@ public class Personality : MonoBehaviour
     [SerializeField, Tooltip("某些非常规技能的特殊逻辑实现方法")]
     private PersonalitySpecialImplementation ultSpecialImplementation;
 
+    [Tooltip("固定位置生成的伤害块的的退回Offset，防止生成的【伤害块】过于靠前")]
+    public float adjustBackOffset = 0.0f;
 
     [Header("互动组件")]
     [Tooltip("人格八维数据。")]
@@ -76,9 +78,6 @@ public class Personality : MonoBehaviour
 
     [Tooltip("状态管理机。")]
     public StatusManager statusManager;
-
-    [Tooltip("固定位置生成的伤害块的的退回Offset，防止生成的【伤害块】过于靠前")]
-    public float adjustBackOffset = 3.0f;
 
     protected Coroutine energeChargeCoroutine;
 
@@ -170,8 +169,6 @@ public class Personality : MonoBehaviour
         normalAttack_CurretReloadingTimer -= Time.deltaTime;
         specialSkill_CurretReloadingTimer -= Time.deltaTime;
 
-
-
         player.IsActioning = false;
 
         if (!statusManager.IsSlienced())
@@ -185,7 +182,6 @@ public class Personality : MonoBehaviour
 
             HandleSkillTypeAndControlScheme(normalAttack, ref normalAttack_CurretReloadingTimer, normalAttack_InitPosition, UnityEngine.Input.GetMouseButton(0), true, ref normalAttackClip, normalAttack_MultiInitPositions); //左键
             HandleSkillTypeAndControlScheme(specialSkill, ref specialSkill_CurretReloadingTimer, specialSkill_InitPosition, UnityEngine.Input.GetMouseButton(1), false, ref specialSkillClip, specialSkill_MultiInitPositions); //右键
-
         }
     }
 

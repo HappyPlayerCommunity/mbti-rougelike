@@ -35,6 +35,7 @@ public class AttackHelper : MonoBehaviour
         }
 
         damageCollider.owner = player;
+        Vector3 creatorPosition = initPos.GetComponentInParent<BaseEntity>().transform.position;
 
         if (isFixPos)
         {
@@ -47,6 +48,7 @@ public class AttackHelper : MonoBehaviour
                     float distanceFromPlayer = boxWidth * 0.5f + boxOffset;
                     float finalAdjustBack = adjustBackOffset * chargingRate;
 
+                    //Vector3 creatorPosition = initPos.GetComponentInParent<BaseEntity>().transform.position;
                     spawnPosition = initPos.GetComponentInParent<BaseEntity>().transform.position + aimDirection.normalized * (distanceFromPlayer - finalAdjustBack);
                     break;
                 default:
@@ -56,6 +58,8 @@ public class AttackHelper : MonoBehaviour
         }
 
         damageCollider.InitPos = aimDirection.normalized * (initPos.position - damageCollider.owner.transform.position).magnitude;
+        //damageCollider.InitPos = spawnPosition;
+        damageCollider.InitInterval = spawnPosition - creatorPosition;
 
         damageCollider.Activate(spawnPosition, Quaternion.Euler(0.0f, 0.0f, 0.0f));
 

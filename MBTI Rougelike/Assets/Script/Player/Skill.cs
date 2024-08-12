@@ -55,7 +55,7 @@ public class Skill : ScriptableObject
     private int maxClip = 0;
 
     [SerializeField, Tooltip("此技能的伤害块的【弹夹】数量；为0的技能则不应有此机制。")]
-    private float clipReloadingTime = 2.0f;
+    private float clipReloadingTime = 1.0f;
 
     [SerializeField, Tooltip("技能的操作模式，例如是按住连续释放，按住蓄力松开释放，或需要反复按下释放等。")]
     SkillControlScheme controlScheme;

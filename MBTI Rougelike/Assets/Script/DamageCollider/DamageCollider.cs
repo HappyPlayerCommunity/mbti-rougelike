@@ -136,8 +136,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("伤害块的【速度矢量】。")]
     protected Vector2 velocity;
 
-    [SerializeField, Tooltip("伤害快的初始生成位置。")]
+    [SerializeField, Tooltip("伤害块的初始生成位置。")]
     protected Vector3 initPos = new Vector3();
+
+    [SerializeField, Tooltip("伤害快与原点的初始位置关系。")]
+    protected Vector3 initInterval = new Vector3();
 
     [SerializeField, Tooltip("伤害块的拥有者，或者说发射者，制造者。")]
     public Unit owner;
@@ -229,6 +232,12 @@ public class DamageCollider : MonoBehaviour, IPoolable
     {
         get { return initPos; }
         set { initPos = value; }
+    }
+
+    public Vector3 InitInterval
+    {
+        get { return initInterval; }
+        set { initInterval = value; }
     }
 
     public Unit Owner
@@ -419,7 +428,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
             {
                 Vector3 fixInitPos = initPos;
                 //fixInitPos.x = initPos.x * owner.FaceRightFloat;
-                transform.position = owner.transform.position + fixInitPos;
+                //transform.position = owner.transform.position + fixInitPos;
+                transform.position = owner.transform.position + initInterval;
             }
         }
         OnFixedUpdate();
@@ -716,8 +726,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
                 anim.Activate(transform.position, Quaternion.identity);
             }
         }
-
-
 
         //Instantiate(hitEffectPrefab, position, Quaternion.identity);
     }
