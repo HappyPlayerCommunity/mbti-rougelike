@@ -3056,9 +3056,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d5cdae98a6fbdf244add8b9aab1a4630, type: 2}
     - target: {fileID: 2582148001522876126, guid: 9e98c651ebc476f4f9fc43d01c7a9189, type: 3}
+      propertyPath: ultimateSkill
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582148001522876126, guid: 9e98c651ebc476f4f9fc43d01c7a9189, type: 3}
       propertyPath: adjustBackOffset
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2582148001522876126, guid: 9e98c651ebc476f4f9fc43d01c7a9189, type: 3}
+      propertyPath: ultSpecialImplementation
+      value: 
+      objectReference: {fileID: 6357457822650620060, guid: fc1194e519ea71e4a9dd7440a95eaa21, type: 3}
     - target: {fileID: 3934078764764362811, guid: 9e98c651ebc476f4f9fc43d01c7a9189, type: 3}
       propertyPath: m_Sprite
       value: 

@@ -27,6 +27,9 @@ public class Turret : Building, IPoolable
 
     Skill.RenderMode damageColliderRenderMode = Skill.RenderMode.NoneFlip;
 
+    [Tooltip("炮塔的攻速，0~1。越低攻速越快。")]
+    public float attackTimeRate = 1.0f;
+
     public string PoolKey
     {
         get { return poolKey; }
@@ -64,7 +67,7 @@ public class Turret : Building, IPoolable
                 }
             }
 
-            attackTimer = attackTime;
+            attackTimer = attackTime * attackTimeRate;
         }
     }
 
