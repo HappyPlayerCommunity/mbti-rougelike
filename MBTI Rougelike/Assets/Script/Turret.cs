@@ -25,6 +25,8 @@ public class Turret : Building, IPoolable
 
     public bool mousetGuiding = false;
 
+    public bool medicalModule = false;
+
     Skill.RenderMode damageColliderRenderMode = Skill.RenderMode.NoneFlip;
 
     [Tooltip("炮塔的攻速，0~1。越低攻速越快。")]
@@ -67,6 +69,16 @@ public class Turret : Building, IPoolable
                 }
             }
 
+            if (medicalModule)
+            {
+                Collider2D nearestAlly = FindNearestAlly();
+                if (nearestAlly != null)
+                {
+                    Vector3 direction = (nearestAlly.transform.position - transform.position).normalized;
+                    Attack(direction);
+                }
+            }
+
             attackTimer = attackTime * attackTimeRate;
         }
     }
@@ -80,6 +92,28 @@ public class Turret : Building, IPoolable
         foreach (Collider2D hit in hits)
         {
             if (hit.CompareTag("Enemy"))
+            {
+                float distance = Vector2.Distance(transform.position, hit.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestEnemy = hit;
+                }
+            }
+        }
+
+        return nearestEnemy;
+    }
+
+    Collider2D FindNearestAlly()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
+        Collider2D nearestEnemy = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (Collider2D hit in hits)
+        {
+            if (hit.CompareTag("Player") || hit.CompareTag("Bond"))
             {
                 float distance = Vector2.Distance(transform.position, hit.transform.position);
                 if (distance < minDistance)

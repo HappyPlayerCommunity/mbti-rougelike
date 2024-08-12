@@ -2958,10 +2958,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3218839877225314838, guid: 99832d441ad71a64fb8818a7224b30dd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.015
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218839877225314838, guid: 99832d441ad71a64fb8818a7224b30dd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.006
+      objectReference: {fileID: 0}
     - target: {fileID: 6822947517902441461, guid: 99832d441ad71a64fb8818a7224b30dd, type: 3}
       propertyPath: normalAttack
       value: 
       objectReference: {fileID: 11400000, guid: 22cd6bfe8d41bba4a8c762bbefaa966e, type: 2}
+    - target: {fileID: 6822947517902441461, guid: 99832d441ad71a64fb8818a7224b30dd, type: 3}
+      propertyPath: specialSkill
+      value: 
+      objectReference: {fileID: 11400000, guid: 6cf265c272537644bbc26257419f1991, type: 2}
     - target: {fileID: 8712647398803029483, guid: 99832d441ad71a64fb8818a7224b30dd, type: 3}
       propertyPath: m_Name
       value: ISFJ_Player
