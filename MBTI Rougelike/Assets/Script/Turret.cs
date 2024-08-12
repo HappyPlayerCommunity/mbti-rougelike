@@ -42,6 +42,7 @@ public class Turret : Building, IPoolable
     {
         base.Start();
         player = GameObject.FindObjectOfType<Player>();
+        attackTimer = attackTime;
     }
 
     protected override void OnUpdate()

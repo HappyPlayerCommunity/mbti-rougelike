@@ -117,6 +117,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("此【伤害块】可以贯穿次数的次数。")]
     protected int penetrability = 1;
 
+    [SerializeField, Tooltip("该【伤害块】可以生成的【地表】。")]
+    protected Surface surface;
 
     public enum HitEffectPlayMode
     {
@@ -153,6 +155,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     [SerializeField, Tooltip("伤害快与原点的初始位置关系。")]
     protected Vector3 initInterval = new Vector3();
+
+    [SerializeField, Tooltip("此【伤害块】现在是否可以造成碰撞。某些子弹如抛物线，可以在抛物过程中关闭此功能，仅在落地时结算碰撞。")]
+    protected bool colliderActive = true;
 
     [SerializeField, Tooltip("伤害块的拥有者，或者说发射者，制造者。")]
     public Unit owner;
@@ -457,7 +462,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     /// </summary>
     protected virtual void CollisionCheck()
     {
-        if (!damageCollider2D)
+        if (!damageCollider2D || !colliderActive)
             return;
 
         // 创建一个临时列表来保存当前的碰撞对象
@@ -694,7 +699,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         return false;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (other != damageCollider2D)
         {
@@ -702,7 +707,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    protected virtual void OnTriggerExit2D(Collider2D other)
     {
         if (collidingObjects.Contains(other))
         {
