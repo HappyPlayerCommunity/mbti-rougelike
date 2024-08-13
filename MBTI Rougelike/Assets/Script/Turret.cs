@@ -117,11 +117,11 @@ public class Turret : Building, IPoolable
             float initDistance = detectionRadius / 2;
             //attackInitPos = transform;
             attackInitPos.position = transform.position + direction * initDistance;
-            AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, adjustBackOffset, direction, scatterAngle, true, damageColliderRenderMode, player, damageColliderSpeed);
+            AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, adjustBackOffset, direction, scatterAngle, true, damageColliderRenderMode, player, damageColliderSpeed, player);
         }
         else
         {
-            AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, 0.0f, direction, scatterAngle, isFixPos, damageColliderRenderMode, player, damageColliderSpeed);
+            AttackHelper.InitTurretDamageCollider(damageCollider, attackInitPos, 0.0f, direction, scatterAngle, isFixPos, damageColliderRenderMode, player, damageColliderSpeed, player);
         }
     }
 

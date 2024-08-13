@@ -3326,6 +3326,14 @@ PrefabInstance:
       propertyPath: specialSkill
       value: 
       objectReference: {fileID: 11400000, guid: 168b48f6d15c7dc41bb13fd3f8e63473, type: 2}
+    - target: {fileID: 2170674341776729181, guid: bf857e28dac20bb4caa6bcf0d07c6a91, type: 3}
+      propertyPath: ultimateSkill
+      value: 
+      objectReference: {fileID: 11400000, guid: 030d784028c5b934686e4dbfb94814e0, type: 2}
+    - target: {fileID: 2170674341776729181, guid: bf857e28dac20bb4caa6bcf0d07c6a91, type: 3}
+      propertyPath: ultSpecialImplementation
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2643512901682278079, guid: bf857e28dac20bb4caa6bcf0d07c6a91, type: 3}
       propertyPath: m_Sprite
       value: 

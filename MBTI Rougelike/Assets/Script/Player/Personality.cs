@@ -230,7 +230,7 @@ public class Personality : MonoBehaviour
                         DamageCollider damageCollider = skill.MultiDamageColliders[i];
                         Transform transform = multiInitPos[i];
                         // 有需要的话还可以扩展不同角度的散射。
-                        var finalDamageCollider = AttackHelper.InitDamageCollider(damageCollider, transform, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, damageColliderSpeed);
+                        var finalDamageCollider = AttackHelper.InitDamageCollider(damageCollider, transform, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, damageColliderSpeed, player);
                         if (selfStatus != null)
                         {
                             finalDamageCollider.ownerStatus = selfStatus;
@@ -241,7 +241,7 @@ public class Personality : MonoBehaviour
                 {
                     if (skill.DamageCollider)
                     {
-                        var finalDamageCollider = AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle);
+                        var finalDamageCollider = AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle, player);
 
                         if (selfStatus != null)
                         {
