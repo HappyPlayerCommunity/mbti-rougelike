@@ -27,25 +27,18 @@ public class CreamSurface : Surface
 
     private void UpdateAllyEffect(GameObject obj)
     {
-        healTimer -= Time.deltaTime;
-
-        if (healTimer <= 0.0f)
+        var allyUnit = obj.GetComponent<BaseEntity>();
+        if (allyUnit != null)
         {
-            healTimer = healTimer = healTime;
-
-            var allyUnit = obj.GetComponent<Unit>();
-            if (allyUnit != null)
+            allyUnit.GetHealing(healAmount);
+            DamagePopupManager.Instance.Popup(PopupType.Healing, obj.transform.position, healAmount, false);
+        
+            if (healAnim)
             {
-                allyUnit.GetHealing(healAmount);
-                DamagePopupManager.Instance.Popup(PopupType.Healing, obj.transform.position, healAmount, false);
-
-                if (healAnim)
-                {
-                    GameObject hitEffect = PoolManager.Instance.GetObject(healAnim.name, healAnim.gameObject);
-                    AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
-                    anim.attachedTransform = obj.transform;
-                    anim.Activate(obj.transform.position, Quaternion.identity);
-                }
+                GameObject hitEffect = PoolManager.Instance.GetObject(healAnim.name, healAnim.gameObject);
+                AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
+                anim.attachedTransform = obj.transform;
+                anim.Activate(obj.transform.position, Quaternion.identity);
             }
         }
     }
@@ -61,21 +54,26 @@ public class CreamSurface : Surface
 
         base.Update();
 
-        foreach (var entity in SurfaceEffectManager.Instance.GetEntitiesAffectedBySurface(this))
+        healTimer -= Time.deltaTime;
+
+        if (healTimer <= 0.0f)
         {
-            if (entity == null)
+            foreach (var entity in SurfaceEffectManager.Instance.GetEntitiesAffectedBySurface(this))
             {
-                // 如果单位已经被销毁，跳过这个循环
-                continue;
+                if (entity == null)
+                {
+                    // 如果单位已经被销毁，跳过这个循环
+                    continue;
+                }
+
+                if (SurfaceEffectManager.Instance.IsUnderSurfaceEffect(entity, this.GetType())
+                && (entity.CompareTag(Tag.Player) || entity.CompareTag(Tag.Bond)))
+                {
+                    UpdateAllyEffect(entity);
+                }
             }
 
-            if (SurfaceEffectManager.Instance.IsUnderSurfaceEffect(entity, this.GetType())
-            && (entity.CompareTag(Tag.Player) || entity.CompareTag(Tag.Bond)))
-            {
-                //if (gameObject == null) return;
-
-                UpdateAllyEffect(entity);
-            }
+            healTimer = healTime;
         }
     }
 

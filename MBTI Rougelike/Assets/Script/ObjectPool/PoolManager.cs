@@ -27,7 +27,7 @@ public class PoolManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("PoolManager Awake.");
+        //Debug.Log("PoolManager Awake.");
 
         if (_instance == null)
         {
@@ -35,12 +35,12 @@ public class PoolManager : MonoBehaviour
             DontDestroyOnLoad(gameObject); // 确保在场景切换时不会销毁
             poolContainer = new GameObject("ObjectPoolContainer");
 
-            Debug.Log("PoolManager Initialized.");
+            //Debug.Log("PoolManager Initialized.");
 
         }
         else if (_instance != this)
         {
-            Debug.Log("PoolManager Destroyed.");
+            //Debug.Log("PoolManager Destroyed.");
             Destroy(gameObject);
         }
     }

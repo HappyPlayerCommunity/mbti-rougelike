@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor.ShaderKeywordFilter;
+using UnityEngine;
 
 public abstract class Surface : MonoBehaviour, IPoolable
 {
@@ -27,14 +28,22 @@ public abstract class Surface : MonoBehaviour, IPoolable
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        GameObject obj = other.gameObject;
-        SurfaceEffectManager.Instance?.ApplySurfaceEffect(obj, this);
+        if(TagHelper.CompareTag(other, Tag.Enemy, Tag.Player, Tag.Bond))
+        {
+            GameObject obj = other.gameObject;
+            SurfaceEffectManager.Instance?.ApplySurfaceEffect(obj, this);
+            //Debug.Log("进入地形");
+        };
     }
 
     protected virtual void OnTriggerExit2D(Collider2D other)
     {
-        GameObject obj = other.gameObject;
-        SurfaceEffectManager.Instance?.RemoveSurfaceEffect(obj, this);
+        if (TagHelper.CompareTag(other, Tag.Enemy, Tag.Player, Tag.Bond))
+        {
+            GameObject obj = other.gameObject;
+            SurfaceEffectManager.Instance?.RemoveSurfaceEffect(obj, this);
+            //Debug.Log("离开地形");
+        }
     }
 
     protected virtual void Update()

@@ -30,16 +30,16 @@ public class SurfaceEffectManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("SurfaceEffectManager Awake");
+        //Debug.Log("SurfaceEffectManager Awake");
         if (_instance == null)
         {
             _instance = this;
-            Debug.Log("SurfaceEffectManager Initialized.");
-            DontDestroyOnLoad(gameObject); // 确保在场景切换时不会销毁
+            //Debug.Log("SurfaceEffectManager Initialized.");
+            DontDestroyOnLoad(gameObject);
         }
         else if (_instance != this)
         {
-            Debug.Log("SurfaceEffectManager Destroyed.");
+            //Debug.Log("SurfaceEffectManager Destroyed.");
             Destroy(gameObject);
         }
     }
@@ -62,6 +62,7 @@ public class SurfaceEffectManager : MonoBehaviour
                 currentSurface.RemoveEffect(obj);
                 newSurface.ApplyEffect(obj);
                 activeSurfaceEffects[obj] = newSurface;
+                //Debug.Log("进入地形——更高的地形");
             }
         }
         else
@@ -69,6 +70,7 @@ public class SurfaceEffectManager : MonoBehaviour
             // 如果没有其他地表效果，则直接应用新地表效果
             newSurface.ApplyEffect(obj);
             activeSurfaceEffects[obj] = newSurface;
+            //Debug.Log("进入地形——上一层地形");
         }
     }
 
@@ -85,6 +87,7 @@ public class SurfaceEffectManager : MonoBehaviour
             {
                 newSurface.ApplyEffect(obj);
                 activeSurfaceEffects[obj] = newSurface;
+                //Debug.Log("进入地形——下一层地形");
             }
         }
     }
@@ -185,7 +188,6 @@ public class SurfaceEffectManager : MonoBehaviour
 
     public void CleanupActiveSurfaceEffects()
     {
-        // 创建一个新的列表，存储需要清理的 Surface 对象
         List<Surface> surfacesToCleanup = new List<Surface>(activeSurfaceEffects.Values);
 
         foreach (var surface in surfacesToCleanup)
@@ -193,11 +195,9 @@ public class SurfaceEffectManager : MonoBehaviour
             if (surface != null)
             {
                 surface.Deactivate();
-                //Destroy(surface.gameObject);  // 销毁 Surface 对象
             }
         }
 
-        // 清空字典
         activeSurfaceEffects.Clear();
     }
 }

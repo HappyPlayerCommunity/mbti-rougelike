@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  duration: 10
+  duration: 5
   durationTimer: 0
   slowAmount: 0.5
   healAmount: 3
