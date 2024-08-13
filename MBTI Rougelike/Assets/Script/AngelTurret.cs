@@ -26,6 +26,8 @@ public class AngelTurret : Turret
         base.OnUpdate();
         FollowPlayer();
         FloatMovement();
+
+        // hmm，可能应该写在fixupdate里。
     }
 
     private void FollowPlayer()

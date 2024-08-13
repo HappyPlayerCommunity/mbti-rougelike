@@ -7,8 +7,9 @@ using static UnityEngine.GraphicsBuffer;
 /// <summary>
 /// 状态类。状态本身的核心属性只有持续时间和记时。具体的效果都由子类实现。
 /// </summary>
+[CreateAssetMenu(fileName = "NewSimpleStatus", menuName = "Status Data/Simple Status")]
 [System.Serializable]
-public abstract class Status : ScriptableObject
+public class Status : ScriptableObject
 {
     [Tooltip("状态的持续时间。")]
     public float duration;

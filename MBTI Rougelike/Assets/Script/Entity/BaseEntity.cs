@@ -339,6 +339,19 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
         }
     }
 
+    public SpriteRenderer SpriteRenderer
+    {
+        get
+        {
+            return spriteRenderer;
+        }
+        set
+        {
+            spriteRenderer = value;
+        }
+    }
+
+
     public virtual void TakeDamage(int damage, float stuntime)
     {
         ResetShieldRestoreCoroutine();

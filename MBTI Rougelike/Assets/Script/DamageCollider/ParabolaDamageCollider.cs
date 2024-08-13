@@ -24,9 +24,6 @@ public class ParabolaDamageCollider : DamageCollider
     [SerializeField, Tooltip("水平速度。")]
     private Vector3 horizontalVelocity;
 
-    [SerializeField, Tooltip("落地时的伤害范围半径。")]
-    private float landingDamageRadius = 2.0f;
-
     [SerializeField, Tooltip("该伤害块【落地】时播放的动画。")]
     private AnimationController2D landingEffectPrefab;
 

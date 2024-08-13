@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e44de392416ad4db2a91cca28b2aa2, type: 3}
+  m_Name: ISFP_Dizzy
+  m_EditorClassIdentifier: 
+  duration: 3
+  timer: 0
+  root: 1
+  ultChargeBan: 0
+  invincible: 0
+  silence: 1
+  modifyPowerRate: 1
+  modifyImpactRate: 1
+  modifyDurationRate: 1
+  lockDuration: 0
+  statusAnimPrefab: {fileID: 9000027635676043056, guid: 1ed1c7fe250638b44adc50629e349aab, type: 3}
+  stats: {fileID: 11400000, guid: 72e15512bd894a341a9279e6ea602389, type: 2}
+  physicalVulnerable: 1
