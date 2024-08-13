@@ -748,7 +748,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
         //除了反射逻辑，后续还可以添加抵消逻辑。
         if (TagReflectCheck(hit))
         {
-            Debug.Log("Refecting?");
             DamageCollider enemyDamageCollider;
 
             enemyDamageCollider = hit.gameObject.GetComponent<DamageCollider>();
@@ -785,6 +784,10 @@ public class DamageCollider : MonoBehaviour, IPoolable
         if (TagEffectCheck(hit))
         {
             var entity = hit.gameObject.GetComponent<BaseEntity>();
+            if (!entity)
+            {
+                entity = hit.gameObject.GetComponentInParent<BaseEntity>();
+            }
 
             //确定该实体现在是否能受到伤害/治疗。
             if (entity && entity.CanTakeDamageFrom(gameObject))

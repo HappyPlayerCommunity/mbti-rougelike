@@ -1,0 +1,253 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3514852587640144903
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8046420454323903023}
+  - component: {fileID: 8591249056428415715}
+  - component: {fileID: 2541557978705589089}
+  m_Layer: 0
+  m_Name: ISTP_Robot_Melee
+  m_TagString: DamageCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8046420454323903023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3514852587640144903}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.618, y: -1.96, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2500328855081794607}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8591249056428415715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3514852587640144903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0982b1d45c1a1af40a875949f5969b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 20
+  maxTimer: 0.25
+  collideTags:
+  - Enemy
+  effectTags:
+  - Enemy
+  reflectTags: []
+  isAttachedPos: 0
+  staggerTime: 1
+  isLifeTimeBindingWithState: 0
+  blowForceSpeed: 10
+  hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
+  healEffectPrefab: {fileID: 0}
+  hitEffectPlayMode: 1
+  damageType: 0
+  damageElementType: 1
+  canvasTransform: {fileID: 0}
+  chargingDamage: 0
+  chargingBlowForceSpeed: 0
+  chargingLocalScale: {x: 0, y: 0, z: 0}
+  chargingStaggerTime: 0
+  chargingMaxTimer: 0
+  chargingSpeedBoost: 0
+  chargingPenetrability: 0
+  blowTurret: 0
+  blowTurretForceSpeed: 0
+  isHealingMode: 0
+  penetrability: 1
+  surface: {fileID: 0}
+  damageHitType: 2
+  damageTriggerTime: 100
+  timer: 0
+  velocity: {x: 0, y: 0}
+  initPos: {x: 0, y: 0, z: 0}
+  initInterval: {x: 0, y: 0, z: 0}
+  colliderActive: 1
+  owner: {fileID: 0}
+  onceHitEventTrigger: 0
+  hits: []
+  hitted: 0
+  didDamage: 0
+  awaked: 0
+  damageCollider2D: {fileID: 0}
+  initSource: {fileID: 0}
+  damageMovementType: 0
+  spriteRenderer: {fileID: 0}
+  ownerStatus: {fileID: 0}
+  applyStatus: {fileID: 0}
+  damagePopupPrefab: {fileID: 0}
+--- !u!50 &2541557978705589089
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3514852587640144903}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!1001 &6985642120111500101
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8046420454323903023}
+    m_Modifications:
+    - target: {fileID: 198168116466773114, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198168116466773114, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 465737999, guid: d7ee5090c924030429e4c274ddacb899, type: 3}
+    - target: {fileID: 3528279790685925914, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_Name
+      value: Art
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528279790685925914, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_TagString
+      value: DamageCollider
+      objectReference: {fileID: 0}
+    - target: {fileID: 4243186920536855455, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 481a42599bb1f5342820a5e174bbcf3a, type: 2}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3528279790685925914, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6344477120650503387}
+  m_SourcePrefab: {fileID: 100100000, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+--- !u!4 &2500328855081794607 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4774677242117592938, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+  m_PrefabInstance: {fileID: 6985642120111500101}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5766590739236952415 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3528279790685925914, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+  m_PrefabInstance: {fileID: 6985642120111500101}
+  m_PrefabAsset: {fileID: 0}
+--- !u!70 &6344477120650503387
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5766590739236952415}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 2, y: 2}
+  m_Direction: 1

@@ -8,6 +8,7 @@ public static class Tag
     public const string Enemy = "Enemy";
     public const string Bond = "Bond";
     public const string DamageCollider = "DamageCollider";
+    public const string ISTP_Robot = "ISTP_Robot";
 }
 
 /// <summary>

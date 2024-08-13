@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f327d7c8417428439099d04d2214334, type: 3}
-  m_Name: ESJF_Ult
+  m_Name: ISTP_Atk
   m_EditorClassIdentifier: 
-  damageCollider: {fileID: 8512005864296378397, guid: f6c6ef4384c2d6a4289665ca049b69c9, type: 3}
+  damageCollider: {fileID: -5672157062423907038, guid: bbb477f6f5292c040b93c377890b0166, type: 3}
   multiDamageColliders: []
-  reloadingTime: 1
+  reloadingTime: 0.1
   scatterAngle: 0
-  damageColliderSpeed: 1
+  damageColliderSpeed: 0
   maxChargeCount: 0
   selfBlowForce: 0
   maxClip: 0
-  clipReloadingTime: 1
+  clipReloadingTime: 0
   controlScheme: 0
-  renderMode: 3
-  selfStatus: {fileID: 11400000, guid: 5af5b6e6839b898448505d0e5d95aafb, type: 2}
+  renderMode: 0
+  selfStatus: {fileID: 0}
   maxChargingTime: 0
   fixPos: 0
   airdropSpawn: 0

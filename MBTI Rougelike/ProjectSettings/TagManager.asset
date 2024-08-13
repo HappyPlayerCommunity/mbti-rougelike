@@ -9,6 +9,7 @@ TagManager:
   - Turret
   - Bond
   - DamageCollider
+  - ISTP_Robot
   layers:
   - Default
   - TransparentFX
