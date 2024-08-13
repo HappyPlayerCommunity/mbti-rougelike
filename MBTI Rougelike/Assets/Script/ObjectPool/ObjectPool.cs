@@ -70,4 +70,16 @@ public class ObjectPool
             Debug.LogWarning("该物体没有继承自IPoolable: " + obj.name);
         }
     }
+
+    public void Clear()
+    {
+        while (_pool.Count > 0)
+        {
+            GameObject obj = _pool.Dequeue();
+            if (obj != null)
+            {
+                Object.Destroy(obj);
+            }
+        }
+    }
 }

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct Tag
+public static class Tag
 {
-    public static string Player = "Player";
-    public static string Enemy = "Enemy";
-    public static string DamageCollider = "DamageCollider";
+    public const string Player = "Player";
+    public const string Enemy = "Enemy";
+    public const string Bond = "Bond";
+    public const string DamageCollider = "DamageCollider";
 }
 
 /// <summary>

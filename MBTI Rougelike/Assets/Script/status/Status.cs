@@ -45,6 +45,8 @@ public abstract class Status : ScriptableObject
 
     protected AnimationController2D recordAnim;
 
+    bool bindingWithSpecialSkill = false;
+
     [Header("互动组件")]
     public Stats stats;
 
@@ -58,7 +60,14 @@ public abstract class Status : ScriptableObject
 
     public virtual void OnUpdate(GameObject target, float deltaTime)
     {
-        timer -= deltaTime;
+        if (bindingWithSpecialSkill && !Input.GetMouseButton(0))
+        {
+            OnExpire(target);
+        }
+        else
+        {
+            timer -= deltaTime;
+        }
     }
 
     public virtual void OnExpire(GameObject target)
@@ -77,7 +86,7 @@ public abstract class Status : ScriptableObject
 
     public bool IsExpired()
     {
-        return timer <= 0.0f;
+        return timer <= 0.0f && !bindingWithSpecialSkill;
     }
 
     protected void PlayAnimation(GameObject target)

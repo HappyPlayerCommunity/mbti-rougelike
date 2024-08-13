@@ -10,7 +10,6 @@ public class StatusIntpUlt : Status
     public Player player;
     public float fireRate = 0.1f; // 每次发射的间隔时间
     public int totalCircles = 5; // 总共旋转的圈数
-
     private float toungness = float.MaxValue;
 
     public override void OnUpdate(GameObject target, float deltaTime)
@@ -80,7 +79,7 @@ public class StatusIntpUlt : Status
             {
                 DamageCollider damageCollider = skill.MultiDamageColliders[i];
                 Transform transform = multiInitPos[i];
-                var finalDamageCollider = AttackHelper.InitDamageCollider(damageCollider, transform, 0.0f, aimDirection, 0.0f, skill.ControlScheme, skill.FixPos, 1.0f, skill.GetRenderMode, player, skill.DamageColliderSpeed);
+                var finalDamageCollider = AttackHelper.InitDamageCollider(damageCollider, transform, 0.0f, aimDirection, 0.0f, skill.ControlScheme, skill.FixPos, 1.0f, skill.GetRenderMode, player, skill.DamageColliderSpeed, player);
             }
 
             // 根据经过的时间来更新总旋转角度

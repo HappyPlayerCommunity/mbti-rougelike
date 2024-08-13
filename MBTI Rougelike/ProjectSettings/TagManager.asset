@@ -8,6 +8,7 @@ TagManager:
   - MainCanvas
   - Turret
   - Bond
+  - DamageCollider
   layers:
   - Default
   - TransparentFX
@@ -42,15 +43,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3812229091
+    locked: 0
+  - name: Surface
+    uniqueID: 3635189071
+    locked: 0
+  - name: Units
+    uniqueID: 2504453747
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Effects
     uniqueID: 1138872041
-    locked: 0
-  - name: Units
-    uniqueID: 2504453747
-    locked: 0
-  - name: Background
-    uniqueID: 3812229091
     locked: 0

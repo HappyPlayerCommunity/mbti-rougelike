@@ -7,17 +7,17 @@ using static Skill;
 public class AttackHelper : MonoBehaviour
 {
 
-    public static DamageCollider InitSkillDamageCollider(Skill skill, Transform initPos, float chargingRate, Player player, float adjustBackOffset, Vector3 aimDirection, float scatterAngle)
+    public static DamageCollider InitSkillDamageCollider(Skill skill, Transform initPos, float chargingRate, Player player, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, BaseEntity owner)
     {
-        return InitDamageCollider(skill.DamageCollider, initPos, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, skill.DamageColliderSpeed);
+        return InitDamageCollider(skill.DamageCollider, initPos, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, skill.DamageColliderSpeed, owner);
     }
 
-    public static DamageCollider InitTurretDamageCollider(DamageCollider damageColliderRef, Transform initPos, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, bool isFixPos, Skill.RenderMode renderMode, Player player, float damageColliderSpeed)
+    public static DamageCollider InitTurretDamageCollider(DamageCollider damageColliderRef, Transform initPos, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, bool isFixPos, Skill.RenderMode renderMode, Player player, float damageColliderSpeed, BaseEntity owner)
     {
-        return InitDamageCollider(damageColliderRef, initPos, adjustBackOffset, aimDirection, scatterAngle, SkillControlScheme.None, isFixPos, 1.0f, renderMode, player, damageColliderSpeed);
+        return InitDamageCollider(damageColliderRef, initPos, adjustBackOffset, aimDirection, scatterAngle, SkillControlScheme.None, isFixPos, 1.0f, renderMode, player, damageColliderSpeed, owner);
     }
 
-    public static DamageCollider InitDamageCollider(DamageCollider damageColliderRef, Transform initPos, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, SkillControlScheme controlScheme, bool isFixPos, float chargingRate, Skill.RenderMode renderMode, Player player, float damageColliderSpeed)
+    public static DamageCollider InitDamageCollider(DamageCollider damageColliderRef, Transform initPos, float adjustBackOffset, Vector3 aimDirection, float scatterAngle, SkillControlScheme controlScheme, bool isFixPos, float chargingRate, Skill.RenderMode renderMode, Player player, float damageColliderSpeed, BaseEntity owner)
     {
         string poolKey = damageColliderRef.name;
         GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, damageColliderRef.gameObject);
@@ -34,7 +34,6 @@ public class AttackHelper : MonoBehaviour
             SkillChargingRateUpdate(damageCollider, chargingRate);
         }
 
-        damageCollider.owner = player;
 
         Vector3 creatorPosition = new Vector3(0.0f, 0.0f, 0.0f);
         var baseEntity = initPos.GetComponentInParent<BaseEntity>();
@@ -42,6 +41,8 @@ public class AttackHelper : MonoBehaviour
             creatorPosition = initPos.GetComponentInParent<BaseEntity>().transform.position;
         else
             creatorPosition = initPos.position;
+
+        damageCollider.owner = owner;
 
         if (isFixPos)
         {

@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 2478275844943369403}
   m_Layer: 0
   m_Name: ENTP_Sp
-  m_TagString: Untagged
+  m_TagString: DamageCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,6 +172,7 @@ MonoBehaviour:
   - Enemy
   effectTags:
   - Enemy
+  reflectTags: []
   isAttachedPos: 0
   staggerTime: 1
   isLifeTimeBindingWithState: 0
@@ -187,17 +188,20 @@ MonoBehaviour:
   chargingLocalScale: {x: 0, y: 0, z: 0}
   chargingStaggerTime: 0
   chargingMaxTimer: 0
+  chargingSpeedBoost: 0
   chargingPenetrability: 0
   blowTurret: 0
   blowTurretForceSpeed: 0
   isHealingMode: 0
   penetrability: 1
+  surface: {fileID: 0}
   damageHitType: 2
   damageTriggerTime: 100
   timer: 0
   velocity: {x: 0, y: 0}
   initPos: {x: 0, y: 0, z: 0}
   initInterval: {x: 0, y: 0, z: 0}
+  colliderActive: 1
   owner: {fileID: 0}
   onceHitEventTrigger: 0
   hits: []

@@ -397,6 +397,8 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
 
         if (statusManager)
             statusManager.RemoveAllStatus();
+
+        SurfaceEffectManager.Instance?.RemoveEntityFromSurfaceEffects(this.gameObject);
     }
 
     public float BlowSpeedReduceUpdate(float speed)

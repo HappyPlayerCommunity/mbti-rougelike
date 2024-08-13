@@ -180,17 +180,17 @@ public class Butterfly : DamageCollider
         {
             spriteRenderer.color = healColor;
 
-            collideTags.Add("Bond");
-            effectTags.Add("Bond");
-            collideTags.Add("Player");
-            effectTags.Add("Player");
+            collideTags.Add(Tag.Bond);
+            effectTags.Add(Tag.Bond);
+            collideTags.Add(Tag.Player);
+            effectTags.Add(Tag.Player);
         }
         else
         {
             spriteRenderer.color = attackColor;
 
-            collideTags.Add("Enemy");
-            effectTags.Add("Enemy");
+            collideTags.Add(Tag.Enemy);
+            effectTags.Add(Tag.Enemy);
         }
 
         FindNearestTarget();

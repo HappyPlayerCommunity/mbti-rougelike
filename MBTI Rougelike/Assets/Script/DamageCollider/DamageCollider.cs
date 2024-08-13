@@ -50,6 +50,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("会产生【伤害判定】/【治疗判定】的其他物体tag。")]
     protected List<string> effectTags;
 
+    [SerializeField, Tooltip("会被此物体【反弹】的其他物体的tag。")]
+    protected List<string> reflectTags;
+
     [SerializeField, Tooltip("该伤害块是否依附于某个位置，而不是自己移动。")]
     protected bool isAttachedPos = false;
 
@@ -117,6 +120,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("此【伤害块】可以贯穿次数的次数。")]
     protected int penetrability = 1;
 
+    [SerializeField, Tooltip("该【伤害块】可以生成的【地表】。")]
+    protected Surface surface;
+
 
     public enum HitEffectPlayMode
     {
@@ -154,8 +160,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("伤害快与原点的初始位置关系。")]
     protected Vector3 initInterval = new Vector3();
 
+    [SerializeField, Tooltip("此【伤害块】现在是否可以造成碰撞。某些子弹如抛物线，可以在抛物过程中关闭此功能，仅在落地时结算碰撞。")]
+    protected bool colliderActive = true;
+
     [SerializeField, Tooltip("伤害块的拥有者，或者说发射者，制造者。")]
-    public Unit owner;
+    public BaseEntity owner;
 
     [SerializeField, Tooltip("伤害块是否触发过【击中特殊事件】，用于结算一些特殊的子类伤害块。")]
     public bool onceHitEventTrigger = false;
@@ -178,6 +187,12 @@ public class DamageCollider : MonoBehaviour, IPoolable
     protected int initDamage = 0;
     protected int initStaggerTime = 0;
     protected int initPenetrability = 0;
+
+    protected List<string> initCollideTags;
+
+    protected List<string> initEffectTags;
+
+    protected List<string> initReflectTags;
 
 
     private string poolKey;
@@ -252,7 +267,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         set { initInterval = value; }
     }
 
-    public Unit Owner
+    public BaseEntity Owner
     {
         get { return owner; }
         set { owner = value; }
@@ -340,6 +355,11 @@ public class DamageCollider : MonoBehaviour, IPoolable
         initDamage = damage;
         initStaggerTime = Mathf.RoundToInt(staggerTime);
         initPenetrability = penetrability;
+
+        initCollideTags = new List<string>(collideTags);
+        initEffectTags = new List<string>(effectTags);
+        initReflectTags = new List<string>(reflectTags);
+
         damageCollider2D.isTrigger = true;
         awaked = true;
         canvasTransform = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>().transform;
@@ -374,6 +394,10 @@ public class DamageCollider : MonoBehaviour, IPoolable
         damage = initDamage;
         staggerTime = initStaggerTime;
         penetrability = initPenetrability;
+
+        collideTags = new List<string>(initCollideTags);
+        effectTags = new List<string>(initEffectTags);
+        reflectTags = new List<string>(initReflectTags);
 
         OnStart();
     }
@@ -457,7 +481,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
     /// </summary>
     protected virtual void CollisionCheck()
     {
-        if (!damageCollider2D)
+        if (!damageCollider2D || !colliderActive)
             return;
 
         // 创建一个临时列表来保存当前的碰撞对象
@@ -549,9 +573,18 @@ public class DamageCollider : MonoBehaviour, IPoolable
         return false;
     }
 
-    protected bool TagDamageCheck(Collider2D hit)
+    protected bool TagEffectCheck(Collider2D hit)
     {
         foreach (var tag in effectTags)
+            if (TagHelper.CompareTag(hit, tag))
+                return true;
+
+        return false;
+    }
+
+    protected bool TagReflectCheck(Collider2D hit)
+    {
+        foreach (var tag in reflectTags)
             if (TagHelper.CompareTag(hit, tag))
                 return true;
 
@@ -694,7 +727,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         return false;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (other != damageCollider2D)
         {
@@ -702,7 +735,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    protected virtual void OnTriggerExit2D(Collider2D other)
     {
         if (collidingObjects.Contains(other))
         {
@@ -712,11 +745,44 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
     protected void EffectToObject(Collider2D hit)
     {
+        //除了反射逻辑，后续还可以添加抵消逻辑。
+        if (TagReflectCheck(hit))
+        {
+            Debug.Log("Refecting?");
+            DamageCollider enemyDamageCollider;
+
+            enemyDamageCollider = hit.gameObject.GetComponent<DamageCollider>();
+            if (!enemyDamageCollider)
+            {
+                enemyDamageCollider = hit.gameObject.GetComponentInParent<DamageCollider>();
+            }
+
+            if (enemyDamageCollider)
+            {
+                if (enemyDamageCollider.owner == owner)
+                {
+                    return;
+                }
+
+                enemyDamageCollider.velocity = -enemyDamageCollider.velocity;
+                enemyDamageCollider.owner = owner;
+                enemyDamageCollider.timer = enemyDamageCollider.maxTimer;
+
+                enemyDamageCollider.effectTags.Clear();
+                enemyDamageCollider.collideTags.Clear();
+
+                enemyDamageCollider.effectTags.Add(Tag.Enemy);
+                enemyDamageCollider.collideTags.Add(Tag.Enemy);
+            }
+
+            return;
+        }
+
         // 标记已经击中目标
         hitted = true;
 
         //检测【伤害块】是否可以对【碰撞体】造成伤害/治疗。
-        if (TagDamageCheck(hit))
+        if (TagEffectCheck(hit))
         {
             var entity = hit.gameObject.GetComponent<BaseEntity>();
 

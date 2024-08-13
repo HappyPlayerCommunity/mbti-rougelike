@@ -17,6 +17,8 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     public float maxTime;
     public float timer;
 
+    private Vector3 initSpriteLocalScale;
+
     public Animator GetAnimator()
     {
         return animator;
@@ -26,6 +28,11 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     {
         get { return poolKey; }
         set { poolKey = value; }
+    }
+
+    void Awake()
+    {
+        initSpriteLocalScale = transform.localScale;
     }
 
     void Start()
@@ -96,6 +103,8 @@ public class AnimationController2D : MonoBehaviour, IPoolable
     {
         transform.position = position;
         transform.rotation = rotation;
+        transform.localScale = initSpriteLocalScale;
+
         gameObject.SetActive(true);
     }
 

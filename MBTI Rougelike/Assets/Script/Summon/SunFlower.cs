@@ -34,9 +34,9 @@ public class SunFlower : Unit
         yield return new WaitForSeconds(firstWaitTime);
         while (true)
         {
-            AttackHelper.InitSkillDamageCollider(skill, spawnPoint, 1.0f, player, 0.0f, Vector3.left + Vector3.up * 0.6f, 0.0f);
-            AttackHelper.InitSkillDamageCollider(skill, spawnPoint, 1.0f, player, 0.0f, Vector3.up, 0.0f);
-            AttackHelper.InitSkillDamageCollider(skill, spawnPoint, 1.0f, player, 0.0f, Vector3.right + Vector3.up * 0.6f, 0.0f);
+            AttackHelper.InitSkillDamageCollider(skill, spawnPoint, 1.0f, player, 0.0f, Vector3.left + Vector3.up * 0.6f, 0.0f, player);
+            AttackHelper.InitSkillDamageCollider(skill, spawnPoint, 1.0f, player, 0.0f, Vector3.up, 0.0f, player);
+            AttackHelper.InitSkillDamageCollider(skill, spawnPoint, 1.0f, player, 0.0f, Vector3.right + Vector3.up * 0.6f, 0.0f, player);
 
             yield return new WaitForSeconds(spawnInterval);
         }

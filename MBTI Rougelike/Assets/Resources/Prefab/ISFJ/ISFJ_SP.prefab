@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 1781129748186705615}
   m_Layer: 0
   m_Name: ISFJ_SP
-  m_TagString: Untagged
+  m_TagString: DamageCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -186,6 +186,7 @@ MonoBehaviour:
   - Enemy
   - Bond
   - Player
+  reflectTags: []
   isAttachedPos: 0
   staggerTime: 1
   isLifeTimeBindingWithState: 0
@@ -207,12 +208,14 @@ MonoBehaviour:
   blowTurretForceSpeed: 0
   isHealingMode: 1
   penetrability: 1
+  surface: {fileID: 0}
   damageHitType: 0
   damageTriggerTime: 3.4028235e+38
   timer: 0
   velocity: {x: 0, y: 0}
   initPos: {x: 0, y: 0, z: 0}
   initInterval: {x: 0, y: 0, z: 0}
+  colliderActive: 1
   owner: {fileID: 0}
   onceHitEventTrigger: 0
   hits: []

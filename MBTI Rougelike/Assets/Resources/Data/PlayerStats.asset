@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f056e92d952d5034499dbff97b261d9a, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  fireDamage: 0
-  movementSpeed: 0
-  toughness: 3.4028235e+38
-  bondMovementSpeed: 0
+  fireDamage: 100
+  movementSpeed: 100
+  toughness: 100
+  bondMovementSpeed: 100
   attackRange: 100
-  attackEnergeCharge: 0
+  attackEnergeCharge: 100
   iceDamage: 0
   maxShield: 0
   shieldReset: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
   maxHealth: 0
   healthRegen: 0
   experienceMultiplier: 0
-  attackSpeed: 1000
+  attackSpeed: 0
   physicalAttackPower: 0
   windDamage: 0
   dodge: 0
