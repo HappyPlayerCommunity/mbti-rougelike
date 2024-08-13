@@ -27,12 +27,22 @@ public class PoolManager : MonoBehaviour
 
     private void Awake()
     {
-        poolContainer = GameObject.Find("ObjectPoolContainer");
-        if (poolContainer == null)
-        {
-            poolContainer = new GameObject("ObjectPoolContainer");
-        }
+        Debug.Log("PoolManager Awake.");
 
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject); // 确保在场景切换时不会销毁
+            poolContainer = new GameObject("ObjectPoolContainer");
+
+            Debug.Log("PoolManager Initialized.");
+
+        }
+        else if (_instance != this)
+        {
+            Debug.Log("PoolManager Destroyed.");
+            Destroy(gameObject);
+        }
     }
     public ObjectPool GetPool(string key)
     {
@@ -43,14 +53,6 @@ public class PoolManager : MonoBehaviour
             return pool;
         }
         return null;
-    }
-
-    private void Update()
-    {
-        //foreach (var kvp in _pools)
-        //{
-        //    Debug.Log($"Key: {kvp.Key}, Pool Size: {kvp.Value}");
-        //}
     }
 
     public void CreatePool(string key, GameObject prefab, int initialSize)
@@ -100,5 +102,34 @@ public class PoolManager : MonoBehaviour
     public static string NormalizePoolKey(string name)
     {
         return name.Replace("(Clone)", "").Trim();
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("PoolManager Disable.");
+        CleanupPools();
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("PoolManager Destroyed.");
+        CleanupPools();
+    }
+
+    private void CleanupPools()
+    {
+        // 遍历所有池并清空它们
+        foreach (var pool in _pools.Values)
+        {
+            pool.Clear();
+        }
+
+        _pools.Clear();
+
+        // 销毁池容器
+        if (poolContainer != null)
+        {
+            Destroy(poolContainer);
+        }
     }
 }

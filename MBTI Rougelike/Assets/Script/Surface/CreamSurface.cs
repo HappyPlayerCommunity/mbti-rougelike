@@ -1,0 +1,100 @@
+﻿using UnityEngine;
+
+public class CreamSurface : Surface
+{
+    public float slowAmount = 0.5f;
+    public int healAmount = 1;
+    public AnimationController2D healAnim;
+
+    public float healTime = 1.0f;
+    public float healTimer = 0.0f;
+
+    public override void ApplyEffect(GameObject obj)
+    {
+        if (obj && obj.CompareTag(Tag.Enemy))
+        {
+            ApplyEnemyEffect(obj);
+        }
+    }
+
+    public override void RemoveEffect(GameObject obj)
+    {
+        if (obj && obj.CompareTag(Tag.Enemy))
+        {
+            RemoveEnemyEffect(obj);
+        }
+    }
+
+    private void UpdateAllyEffect(GameObject obj)
+    {
+        healTimer -= Time.deltaTime;
+
+        if (healTimer <= 0.0f)
+        {
+            healTimer = healTimer = healTime;
+
+            var allyUnit = obj.GetComponent<Unit>();
+            if (allyUnit != null)
+            {
+                allyUnit.GetHealing(healAmount);
+                DamagePopupManager.Instance.Popup(PopupType.Healing, obj.transform.position, healAmount, false);
+
+                if (healAnim)
+                {
+                    GameObject hitEffect = PoolManager.Instance.GetObject(healAnim.name, healAnim.gameObject);
+                    AnimationController2D anim = hitEffect.GetComponent<AnimationController2D>();
+                    anim.attachedTransform = obj.transform;
+                    anim.Activate(obj.transform.position, Quaternion.identity);
+                }
+            }
+        }
+    }
+
+    public override void ReactToElement(string element, GameObject source)
+    {
+        // 实现地表与元素反应的逻辑
+    }
+
+    protected override void Update()
+    {
+        if (gameObject == null) return;
+
+        base.Update();
+
+        foreach (var entity in SurfaceEffectManager.Instance.GetEntitiesAffectedBySurface(this))
+        {
+            if (entity == null)
+            {
+                // 如果单位已经被销毁，跳过这个循环
+                continue;
+            }
+
+            if (SurfaceEffectManager.Instance.IsUnderSurfaceEffect(entity, this.GetType())
+            && (entity.CompareTag(Tag.Player) || entity.CompareTag(Tag.Bond)))
+            {
+                //if (gameObject == null) return;
+
+                UpdateAllyEffect(entity);
+            }
+        }
+    }
+
+    private void ApplyEnemyEffect(GameObject obj)
+    {
+        var entity = obj.GetComponent<BaseEntity>();
+        if (entity != null)
+        {
+            entity.MovementSpeed *= slowAmount;
+        }
+    }
+
+    private void RemoveEnemyEffect(GameObject obj)
+    {
+        var entity = obj.GetComponent<BaseEntity>();
+        if (entity != null)
+        {
+            entity.MovementSpeed /= slowAmount;
+        }
+    }
+
+}

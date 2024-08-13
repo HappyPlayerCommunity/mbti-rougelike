@@ -32,6 +32,8 @@ public class Turret : Building, IPoolable
     [Tooltip("炮塔的攻速，0~1。越低攻速越快。")]
     public float attackTimeRate = 1.0f;
 
+    public bool isEnemy = false;
+
     public string PoolKey
     {
         get { return poolKey; }
@@ -52,34 +54,14 @@ public class Turret : Building, IPoolable
 
         if (attackTimer <= 0.0f)
         {
-            if (mousetGuiding && player.IsAlive() && Input.GetMouseButton(0))
+            if (isEnemy) 
             {
-                Vector3 mouseScreenPosition = Input.mousePosition;
-                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-                mouseWorldPosition.z = 0.0f;
-                Vector3 direction = (mouseWorldPosition - transform.position).normalized;
-                Attack(direction);
+                AttackFriendSide();
             }
-            else 
+            else
             {
-                Collider2D nearestEnemy = FindNearestEnemy();
-                if (nearestEnemy != null)
-                {
-                    Vector3 direction = (nearestEnemy.transform.position - transform.position).normalized;
-                    Attack(direction);
-                }
+                AttackEnemySide();
             }
-
-            if (medicalModule)
-            {
-                Collider2D nearestAlly = FindNearestAlly();
-                if (nearestAlly != null)
-                {
-                    Vector3 direction = (nearestAlly.transform.position - transform.position).normalized;
-                    Attack(direction);
-                }
-            }
-
             attackTimer = attackTime * attackTimeRate;
         }
     }
@@ -92,7 +74,7 @@ public class Turret : Building, IPoolable
 
         foreach (Collider2D hit in hits)
         {
-            if (hit.CompareTag("Enemy"))
+            if (hit.CompareTag(Tag.Enemy))
             {
                 float distance = Vector2.Distance(transform.position, hit.transform.position);
                 if (distance < minDistance)
@@ -114,7 +96,7 @@ public class Turret : Building, IPoolable
 
         foreach (Collider2D hit in hits)
         {
-            if (hit.CompareTag("Player") || hit.CompareTag("Bond"))
+            if (hit.CompareTag(Tag.Player) || hit.CompareTag(Tag.Bond))
             {
                 float distance = Vector2.Distance(transform.position, hit.transform.position);
                 if (distance < minDistance)
@@ -178,5 +160,47 @@ public class Turret : Building, IPoolable
         gameObject.SetActive(false);
 
         PoolManager.Instance.ReturnObject(poolKey, gameObject);
+    }
+
+    protected virtual void AttackEnemySide()
+    {
+        if (mousetGuiding && player.IsAlive() && Input.GetMouseButton(0)) //后续修改为绑定。
+        {
+            Vector3 mouseScreenPosition = Input.mousePosition;
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+            mouseWorldPosition.z = 0.0f;
+            Vector3 direction = (mouseWorldPosition - transform.position).normalized;
+            Attack(direction);
+        }
+        else
+        {
+            Collider2D nearestEnemy = FindNearestEnemy();
+            if (nearestEnemy != null)
+            {
+                Vector3 direction = (nearestEnemy.transform.position - transform.position).normalized;
+                Attack(direction);
+            }
+        }
+
+        if (medicalModule)
+        {
+            Collider2D nearestAlly = FindNearestAlly();
+            if (nearestAlly != null)
+            {
+                Vector3 direction = (nearestAlly.transform.position - transform.position).normalized;
+                Attack(direction);
+            }
+        }
+
+    }
+
+    protected virtual void AttackFriendSide()
+    {
+        Collider2D nearestAlly = FindNearestAlly();
+        if (nearestAlly != null)
+        {
+            Vector3 direction = (nearestAlly.transform.position - transform.position).normalized;
+            Attack(direction);
+        }
     }
 }

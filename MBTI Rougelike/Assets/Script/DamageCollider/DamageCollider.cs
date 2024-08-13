@@ -184,7 +184,6 @@ public class DamageCollider : MonoBehaviour, IPoolable
     protected int initStaggerTime = 0;
     protected int initPenetrability = 0;
 
-
     private string poolKey;
 
     const float basicShieldResistance = 0.5f;

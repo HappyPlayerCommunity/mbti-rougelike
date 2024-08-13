@@ -106,7 +106,9 @@ public class ParabolaDamageCollider : DamageCollider
 
         if (surface)
         {
-            Instantiate(surface, transform.position, Quaternion.identity);
+            GameObject newSurfaceObj = PoolManager.Instance.GetObject(surface.name, surface.gameObject);
+            Surface newSurface = newSurfaceObj.GetComponent<Surface>();
+            newSurface.Activate(transform.position, Quaternion.identity);
         }
     }
 

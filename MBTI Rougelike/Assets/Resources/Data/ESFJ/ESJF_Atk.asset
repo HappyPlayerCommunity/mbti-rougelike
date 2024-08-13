@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 2962347597343187719, guid: a9c7662e0cd148b41983c2562d24cba3, type: 3}
   multiDamageColliders: []
-  reloadingTime: 1
-  scatterAngle: 0.15
+  reloadingTime: 0.2
+  scatterAngle: 0
   damageColliderSpeed: 1
   maxChargeCount: 0
   selfBlowForce: 0
   maxClip: 0
   clipReloadingTime: 1
   controlScheme: 0
-  renderMode: 0
+  renderMode: 3
   selfStatus: {fileID: 0}
   maxChargingTime: 0
   fixPos: 0
