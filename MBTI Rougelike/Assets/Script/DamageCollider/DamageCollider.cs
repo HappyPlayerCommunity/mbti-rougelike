@@ -123,6 +123,8 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("该【伤害块】可以生成的【地表】。")]
     protected Surface surface;
 
+    [SerializeField, Tooltip("击中目标时造成的僵直时间。")]
+    protected List<DamageColliderBoost> boosts;
 
     public enum HitEffectPlayMode
     {
@@ -417,6 +419,10 @@ public class DamageCollider : MonoBehaviour, IPoolable
             sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
         }
 
+        for (int i = 0; i < boosts.Count; i++)
+        {
+            boosts[i].Boost(this);
+        }
         gameObject.SetActive(true);
     }
 
@@ -748,6 +754,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         //除了反射逻辑，后续还可以添加抵消逻辑。
         if (TagReflectCheck(hit))
         {
+            Debug.Log("Reflect");
             DamageCollider enemyDamageCollider;
 
             enemyDamageCollider = hit.gameObject.GetComponent<DamageCollider>();

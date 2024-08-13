@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bffcd00baebb8e4ca389ce94e4142b1, type: 3}
-  m_Name: ESFJ_Ult_Ban
+  m_Name: ESTP_Invincible
   m_EditorClassIdentifier: 
-  duration: 3.1
+  duration: 1
   timer: 0
   root: 0
-  ultChargeBan: 1
-  invincible: 0
+  ultChargeBan: 0
+  invincible: 1
   silence: 0
   modifyPowerRate: 1
   modifyImpactRate: 1

@@ -8,7 +8,7 @@ public class StatusEntpUlt : Status
     public float attackSpeedBonus;
     public float attackRangedBonus;
 
-    private float toungness = float.MaxValue;
+    private float toungness = 10000.0f;
 
     public override void OnUpdate(GameObject target, float deltaTime)
     {
@@ -34,6 +34,9 @@ public class StatusEntpUlt : Status
         stats.attackSpeed -= attackSpeedBonus * modifyPowerRate;
         stats.attackRange -= attackRangedBonus * modifyPowerRate;
         stats.toughness -= toungness;
+
+        var player = target.GetComponent<Player>();
+        player.StatsUpdate();
     }
 
 }
