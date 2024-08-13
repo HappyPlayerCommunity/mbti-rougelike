@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f327d7c8417428439099d04d2214334, type: 3}
+  m_Name: ESTP_Ult
+  m_EditorClassIdentifier: 
+  damageCollider: {fileID: 0}
+  multiDamageColliders: []
+  reloadingTime: 0
+  scatterAngle: 0
+  damageColliderSpeed: 0
+  maxChargeCount: 0
+  selfBlowForce: 0
+  maxClip: 0
+  clipReloadingTime: 1
+  controlScheme: 0
+  renderMode: 0
+  selfStatus: {fileID: 11400000, guid: edecb52961edf0f4b97a61ab623c28cb, type: 2}
+  maxChargingTime: 0
+  fixPos: 0
+  airdropSpawn: 0
+  turret: {fileID: 0}
+  skillType: 0

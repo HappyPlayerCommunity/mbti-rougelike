@@ -10,7 +10,7 @@ public class StatusIntpUlt : Status
     public Player player;
     public float fireRate = 0.1f; // 每次发射的间隔时间
     public int totalCircles = 5; // 总共旋转的圈数
-    private float toungness = float.MaxValue;
+    private float toungness = 10000.0f;
 
     public override void OnUpdate(GameObject target, float deltaTime)
     {

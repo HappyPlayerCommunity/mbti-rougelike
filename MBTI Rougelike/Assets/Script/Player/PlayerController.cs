@@ -16,13 +16,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Tooltip("玩家攻击时的移动速度，后面改为由PlayerData中读取。")]
     private float movementSpeedReduceRate = 0.6f;
 
-    void Start()
+    protected virtual void Start()
     {
         player = GetComponent<Player>();
         statusManager = GetComponent<StatusManager>();
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (statusManager.IsRooted())
         {
