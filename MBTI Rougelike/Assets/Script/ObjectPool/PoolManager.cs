@@ -106,13 +106,13 @@ public class PoolManager : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("PoolManager Disable.");
+        //Debug.Log("PoolManager Disable.");
         CleanupPools();
     }
 
     private void OnDestroy()
     {
-        Debug.Log("PoolManager Destroyed.");
+        //Debug.Log("PoolManager Destroyed.");
         CleanupPools();
     }
 

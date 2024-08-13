@@ -8,6 +8,7 @@ TagManager:
   - MainCanvas
   - Turret
   - Bond
+  - DamageCollider
   layers:
   - Default
   - TransparentFX

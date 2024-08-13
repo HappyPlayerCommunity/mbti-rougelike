@@ -168,7 +168,7 @@ public class SurfaceEffectManager : MonoBehaviour
     private void OnDestroy()
     {
         isShuttingDown = true;
-        Debug.Log("SurfaceEffectManager Destroyed.");
+        //Debug.Log("SurfaceEffectManager Destroyed.");
         CleanupActiveSurfaceEffects();
         if (_instance == this)
         {
@@ -178,7 +178,7 @@ public class SurfaceEffectManager : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("SurfaceEffectManager Disable.");
+        //Debug.Log("SurfaceEffectManager Disable.");
         CleanupActiveSurfaceEffects();
         if (_instance == this)
         {

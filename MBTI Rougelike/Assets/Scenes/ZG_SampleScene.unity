@@ -3322,6 +3322,10 @@ PrefabInstance:
       propertyPath: normalAttack
       value: 
       objectReference: {fileID: 11400000, guid: 4a1036c8f7c42bc4bb185199a361709d, type: 2}
+    - target: {fileID: 2170674341776729181, guid: bf857e28dac20bb4caa6bcf0d07c6a91, type: 3}
+      propertyPath: specialSkill
+      value: 
+      objectReference: {fileID: 11400000, guid: 168b48f6d15c7dc41bb13fd3f8e63473, type: 2}
     - target: {fileID: 2643512901682278079, guid: bf857e28dac20bb4caa6bcf0d07c6a91, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -3338,6 +3342,10 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1790513549
       objectReference: {fileID: 0}
+    - target: {fileID: 6759529876293731639, guid: bf857e28dac20bb4caa6bcf0d07c6a91, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.012
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3351,6 +3359,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1591915162873824297, guid: 8d6e39eafa06acd4a94d17ee708e3971, type: 3}
+      propertyPath: hp
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1591915162873824297, guid: 8d6e39eafa06acd4a94d17ee708e3971, type: 3}
+      propertyPath: maxHp
+      value: 5000
+      objectReference: {fileID: 0}
     - target: {fileID: 1591915162873824297, guid: 8d6e39eafa06acd4a94d17ee708e3971, type: 3}
       propertyPath: isEnemy
       value: 1
@@ -3369,7 +3385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3614422220149361890, guid: 8d6e39eafa06acd4a94d17ee708e3971, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.62
+      value: 2.579
       objectReference: {fileID: 0}
     - target: {fileID: 3614422220149361890, guid: 8d6e39eafa06acd4a94d17ee708e3971, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3421,7 +3437,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7147249661115161902, guid: 8d6e39eafa06acd4a94d17ee708e3971, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147249661115161902, guid: 8d6e39eafa06acd4a94d17ee708e3971, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

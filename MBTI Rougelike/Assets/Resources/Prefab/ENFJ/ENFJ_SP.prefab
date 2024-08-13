@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6142253094544922911}
   m_Layer: 0
   m_Name: ENFJ_SP
-  m_TagString: Untagged
+  m_TagString: DamageCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,6 +52,7 @@ MonoBehaviour:
   - Enemy
   effectTags:
   - Enemy
+  reflectTags: []
   isAttachedPos: 1
   staggerTime: 1
   isLifeTimeBindingWithState: 0
@@ -67,17 +68,20 @@ MonoBehaviour:
   chargingLocalScale: {x: 0, y: 0, z: 0}
   chargingStaggerTime: 0
   chargingMaxTimer: 0
+  chargingSpeedBoost: 0
   chargingPenetrability: 0
   blowTurret: 0
   blowTurretForceSpeed: 0
   isHealingMode: 0
   penetrability: 1
+  surface: {fileID: 0}
   damageHitType: 2
   damageTriggerTime: 100
   timer: 0
   velocity: {x: 0, y: 0}
   initPos: {x: 0, y: 0, z: 0}
   initInterval: {x: 0, y: 0, z: 0}
+  colliderActive: 1
   owner: {fileID: 0}
   onceHitEventTrigger: 0
   hits: []
@@ -137,6 +141,10 @@ PrefabInstance:
     - target: {fileID: 3528279790685925914, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
       propertyPath: m_Name
       value: Art
+      objectReference: {fileID: 0}
+    - target: {fileID: 3528279790685925914, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
+      propertyPath: m_TagString
+      value: DamageCollider
       objectReference: {fileID: 0}
     - target: {fileID: 4243186920536855455, guid: 25dcd9b584049884e9ddaae3c251a4f1, type: 3}
       propertyPath: m_Controller

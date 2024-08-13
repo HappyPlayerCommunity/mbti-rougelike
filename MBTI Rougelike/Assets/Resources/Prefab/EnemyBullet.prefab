@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8654008166346371160}
   m_Layer: 0
   m_Name: Art
-  m_TagString: Untagged
+  m_TagString: DamageCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 3430925785213068441}
   m_Layer: 0
   m_Name: EnemyBullet
-  m_TagString: Untagged
+  m_TagString: DamageCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,6 +184,7 @@ MonoBehaviour:
   effectTags:
   - Player
   - Bond
+  reflectTags: []
   isAttachedPos: 0
   staggerTime: 0.5
   isLifeTimeBindingWithState: 0
@@ -251,5 +252,5 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0

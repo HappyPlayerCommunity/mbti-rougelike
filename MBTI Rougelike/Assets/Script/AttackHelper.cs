@@ -34,7 +34,6 @@ public class AttackHelper : MonoBehaviour
             SkillChargingRateUpdate(damageCollider, chargingRate);
         }
 
-        damageCollider.owner = player;
 
         Vector3 creatorPosition = new Vector3(0.0f, 0.0f, 0.0f);
         var baseEntity = initPos.GetComponentInParent<BaseEntity>();
@@ -42,6 +41,8 @@ public class AttackHelper : MonoBehaviour
             creatorPosition = initPos.GetComponentInParent<BaseEntity>().transform.position;
         else
             creatorPosition = initPos.position;
+
+        damageCollider.owner = baseEntity;
 
         if (isFixPos)
         {

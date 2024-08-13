@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1269351654346061608}
   m_Layer: 0
   m_Name: ESFJ_Auto
-  m_TagString: Untagged
+  m_TagString: DamageCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,6 +52,7 @@ MonoBehaviour:
   - Enemy
   effectTags:
   - Enemy
+  reflectTags: []
   isAttachedPos: 0
   staggerTime: 1
   isLifeTimeBindingWithState: 0
