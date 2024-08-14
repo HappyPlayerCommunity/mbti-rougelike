@@ -2296,6 +2296,18 @@ PrefabInstance:
       propertyPath: ultimateSkill
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6021292794118227362, guid: 757f096a22e9eef4bb86842b9a7620d4, type: 3}
+      propertyPath: ultimateEnerge
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6021292794118227362, guid: 757f096a22e9eef4bb86842b9a7620d4, type: 3}
+      propertyPath: adjustBackOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6021292794118227362, guid: 757f096a22e9eef4bb86842b9a7620d4, type: 3}
+      propertyPath: ultSpecialImplementation
+      value: 
+      objectReference: {fileID: 5074356480323356551, guid: d82af68db8c7beb48a8eff8121b2e9f8, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

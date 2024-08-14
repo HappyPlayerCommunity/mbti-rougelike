@@ -132,9 +132,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  duration: 5
+  duration: 8
   durationTimer: 0
-  healing: 10
+  initLocalScale: {x: 1, y: 1, z: 1}
+  healing: 5
   healingTime: 1
   healingTimer: 0
   healingAnim: {fileID: 2671232215383034676, guid: fc92db3498562d7409939a85d47a0ba4, type: 3}

@@ -132,8 +132,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  duration: 5
+  duration: 8
   durationTimer: 0
+  initLocalScale: {x: 1, y: 1, z: 1}
   damage: 10
   damageTime: 1
   damageTimer: 0

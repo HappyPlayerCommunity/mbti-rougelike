@@ -243,4 +243,24 @@ public class SurfaceEffectManager : MonoBehaviour
 
         return highestPrioritySurface;
     }
+
+    public void SetToHighPriority(Surface surface)
+    {
+        // 更新 currentMaxPriority 并设置 surface 的 priority 和 sortingOrder
+        currentMaxPriority++;
+        surface.priority = currentMaxPriority;
+
+        var spriteRender = surface.GetComponentInChildren<SpriteRenderer>();
+        if (spriteRender != null)
+        {
+            spriteRender.sortingOrder = currentMaxPriority;
+        }
+
+        List<GameObject> affectedEntities = GetEntitiesAffectedBySurface(surface);
+
+        foreach (var entity in affectedEntities)
+        {
+            ApplySurfaceEffect(entity, surface);
+        }
+    }
 }

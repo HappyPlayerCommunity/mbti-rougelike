@@ -48,9 +48,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  duration: 5
+  duration: 8
   durationTimer: 0
-  dodgeBonus: 50
+  initLocalScale: {x: 1, y: 1, z: 1}
+  dodgeBonus: 75
 --- !u!50 &2856673225602460958
 Rigidbody2D:
   serializedVersion: 4

@@ -36,6 +36,7 @@ public class IsfpExpandStatus : Status
 
         // 扩大地表
         ExpandSurface(highestPrioritySurface);
+        surfaceEffectManager.SetToHighPriority(highestPrioritySurface);
     }
 
     private void ExpandSurface(Surface surface)

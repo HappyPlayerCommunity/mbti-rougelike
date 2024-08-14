@@ -132,8 +132,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  duration: 5
+  duration: 8
   durationTimer: 0
+  initLocalScale: {x: 1, y: 1, z: 1}
   movementSpeedBonus: 100
 --- !u!50 &8587920567491044413
 Rigidbody2D:

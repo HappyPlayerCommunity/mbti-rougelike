@@ -48,9 +48,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  duration: 5
+  duration: 8
   durationTimer: 0
-  shieldRegenPreSecond: 3
+  initLocalScale: {x: 1, y: 1, z: 1}
+  shieldRegenPreSecond: 5
   shieldTime: 1
   shieldTimer: 0
   rearmAnim: {fileID: 0}

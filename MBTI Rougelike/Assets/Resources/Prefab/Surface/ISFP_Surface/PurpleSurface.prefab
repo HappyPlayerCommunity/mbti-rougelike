@@ -132,8 +132,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  duration: 5
+  duration: 8
   durationTimer: 0
+  initLocalScale: {x: 1, y: 1, z: 1}
   poisonStatus: {fileID: 11400000, guid: 335202852af3da8448df8c28b71fe1a7, type: 2}
   poisonTime: 1
   poisonTimer: 0

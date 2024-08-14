@@ -132,8 +132,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  duration: 5
+  duration: 8
   durationTimer: 0
+  initLocalScale: {x: 1, y: 1, z: 1}
   physicalAttackBonus: 30
 --- !u!50 &8643526758644090739
 Rigidbody2D:

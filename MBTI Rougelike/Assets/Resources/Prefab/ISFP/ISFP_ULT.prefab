@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7890711245668487056
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1253933168097774006}
+  - component: {fileID: 5074356480323356551}
+  m_Layer: 0
+  m_Name: ISFP_ULT
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1253933168097774006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7890711245668487056}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.137518, y: 0.5699549, z: -0.008870915}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5074356480323356551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7890711245668487056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2bb19926c2d39248802a5f54ac4c74a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaces:
+  - {fileID: 3969730150054073220, guid: 65785e4ebac19d34b80ffbfdcee14797, type: 3}
+  - {fileID: 826856179131958894, guid: 31e3ed24f3cf5b948bc3141214ee741b, type: 3}
+  - {fileID: 931692313724736, guid: 26798c9015f0767439ac5907c8de894f, type: 3}
+  - {fileID: 6738153630505617607, guid: 667109783891ebc4d90a5ff715994585, type: 3}
+  - {fileID: -2827319291773718666, guid: c22bec8af9ce3b24aaba31b47645a849, type: 3}
+  - {fileID: 2755864976123288911, guid: 6b26d89c9369cd54eab2f48e2d6ace64, type: 3}
+  - {fileID: 1319446137379317643, guid: 58522f9b542248e4c8507cb80354fead, type: 3}
+  - {fileID: -6049315262138960936, guid: 261247e9666556548b62d8f7996ae677, type: 3}
+  radius: 4
+  expandRate: 3

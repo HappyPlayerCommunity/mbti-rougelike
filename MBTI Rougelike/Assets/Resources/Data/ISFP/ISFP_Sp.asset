@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 6641186064185210697, guid: e98893ff9efbd7c448b021c534dcd62c, type: 3}
   multiDamageColliders: []
-  reloadingTime: 5
+  reloadingTime: 8
   scatterAngle: 0
   damageColliderSpeed: 1
   maxChargeCount: 0

@@ -21,7 +21,7 @@ MonoBehaviour:
   modifyPowerRate: 1
   modifyImpactRate: 1
   modifyDurationRate: 1
-  lockDuration: 0
+  lockDuration: 1
   statusAnimPrefab: {fileID: 0}
   stats: {fileID: 11400000, guid: 72e15512bd894a341a9279e6ea602389, type: 2}
-  expansionFactor: 3
+  expansionFactor: 5
