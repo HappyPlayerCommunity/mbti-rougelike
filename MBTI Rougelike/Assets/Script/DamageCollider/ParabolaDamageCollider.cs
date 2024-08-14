@@ -93,12 +93,7 @@ public class ParabolaDamageCollider : DamageCollider
 
         AttackHelper.InitDamageCollider(landingDamageCollider, transform, 0.0f, Vector3.right, 0.0f, SkillControlScheme.None, false, 1.0f, Skill.RenderMode.Lock, player, 0.0f, owner);
 
-        if (surface)
-        {
-            GameObject newSurfaceObj = PoolManager.Instance.GetObject(surface.name, surface.gameObject);
-            Surface newSurface = newSurfaceObj.GetComponent<Surface>();
-            newSurface.Activate(transform.position, Quaternion.identity);
-        }
+        CreateSurface();
     }
 
     public void InitializeParabola()

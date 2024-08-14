@@ -157,12 +157,12 @@ public class Stats : ScriptableObject
 
     public const float percentage = 0.01f;
 
-    private float ApplyPercentageMultiplier(float value)
+    public static float ApplyPercentageMultiplier(float value)
     {
         return 1.0f + value * percentage;
     }
 
-    private float ApplyPercentage(float value)
+    public static float ApplyPercentage(float value)
     {
         return value * percentage;
     }

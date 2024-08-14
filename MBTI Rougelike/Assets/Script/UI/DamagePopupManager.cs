@@ -10,6 +10,7 @@ public enum PopupType
     Miss = 2,
     ReloadingClip = 3,
     DotDamage = 4,
+    RearmShield = 5,
     //  后续可以为破盾，元素反应，撞墙等情况添加新的弹出类型。
 }
 
@@ -64,6 +65,9 @@ public class DamagePopupManager : MonoBehaviour
                 break;
             case PopupType.DotDamage:
                 damagePopup.SetDotDamage(damage, isCrit);
+                break;
+            case PopupType.RearmShield:
+                damagePopup.SetRearmShield(damage);
                 break;
             default:
                 break;

@@ -123,6 +123,9 @@ public class DamageCollider : MonoBehaviour, IPoolable
     [SerializeField, Tooltip("该【伤害块】可以生成的【地表】。")]
     protected Surface surface;
 
+    [SerializeField, Tooltip("该【伤害块】可以随机生成数个【地表】。")]
+    protected List<Surface> randomSurfaces;
+
     [SerializeField, Tooltip("击中目标时造成的僵直时间。")]
     protected List<DamageColliderBoost> boosts;
 
@@ -456,6 +459,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         if (timer <= 0.0f)
         {
             Deactivate();
+            CreateSurface();
         }
         else
         {
@@ -511,6 +515,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
         if (hitted && damageHitType != DamageHitType.SustainedMultiHit && penetrability <= 0)
         {
             Deactivate();
+            CreateSurface();
             return;
         }
     }
@@ -832,6 +837,7 @@ public class DamageCollider : MonoBehaviour, IPoolable
                     if (penetrability <= 0)
                     {
                         Deactivate();
+                        CreateSurface();
                         return;
                     }
                     else
@@ -938,6 +944,25 @@ public class DamageCollider : MonoBehaviour, IPoolable
 
             //Debug.Log(entity.StatusManager.ActiveStatus());
 
+        }
+    }
+
+    protected void CreateSurface()
+    {
+        if (randomSurfaces != null && randomSurfaces.Count > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, randomSurfaces.Count);
+            Surface selectedSurface = randomSurfaces[randomIndex];
+
+            GameObject newSurfaceObj = PoolManager.Instance.GetObject(selectedSurface.name, selectedSurface.gameObject);
+            Surface newSurface = newSurfaceObj.GetComponent<Surface>();
+            newSurface.Activate(transform.position, Quaternion.identity);
+        }
+        else if (surface)
+        {
+            GameObject newSurfaceObj = PoolManager.Instance.GetObject(surface.name, surface.gameObject);
+            Surface newSurface = newSurfaceObj.GetComponent<Surface>();
+            newSurface.Activate(transform.position, Quaternion.identity);
         }
     }
 }

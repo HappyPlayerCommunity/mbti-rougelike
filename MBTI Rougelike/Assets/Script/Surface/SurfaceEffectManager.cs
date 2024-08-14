@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SurfaceEffectManager : MonoBehaviour
@@ -44,11 +45,21 @@ public class SurfaceEffectManager : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        foreach (var obj in activeSurfaceEffects.Keys.ToList())
+        {
+            ApplySurfaceEffectsAfterAllUpdates(obj);
+        }
+    }
+
     // 为新生成的地表分配优先级
     public void RegisterNewSurface(Surface surface)
     {
         currentMaxPriority++;
         surface.priority = currentMaxPriority;
+        var spriteRender = surface.GetComponentInChildren<SpriteRenderer>();
+        spriteRender.sortingOrder = currentMaxPriority;
     }
 
     public void ApplySurfaceEffect(GameObject obj, Surface newSurface)
@@ -56,6 +67,7 @@ public class SurfaceEffectManager : MonoBehaviour
         if (activeSurfaceEffects.ContainsKey(obj))
         {
             Surface currentSurface = activeSurfaceEffects[obj];
+
             if (newSurface.priority > currentSurface.priority)
             {
                 // 移除当前地表效果，应用新的地表效果
@@ -76,26 +88,30 @@ public class SurfaceEffectManager : MonoBehaviour
 
     public void RemoveSurfaceEffect(GameObject obj, Surface surface)
     {
-        if (activeSurfaceEffects.ContainsKey(obj) && activeSurfaceEffects[obj] == surface)
+        if (activeSurfaceEffects.ContainsKey(obj))
         {
-            surface.RemoveEffect(obj);
-            activeSurfaceEffects.Remove(obj);
+            Surface currentSurface = activeSurfaceEffects[obj];
 
-            // 检查是否还有其他重叠的地表，如果有则应用优先级最高的地表效果
-            Surface newSurface = FindHighestPrioritySurface(obj);
-            if (newSurface != null)
+            if (currentSurface == surface)
             {
-                newSurface.ApplyEffect(obj);
-                activeSurfaceEffects[obj] = newSurface;
-                //Debug.Log("进入地形——下一层地形");
+                currentSurface.RemoveEffect(obj);
+                activeSurfaceEffects.Remove(obj);
+
+                // 查找并应用新的最高优先级地形
+                Surface newSurface = FindHighestPrioritySurface(obj);
+                if (newSurface != null)
+                {
+                    newSurface.ApplyEffect(obj);
+                    activeSurfaceEffects[obj] = newSurface;
+                }
             }
         }
     }
 
-    private Surface FindHighestPrioritySurface(GameObject unit)
+    public Surface FindHighestPrioritySurface(GameObject obj)
     {
         Surface highestSurface = null;
-        Collider2D[] overlappingSurfaces = Physics2D.OverlapPointAll(unit.transform.position);
+        Collider2D[] overlappingSurfaces = Physics2D.OverlapPointAll(obj.transform.position);
 
         foreach (var collider in overlappingSurfaces)
         {
@@ -104,6 +120,7 @@ public class SurfaceEffectManager : MonoBehaviour
             {
                 if (highestSurface == null || surface.priority > highestSurface.priority)
                 {
+                    //Debug.Log("highestSurface" + surface.name + " 优先度：" + highestSurface);
                     highestSurface = surface;
                 }
             }
@@ -179,6 +196,7 @@ public class SurfaceEffectManager : MonoBehaviour
     private void OnDisable()
     {
         //Debug.Log("SurfaceEffectManager Disable.");
+        isShuttingDown = true;
         CleanupActiveSurfaceEffects();
         if (_instance == this)
         {
@@ -199,5 +217,50 @@ public class SurfaceEffectManager : MonoBehaviour
         }
 
         activeSurfaceEffects.Clear();
+    }
+
+    public void ApplySurfaceEffectsAfterAllUpdates(GameObject obj)
+    {
+        Surface highestSurface = FindHighestPrioritySurface(obj);
+        if (highestSurface != null)
+        {
+            ApplySurfaceEffect(obj, highestSurface);
+        }
+    }
+
+    public Surface GetHighestPrioritySurface()
+    {
+        Surface highestPrioritySurface = null;
+
+        foreach (var kvp in activeSurfaceEffects)
+        {
+            Surface surface = kvp.Value;
+            if (highestPrioritySurface == null || surface.priority > highestPrioritySurface.priority)
+            {
+                highestPrioritySurface = surface;
+            }
+        }
+
+        return highestPrioritySurface;
+    }
+
+    public void SetToHighPriority(Surface surface)
+    {
+        // 更新 currentMaxPriority 并设置 surface 的 priority 和 sortingOrder
+        currentMaxPriority++;
+        surface.priority = currentMaxPriority;
+
+        var spriteRender = surface.GetComponentInChildren<SpriteRenderer>();
+        if (spriteRender != null)
+        {
+            spriteRender.sortingOrder = currentMaxPriority;
+        }
+
+        List<GameObject> affectedEntities = GetEntitiesAffectedBySurface(surface);
+
+        foreach (var entity in affectedEntities)
+        {
+            ApplySurfaceEffect(entity, surface);
+        }
     }
 }

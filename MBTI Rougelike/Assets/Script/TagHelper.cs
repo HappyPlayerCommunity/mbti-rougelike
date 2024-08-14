@@ -16,6 +16,15 @@ public static class Tag
 /// </summary>
 public struct TagHelper
 {
+    public static bool CompareTag(GameObject obj, params string[] s)
+    {
+        foreach (var tag in s)
+            if (obj.CompareTag(tag))
+                return true;
+
+        return false;
+    }
+
     public static bool CompareTag(Collider2D hit, params string[] s)
     {
         foreach (var tag in s)

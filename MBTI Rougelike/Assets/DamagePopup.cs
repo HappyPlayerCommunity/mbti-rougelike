@@ -115,7 +115,7 @@ public class DamagePopup : MonoBehaviour, IPoolable
 
     public void SetHealing(int healingAmount, bool isCrit = false)
     {
-        damageText.text = healingAmount.ToString();
+        damageText.text = "+" + healingAmount.ToString();
 
         damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
 
@@ -149,6 +149,15 @@ public class DamagePopup : MonoBehaviour, IPoolable
 
         damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
         damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
+    }
+
+    public void SetRearmShield(int rearmAmount)
+    {
+        damageText.text = "+" + rearmAmount.ToString();
+
+        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
+        damageText.color = Color.cyan;
+        damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
     }
 
     /// <summary>

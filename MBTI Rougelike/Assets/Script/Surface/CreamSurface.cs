@@ -43,11 +43,6 @@ public class CreamSurface : Surface
         }
     }
 
-    public override void ReactToElement(string element, GameObject source)
-    {
-        // 实现地表与元素反应的逻辑
-    }
-
     protected override void Update()
     {
         if (gameObject == null) return;
@@ -62,7 +57,6 @@ public class CreamSurface : Surface
             {
                 if (entity == null)
                 {
-                    // 如果单位已经被销毁，跳过这个循环
                     continue;
                 }
 
