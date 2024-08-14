@@ -35,10 +35,15 @@ public class HPController : MonoBehaviour, IPoolable
     {
         hp.value = (float)baseEntity.HP / (float)baseEntity.MaxHP;
 
-        if (baseEntity.MaxShield > 0 && baseEntity.Shield > 0)
+        if (baseEntity.Shield > 0)
         {
             // 护盾不会超过当前血条的长度。
             float shieldPercentage = (float)baseEntity.Shield / (float)baseEntity.MaxShield;
+
+            if (baseEntity.MaxShield <= 0)
+            {
+                shieldPercentage = (float)baseEntity.Shield / (float)baseEntity.MaxHP;
+            }
             float effectiveShieldPercentage = Mathf.Min(shieldPercentage, hp.value);
 
             shield.value = effectiveShieldPercentage;

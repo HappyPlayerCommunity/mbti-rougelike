@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fe5cce8362783c4798922cc3894cea2, type: 3}
+  m_Name: ISFP_PoisonStatus
+  m_EditorClassIdentifier: 
+  duration: 10
+  timer: 0
+  root: 0
+  ultChargeBan: 0
+  invincible: 0
+  silence: 0
+  modifyPowerRate: 1
+  modifyImpactRate: 1
+  modifyDurationRate: 1
+  lockDuration: 0
+  statusAnimPrefab: {fileID: 2382681078073630418, guid: 537cc0ecdde16e142bb0d75f108a949e, type: 3}
+  stats: {fileID: 11400000, guid: 72e15512bd894a341a9279e6ea602389, type: 2}
+  poisonDamage: 3
+  positionTime: 1
+  positionTimer: 0

@@ -28,10 +28,21 @@ public class EstpAccelerateBar : MonoBehaviour
         {
             Debug.LogError("Background Image component not found on the Slider.");
         }
+
+        if (!estpController)
+        {
+            gameObject.SetActive(false);
+            Destroy(this);
+        }
     }
 
     void Update()
     {
+        if (!estpController || !estpController.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         float currentSpeed = estpController.currentSpeed;
         float maxSpeed = estpController.maxSpeed;
         float rate = currentSpeed / maxSpeed;

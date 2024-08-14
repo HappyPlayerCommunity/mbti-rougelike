@@ -8,6 +8,8 @@ public abstract class Surface : MonoBehaviour, IPoolable
     public float duration = -1f;
     public float durationTimer = 0.0f;
 
+    public Vector3 initLocalScale = Vector3.one;
+
     private string poolKey;
     public string PoolKey
     {
@@ -19,12 +21,16 @@ public abstract class Surface : MonoBehaviour, IPoolable
     {
         poolKey = gameObject.name;
 
+        initLocalScale = transform.localScale;
         // 注册新生成的地表，并分配优先级
         SurfaceEffectManager.Instance?.RegisterNewSurface(this);
     }
 
-    public abstract void ApplyEffect(GameObject obj);
-    public abstract void RemoveEffect(GameObject obj);
+    public virtual void ApplyEffect(GameObject obj)
+    { }
+
+    public virtual void RemoveEffect(GameObject obj)
+    { }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
@@ -32,7 +38,7 @@ public abstract class Surface : MonoBehaviour, IPoolable
         {
             GameObject obj = other.gameObject;
             SurfaceEffectManager.Instance?.ApplySurfaceEffect(obj, this);
-            //Debug.Log("进入地形");
+            Debug.Log("进入地形: " + this.name);
         };
     }
 
@@ -42,7 +48,7 @@ public abstract class Surface : MonoBehaviour, IPoolable
         {
             GameObject obj = other.gameObject;
             SurfaceEffectManager.Instance?.RemoveSurfaceEffect(obj, this);
-            //Debug.Log("离开地形");
+            Debug.Log("离开地形 " + this.name);
         }
     }
 
@@ -63,11 +69,13 @@ public abstract class Surface : MonoBehaviour, IPoolable
         Deactivate();
     }
 
-    public abstract void ReactToElement(string element, GameObject source);
+    public virtual void ReactToElement(string element, GameObject source)
+    {}
 
     public virtual void ResetObjectState()
     {
         durationTimer = duration;
+        transform.localScale = initLocalScale;
     }
 
     public virtual void Activate(Vector3 position, Quaternion rotation)
@@ -80,7 +88,7 @@ public abstract class Surface : MonoBehaviour, IPoolable
 
     public virtual void Deactivate()
     {
-        SurfaceEffectManager.Instance.RemoveSurfaceEffectFromAllEntity(this);
+        SurfaceEffectManager.Instance?.RemoveSurfaceEffectFromAllEntity(this);
         gameObject.SetActive(false);
         PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
