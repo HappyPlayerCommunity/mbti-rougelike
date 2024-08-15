@@ -820,6 +820,7 @@ MonoBehaviour:
   maxRotationSpeed: 100
   ultRotationSpeed: 50
   aim: {fileID: 5575101681659413750}
+  stats: {fileID: 0}
   timerAuto: 0
   timerSp: 0
   isUlting: 0
@@ -1350,7 +1351,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1480984078
 MonoBehaviour:
   m_ObjectHideFlags: 0
