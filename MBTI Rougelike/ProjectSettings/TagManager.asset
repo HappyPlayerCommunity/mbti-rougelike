@@ -10,6 +10,7 @@ TagManager:
   - Bond
   - DamageCollider
   - ISTP_Robot
+  - ESFP_Note
   layers:
   - Default
   - TransparentFX

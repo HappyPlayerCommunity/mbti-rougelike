@@ -6,7 +6,7 @@ public enum SkillControlScheme
 {
     Continuous,         //按住按键，会持续自动使用技能，类似于机枪。
     ChargeRelease,      //按住按键为“蓄力”，松开时使用技能。
-    Toggle,             //按下按键触发效果，再次释放需要松开并再次按下。
+    Toggle,             //按下按键触发效果，再次释放需要松开并再次按下。(目前处于废弃状态)
     None                //用于标识一些自动攻击。
 }
 

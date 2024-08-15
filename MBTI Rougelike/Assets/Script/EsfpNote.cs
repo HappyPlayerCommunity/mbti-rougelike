@@ -11,7 +11,13 @@ public class EsfpNote : MonoBehaviour
     public float radius = 2.0f;
 
     private Transform playerTransform;
+    public Aim aim;
     private float angle;
+
+    public EsfpNoteManager esfpNoteManager;
+
+    public bool isBitNote = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,13 +36,17 @@ public class EsfpNote : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerTransform == null) return;
+        if (playerTransform == null || aim == null) return;
 
         // 更新角度
         angle += rotationSpeed * Time.deltaTime;
 
+        // 获取 Aim 的角度
+        float aimAngle = aim.GetAimAngle(); // 假设 Aim 类有一个 GetAimAngle 方法返回当前瞄准角度
+
         // 计算音符的位置
-        float radian = angle * Mathf.Deg2Rad;
+        float totalAngle = angle + aimAngle + 180;
+        float radian = totalAngle * Mathf.Deg2Rad;
         Vector3 position = new Vector3(
             playerTransform.position.x + radius * Mathf.Cos(radian),
             playerTransform.position.y + radius * Mathf.Sin(radian),

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static EsfpNoteTrigger;
 
 public enum PopupType
 {
@@ -11,6 +12,7 @@ public enum PopupType
     ReloadingClip = 3,
     DotDamage = 4,
     RearmShield = 5,
+    Note = 6
     //  后续可以为破盾，元素反应，撞墙等情况添加新的弹出类型。
 }
 
@@ -43,7 +45,7 @@ public class DamagePopupManager : MonoBehaviour
     /// 【闪避】，【破盾】等其他弹出，或许应该使用不同的预制件甚至类，来做到不同的效果。
     ///  但目前先统一，简单地归类为DamagePopup。某种程度上，它们也是和伤害相关的。
     /// </summary>
-    public void Popup(PopupType popupType, Vector3 position, int damage = 0, bool isCrit = false)
+    public void Popup(PopupType popupType, Vector3 position, int damage = 0, bool isCrit = false, NoteResult noteResult = NoteResult.Default)
     {
         GameObject popupObj = PoolManager.Instance.GetObject(damagePopupPrefab.name, damagePopupPrefab.gameObject);
         DamagePopup damagePopup = popupObj.GetComponent<DamagePopup>();
@@ -68,6 +70,9 @@ public class DamagePopupManager : MonoBehaviour
                 break;
             case PopupType.RearmShield:
                 damagePopup.SetRearmShield(damage);
+                break;
+            case PopupType.Note:
+                damagePopup.SetNote(noteResult);
                 break;
             default:
                 break;
