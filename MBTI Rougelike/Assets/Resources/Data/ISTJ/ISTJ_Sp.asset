@@ -24,8 +24,9 @@ MonoBehaviour:
   controlScheme: 1
   renderMode: 0
   selfStatus: {fileID: 0}
-  maxChargingTime: 0.1
+  maxChargingTime: 0
   fixPos: 0
   airdropSpawn: 0
   turret: {fileID: 6712917892805544707, guid: 7fd40ae63fee93b4380c807a89f001b3, type: 3}
   skillType: 1
+  lowestChargingRateCap: 0

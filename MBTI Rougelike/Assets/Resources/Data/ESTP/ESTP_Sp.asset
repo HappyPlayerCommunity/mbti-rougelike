@@ -24,7 +24,7 @@ MonoBehaviour:
   controlScheme: 1
   renderMode: 3
   selfStatus: {fileID: 11400000, guid: 42028abf0cb3ab84fb5d4c7ae1259222, type: 2}
-  maxChargingTime: 0.1
+  maxChargingTime: 0
   fixPos: 1
   airdropSpawn: 0
   turret: {fileID: 0}
