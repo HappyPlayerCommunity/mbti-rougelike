@@ -21,7 +21,7 @@ public class EsfpNoteTrigger : MonoBehaviour
 
     private bool isInitialized = false;
 
-    public bool isBitNote = false;
+    public bool isBigNote = false;
 
     public enum NoteResult
     {
@@ -61,7 +61,7 @@ public class EsfpNoteTrigger : MonoBehaviour
         collidedNote = esfpNotes[0];
         float distance = Vector3.Distance(transform.position, collidedNote.transform.position);
 
-        if (distance <= detectionRadius && isBitNote == collidedNote.isBitNote)
+        if (distance <= detectionRadius && isBigNote == collidedNote.isBigNote)
         {
             damageCollider.ResetObjectState();
             // 根据距离强化 DamageCollider 的属性

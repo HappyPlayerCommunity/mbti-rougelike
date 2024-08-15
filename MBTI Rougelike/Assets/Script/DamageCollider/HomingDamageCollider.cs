@@ -25,8 +25,6 @@ public class HomingDamageCollider : DamageCollider
 
     public float refindTimer = 0.0f;
 
-    public bool lockRotation = false;
-
 
     protected override void Start()
     {
@@ -41,11 +39,6 @@ public class HomingDamageCollider : DamageCollider
         if (refindTimer <= 0.0f)
         {
             FindNearestTarget();
-        }
-
-        if (lockRotation)
-        {
-            transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
         }
     }
 
@@ -73,7 +66,7 @@ public class HomingDamageCollider : DamageCollider
         List<GameObject> targets = new List<GameObject>();
         if (!isHealingMode)
         {
-            var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            var enemies = GameObject.FindGameObjectsWithTag(Tag.Enemy);
 
             foreach (var enemy in enemies)
             {
@@ -83,13 +76,13 @@ public class HomingDamageCollider : DamageCollider
         }
         else
         {
-            var bondes = GameObject.FindGameObjectsWithTag("Bond");
+            var bondes = GameObject.FindGameObjectsWithTag(Tag.Bond);
             foreach (var bond in bondes)
             {
                 targets.Add(bond);
             }
 
-            targets.Add(GameObject.FindGameObjectWithTag("Player"));
+            targets.Add(GameObject.FindGameObjectWithTag(Tag.Player));
         }
 
         float nearestDistance = homingRange;

@@ -49,6 +49,7 @@ MonoBehaviour:
   radius: 1
   aim: {fileID: 0}
   esfpNoteManager: {fileID: 0}
+  isBitNote: 0
 --- !u!212 &2567553879589398872
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -87,8 +88,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 470305879
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8ce1e2bf97d086345830612259e7a860, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

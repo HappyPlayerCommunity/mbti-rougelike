@@ -16,8 +16,7 @@ public class EsfpNote : MonoBehaviour
 
     public EsfpNoteManager esfpNoteManager;
 
-    public bool isBitNote = false;
-
+    public bool isBigNote = false;
 
     // Start is called before the first frame update
     void Start()

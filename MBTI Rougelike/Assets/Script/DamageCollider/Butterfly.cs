@@ -73,7 +73,7 @@ public class Butterfly : DamageCollider
         List<GameObject> targets = new List<GameObject>();
         if (!isHealingMode)
         {
-            var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            var enemies = GameObject.FindGameObjectsWithTag(Tag.Enemy);
 
             foreach (var enemy in enemies)
             {
@@ -83,13 +83,13 @@ public class Butterfly : DamageCollider
         }
         else
         {
-            var bondes = GameObject.FindGameObjectsWithTag("Bond");
+            var bondes = GameObject.FindGameObjectsWithTag(Tag.Bond);
             foreach (var bond in bondes)
             {
                 targets.Add(bond);
             }
 
-            targets.Add(GameObject.FindGameObjectWithTag("Player"));
+            targets.Add(GameObject.FindGameObjectWithTag(Tag.Player));
         }
 
         float nearestDistance = homingRange;
@@ -142,17 +142,17 @@ public class Butterfly : DamageCollider
         {
             spriteRenderer.color = healColor;
 
-            collideTags.Add("Bond");
-            effectTags.Add("Bond");
-            collideTags.Add("Player");
-            effectTags.Add("Player");
+            collideTags.Add(Tag.Bond);
+            effectTags.Add(Tag.Bond);
+            collideTags.Add(Tag.Player);
+            effectTags.Add(Tag.Player);
         }
         else
         {
             spriteRenderer.color = attackColor;
 
-            collideTags.Add("Enemy");
-            effectTags.Add("Enemy");
+            collideTags.Add(Tag.Enemy);
+            effectTags.Add(Tag.Enemy);
         }
 
         activateHomingAfterDelayCoroutine = StartCoroutine(ActivateHomingAfterDelay());

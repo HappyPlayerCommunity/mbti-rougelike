@@ -16,6 +16,9 @@ public class EsfpNoteManager : MonoBehaviour
     [Tooltip("生成EsfpNote Sp的时间间隔")]
     public float timeSp = 8.0f;
 
+    [Tooltip("大招期间生成EsfpNote的时间间隔")]
+    public float timeUlt = 1.0f;
+
     [Tooltip("EsfpNote的最大数量")]
     public int maxNotes = 10;
 
@@ -25,18 +28,26 @@ public class EsfpNoteManager : MonoBehaviour
     [Tooltip("EsfpNote的最大旋转速度")]
     public float maxRotationSpeed = 100.0f;
 
+    [Tooltip("EsfpNote的大招时的旋转速度")]
+    public float ultRotationSpeed = 50.0f;
+
     public Aim aim;
+    public Stats stats;
 
     private List<GameObject> activeNotes = new List<GameObject>();
 
-    private float timerAuto;
-    private float timerSp;
+    public float timerAuto;
+    public float timerSp;
+
+    public bool isUlting = false;
 
 
     void Start()
     {
         timerAuto = timeAuto;
         timerSp = timeSp;
+
+        stats = transform.GetComponentInParent<Player>().stats;
     }
 
     void Update()
@@ -46,8 +57,8 @@ public class EsfpNoteManager : MonoBehaviour
 
         if (activeNotes.Count < maxNotes)
         {
-            SpawnEsfpNote(ref timerAuto, timeAuto, esfpNotePrefabAuto);
-            SpawnEsfpNote(ref timerSp, timeSp, esfpNotePrefabSp);
+            SpawnEsfpNote(ref timerAuto, timeAuto * stats.Calculate_AttackSpeed(), esfpNotePrefabAuto);
+            SpawnEsfpNote(ref timerSp, timeSp * stats.Calculate_SpecialCooldown(), esfpNotePrefabSp);
         }
 
         // 清理已销毁的音符
@@ -65,7 +76,7 @@ public class EsfpNoteManager : MonoBehaviour
             EsfpNote esfpNote = newNote.GetComponent<EsfpNote>();
             if (esfpNote != null)
             {
-                esfpNote.rotationSpeed = Random.Range(minRotationSpeed, maxRotationSpeed);
+                esfpNote.rotationSpeed = isUlting ? ultRotationSpeed : Random.Range(minRotationSpeed, maxRotationSpeed);
                 esfpNote.aim = aim;
                 esfpNote.esfpNoteManager = this;
             }
@@ -73,7 +84,7 @@ public class EsfpNoteManager : MonoBehaviour
             // 记录生成的 EsfpNote
             activeNotes.Add(newNote);
 
-            timer = time;
+            timer = isUlting ? timeUlt : time;
         }
     }
 

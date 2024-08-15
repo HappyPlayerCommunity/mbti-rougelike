@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 150}
   m_MaxSize: {x: 32384, y: 24288}
   vertical: 0
-  controlID: 116218
+  controlID: 124441
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 150}
   m_MaxSize: {x: 24288, y: 24288}
   vertical: 1
-  controlID: 116171
+  controlID: 124396
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 116147
+  controlID: 124372
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 116115
+  controlID: 124340
   draggingID: 0
 --- !u!114 &8
 MonoBehaviour:
@@ -1035,7 +1035,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -481328
+  m_LastSelectedObjectID: -340214
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -1116,14 +1116,14 @@ MonoBehaviour:
     y: 641
     width: 1416
     height: 306
-  m_MinSize: {x: 231, y: 271}
-  m_MaxSize: {x: 10001, y: 10021}
-  m_ActualView: {fileID: 16}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 16}
   - {fileID: 17}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1169,7 +1169,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Data/ESFP
+    - Assets/Resources/Data
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1177,15 +1177,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/Data/ESFP
+  - Assets/Resources/Data
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Desktop\Documents\GitHub\mbti-rouge\mbti-rougelike\MBTI Rougelike
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 135}
-    m_SelectedIDs: d2250300
-    m_LastClickedID: 206290
+    scrollPos: {x: 0, y: 120}
+    m_SelectedIDs: 066f0000
+    m_LastClickedID: 28422
     m_ExpandedIDs: 00000000fe6e0000006f0000026f0000046f0000066f0000086f0000646f00007a6f000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1239,8 +1239,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: d0a7f8ff
-    m_LastClickedInstanceID: -481328
+    m_SelectedInstanceIDs: 4e290000
+    m_LastClickedInstanceID: 10574
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000b06c000016630000641f0100bc610000e89a00003864000014640000acc301009a6700004e6500003266000000000000366a0000346a0000b0670000906b00002a710000307200004a2a0000
     m_RenameOverlay:
@@ -1323,8 +1323,8 @@ MonoBehaviour:
     y: 0
     width: 504
     height: 947
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
@@ -1370,7 +1370,7 @@ MonoBehaviour:
     m_CachedPref: -160
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: -481328
+  m_LastInspectedObjectInstanceID: 10574
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0

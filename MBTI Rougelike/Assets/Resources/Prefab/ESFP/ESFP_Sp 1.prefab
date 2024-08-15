@@ -150,7 +150,7 @@ MonoBehaviour:
   perfectThreshold: 0.15
   perfectMultiplier: 3
   greatMultiplier: 2
-  isBitNote: 1
+  isBigNote: 1
 --- !u!1 &7504400131896347202
 GameObject:
   m_ObjectHideFlags: 0
