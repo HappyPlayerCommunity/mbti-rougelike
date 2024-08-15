@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// 敌人的基类。在这里实现了大部分敌人的共同行为；特殊的敌人可以另开子类实现。
@@ -59,7 +60,11 @@ public class Enemy : Unit, IPoolable
 
         attackTimer -= Time.deltaTime;
 
-        
+        if (IsStaggered())
+        {
+            return;
+        }
+
 
         switch (unitAi.CurrentState)
         {
@@ -75,6 +80,8 @@ public class Enemy : Unit, IPoolable
             case UnitAI.State.Retreat:
                 break;
             case UnitAI.State.Flee:
+                Debug.Log("unitAi.CurrentState" + unitAi.CurrentState);
+                Flee();
                 break;
             default:
                 break;
@@ -103,6 +110,24 @@ public class Enemy : Unit, IPoolable
         VelocityUpdate();
     }
 
+    public void Flee()
+    {
+        Debug.Log("Flee????????");
+        var distanceVec = transform.position - player.transform.position;
+        Vector3 direction = Vector3.Normalize(distanceVec);
+
+        if (statusManager.IsRooted())
+        {
+            velocity = Vector3.zero;
+        }
+        else
+        {
+            velocity = movementSpeed * direction;
+        }
+        VelocityUpdate();
+    }
+
+
     public void Attack()
     {
 
@@ -124,13 +149,46 @@ public class Enemy : Unit, IPoolable
                 string poolKey = damageCollider.name;
                 GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, damageCollider.gameObject);
                 DamageCollider collider = damageColliderObj.GetComponent<DamageCollider>();
-                collider.Activate(transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                collider.Activate(transform.position + (distanceVec.normalized * damageColliderInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
                 collider.owner = transform.GetComponent<Unit>();
+                collider.Velocity = (distanceVec.normalized * damageColliderMovementSpeed);
 
-                //DamageCollider attackBox = Instantiate(damageCollider, transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
-                //attackBox.owner = transform.GetComponent<Unit>();
+                var sprite = collider.GetComponentInChildren<SpriteRenderer>();
+                if (sprite != null)
+                {
+                    float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), direction);
 
-                collider.Velocity = (distanceVec.normalized * initAttackMovementSpeed);
+                    switch (damageColliderRenderMode)
+                    {
+                        case Skill.RenderMode.HorizontalFlip:
+                            sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+
+                            if (direction.x < 0.0f)
+                            {
+                                sprite.transform.localScale = new Vector3(sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
+                            }
+                            break;
+                        case Skill.RenderMode.AllFlip:
+                            sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+
+                            if (direction.x < 0.0f)
+                            {
+                                sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
+                            }
+                            break;
+                        case Skill.RenderMode.Lock:
+                            sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    var collider2d = damageCollider.GetComponentInChildren<Collider2D>();
+                    if (collider2d != null)
+                    {
+                        collider2d.transform.localEulerAngles = sprite.transform.localEulerAngles;
+                    }
+                }
 
                 attackTimer = attackTime;
             }

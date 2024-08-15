@@ -770,6 +770,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePopupPrefab: {fileID: 3337920204430039234, guid: 9406a451fdf15664e884b89e2cffb7e7, type: 3}
   canvasTransform: {fileID: 1023004544}
+  randomOffsetAmount: 2
 --- !u!4 &924398120
 Transform:
   m_ObjectHideFlags: 0
@@ -1236,6 +1237,7 @@ MonoBehaviour:
   toughness: 0
   crit: 0
   critDamageRate: 0
+  statusManager: {fileID: 0}
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   hpController: {fileID: 0}
@@ -2053,6 +2055,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8425808833404993618, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
+      propertyPath: stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 72e15512bd894a341a9279e6ea602389, type: 2}
     - target: {fileID: 8425808833404993618, guid: 2e06445f26bc6054e8f4719abda330fc, type: 3}
       propertyPath: preference
       value: 

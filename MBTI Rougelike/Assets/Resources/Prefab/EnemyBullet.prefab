@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2289027611333316821}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 3
-  maxTimer: 0.5
+  maxTimer: 1
   collideTags:
   - Player
   - Bond
@@ -207,6 +207,8 @@ MonoBehaviour:
   isHealingMode: 0
   penetrability: 1
   surface: {fileID: 0}
+  randomSurfaces: []
+  boosts: []
   damageHitType: 0
   damageTriggerTime: 100
   timer: 0
