@@ -38,7 +38,7 @@ public abstract class Surface : MonoBehaviour, IPoolable
         {
             GameObject obj = other.gameObject;
             SurfaceEffectManager.Instance?.ApplySurfaceEffect(obj, this);
-            Debug.Log("进入地形: " + this.name);
+            //Debug.Log("进入地形: " + this.name);
         };
     }
 
@@ -48,7 +48,7 @@ public abstract class Surface : MonoBehaviour, IPoolable
         {
             GameObject obj = other.gameObject;
             SurfaceEffectManager.Instance?.RemoveSurfaceEffect(obj, this);
-            Debug.Log("离开地形 " + this.name);
+            //Debug.Log("离开地形 " + this.name);
         }
     }
 

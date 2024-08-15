@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static EsfpNoteTrigger;
 
 public class DamagePopup : MonoBehaviour, IPoolable
 {
@@ -29,6 +30,9 @@ public class DamagePopup : MonoBehaviour, IPoolable
 
     private Vector3 randomUpVec = new Vector3(3.0f, 3.0f, 0.0f);
 
+    public int fontSize = 36;
+    public int initFontSize = 36;
+
     public string PoolKey
     {
         get { return poolKey; }
@@ -46,6 +50,7 @@ public class DamagePopup : MonoBehaviour, IPoolable
         rectTransform = GetComponent<RectTransform>();
 
         initLocalScale = rectTransform.localScale;
+        initFontSize = (int)damageText.fontSize;
         lifetimer = lifetime;
 
         randomUpVec = new Vector3(Random.Range(-randomUpVec.x, randomUpVec.x), Random.Range(0.0f, randomUpVec.y), 0.0f);
@@ -78,7 +83,6 @@ public class DamagePopup : MonoBehaviour, IPoolable
     public void SetDamage(int damage, bool isCrit = false)
     {
         damageText.text = damage.ToString();
-
         damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
 
         if (isCrit)
@@ -158,6 +162,39 @@ public class DamagePopup : MonoBehaviour, IPoolable
         damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
         damageText.color = Color.cyan;
         damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
+    }
+
+    public void SetNote(NoteResult result)
+    {
+        switch (result)
+        {
+            case NoteResult.Perfect:
+                damageText.text = "Prefect!!!";
+                damageText.color = new Color(1.0f, 0.65f, 0.0f);
+                damageText.fontSize = 24;
+                break;
+            case NoteResult.Great:
+                damageText.text = "Great!!";
+                damageText.color = Color.yellow;
+                damageText.fontSize = 20;
+                break;
+            case NoteResult.Good:
+                damageText.text = "Good!";
+                damageText.color = Color.cyan;
+                damageText.fontSize = 16;
+                break;
+            case NoteResult.Miss:
+                damageText.text = "Miss...";
+                damageText.color = Color.gray;
+                damageText.fontSize = 16;
+                break;
+            default:
+                break;
+        }
+
+        damageText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, outlineSize);
+        damageText.fontMaterial.SetColor(ShaderUtilities.ID_OutlineColor, outlineColor);
+
     }
 
     /// <summary>

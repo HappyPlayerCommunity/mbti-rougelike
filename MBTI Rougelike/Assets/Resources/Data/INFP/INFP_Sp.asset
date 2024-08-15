@@ -13,15 +13,20 @@ MonoBehaviour:
   m_Name: INFP_Sp
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 4570751309795197616, guid: 47166afc3e935344386c9db8fa40d280, type: 3}
+  multiDamageColliders: []
   reloadingTime: 6
   scatterAngle: 0
   damageColliderSpeed: 3
   maxChargeCount: 0
   selfBlowForce: 2
-  controlScheme: 0
+  maxClip: 0
+  clipReloadingTime: 1
+  controlScheme: 1
   renderMode: 3
   selfStatus: {fileID: 0}
-  maxChargingTime: 0
+  maxChargingTime: 1
   fixPos: 0
+  airdropSpawn: 0
   turret: {fileID: 0}
   skillType: 0
+  lowestChargingRateCap: 0

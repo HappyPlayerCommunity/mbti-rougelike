@@ -6,7 +6,7 @@ public enum SkillControlScheme
 {
     Continuous,         //按住按键，会持续自动使用技能，类似于机枪。
     ChargeRelease,      //按住按键为“蓄力”，松开时使用技能。
-    Toggle,             //按下按键触发效果，再次释放需要松开并再次按下。
+    Toggle,             //按下按键触发效果，再次释放需要松开并再次按下。(目前处于废弃状态)
     None                //用于标识一些自动攻击。
 }
 
@@ -81,6 +81,8 @@ public class Skill : ScriptableObject
     [SerializeField, Tooltip("该技能的生成类型。是生成伤害块，还是生成炮塔？")]
     private SkillCreateType skillType = SkillCreateType.DamageCollider;
 
+    [SerializeField, Tooltip("此技能的最低充能。如果蓄力比率不足这个值，也会补加到这个值。")]
+    private float lowestChargingRateCap;
 
     public DamageCollider DamageCollider
     {
@@ -178,5 +180,11 @@ public class Skill : ScriptableObject
     {
         get { return clipReloadingTime; }
         set { clipReloadingTime = value; }
+    }
+
+    public float LowestChargingRateCap
+    {
+        get { return lowestChargingRateCap; }
+        set { lowestChargingRateCap = value; }
     }
 }

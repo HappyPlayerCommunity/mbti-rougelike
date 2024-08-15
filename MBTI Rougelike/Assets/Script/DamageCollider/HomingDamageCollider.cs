@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static DamageCollider;
 
-public class Butterfly : DamageCollider
+public class HomingDamageCollider : DamageCollider
 {
     [SerializeField, Tooltip("追踪敌人的速度。")]
     private float homingSpeed = 5.0f;
@@ -16,12 +15,6 @@ public class Butterfly : DamageCollider
 
     [SerializeField, Tooltip("转向速度。")]
     private float turnSpeed = 5.0f;
-
-    [SerializeField, Tooltip("攻击状态的颜色。")]
-    private Color attackColor = Color.red;
-
-    [SerializeField, Tooltip("治疗状态的颜色。")]
-    private Color healColor = Color.blue;
 
     private Transform target;
     private bool isHomingActive = false;
@@ -73,7 +66,7 @@ public class Butterfly : DamageCollider
         List<GameObject> targets = new List<GameObject>();
         if (!isHealingMode)
         {
-            var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            var enemies = GameObject.FindGameObjectsWithTag(Tag.Enemy);
 
             foreach (var enemy in enemies)
             {
@@ -83,13 +76,13 @@ public class Butterfly : DamageCollider
         }
         else
         {
-            var bondes = GameObject.FindGameObjectsWithTag("Bond");
+            var bondes = GameObject.FindGameObjectsWithTag(Tag.Bond);
             foreach (var bond in bondes)
             {
                 targets.Add(bond);
             }
 
-            targets.Add(GameObject.FindGameObjectWithTag("Player"));
+            targets.Add(GameObject.FindGameObjectWithTag(Tag.Player));
         }
 
         float nearestDistance = homingRange;
@@ -129,33 +122,10 @@ public class Butterfly : DamageCollider
         // 重置追踪状态
         isHomingActive = false;
         isHealingMode = false;
-        spriteRenderer.color = attackColor;
-        if (activateHomingAfterDelayCoroutine != null)
-        {
-            StopCoroutine(activateHomingAfterDelayCoroutine);
+
+        if (gameObject.activeInHierarchy) {
+            activateHomingAfterDelayCoroutine = StartCoroutine(ActivateHomingAfterDelay());
         }
-
-        collideTags.Clear();
-        effectTags.Clear();
-
-        if (isHealingMode)
-        {
-            spriteRenderer.color = healColor;
-
-            collideTags.Add("Bond");
-            effectTags.Add("Bond");
-            collideTags.Add("Player");
-            effectTags.Add("Player");
-        }
-        else
-        {
-            spriteRenderer.color = attackColor;
-
-            collideTags.Add("Enemy");
-            effectTags.Add("Enemy");
-        }
-
-        activateHomingAfterDelayCoroutine = StartCoroutine(ActivateHomingAfterDelay());
     }
 
     /// <summary>
@@ -166,33 +136,6 @@ public class Butterfly : DamageCollider
         base.Deactivate();
         isHealingMode = false;
         isHomingActive = false;
-        spriteRenderer.color = healColor;
         StopCoroutine(ActivateHomingAfterDelay());
-    }
-
-    protected override void CollideEvents(Collider2D hit)
-    {
-        isHealingMode = !isHealingMode;
-        collideTags.Clear();
-        effectTags.Clear();
-
-        if (isHealingMode)
-        {
-            spriteRenderer.color = healColor;
-
-            collideTags.Add(Tag.Bond);
-            effectTags.Add(Tag.Bond);
-            collideTags.Add(Tag.Player);
-            effectTags.Add(Tag.Player);
-        }
-        else
-        {
-            spriteRenderer.color = attackColor;
-
-            collideTags.Add(Tag.Enemy);
-            effectTags.Add(Tag.Enemy);
-        }
-
-        FindNearestTarget();
     }
 }

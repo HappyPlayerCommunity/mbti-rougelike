@@ -66,4 +66,13 @@ public class Aim : MonoBehaviour
             weaponArtTransform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
         }
     }
+
+    public float GetAimAngle()
+    {
+        // 计算并返回瞄准角度
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 direction = mousePosition - transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        return angle;
+    }
 }

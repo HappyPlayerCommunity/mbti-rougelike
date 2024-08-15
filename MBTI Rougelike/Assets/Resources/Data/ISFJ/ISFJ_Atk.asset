@@ -29,3 +29,4 @@ MonoBehaviour:
   airdropSpawn: 0
   turret: {fileID: 0}
   skillType: 0
+  lowestChargingRateCap: 0.1

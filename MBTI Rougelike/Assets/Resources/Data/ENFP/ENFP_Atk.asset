@@ -13,14 +13,20 @@ MonoBehaviour:
   m_Name: ENFP_Atk
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 1168946432406153740, guid: 10810244db5f5c542896176765a79d0c, type: 3}
+  multiDamageColliders: []
   reloadingTime: 1
   scatterAngle: 0
   damageColliderSpeed: 0
   maxChargeCount: 0
   selfBlowForce: 0
+  maxClip: 0
+  clipReloadingTime: 1
   controlScheme: 1
   renderMode: 0
   selfStatus: {fileID: 0}
   maxChargingTime: 2
   fixPos: 1
-  fixedDistance: 0
+  airdropSpawn: 0
+  turret: {fileID: 0}
+  skillType: 0
+  lowestChargingRateCap: 0.1

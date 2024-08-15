@@ -186,93 +186,17 @@ public class Personality : MonoBehaviour
 
     protected virtual void SkillUpdate(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto, ref int clip, List<Transform> multiInitPos, float chargingRate = 1.0f)
     {
-        Vector3 mousePos = UnityEngine.Input.mousePosition;
-        var mouseWorldPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
-        mouseWorldPos.z = 0.0f;
-        Vector3 aimDirection = aim.aimDirection;
-
-        Transform playerTransform = player.transform;
-        Transform playerArtTransform = player.playerArtTransform;
-        Transform weaponArtTransform = player.weaponArtTransform;
-
-        // 后续的天赋/buff修正，或许可以在这里结算。
-        float scatterAngle = skill.ScatterAngle;
-        float damageColliderSpeed = skill.DamageColliderSpeed;
-        float reloadingTime = skill.ReloadingTime;
-
-        if (holding) // 在后面改为绑定按键
+        switch (skill.SkillType)
         {
-            player.IsActioning = true;
-
-            if (currentReloadingTimer <= 0.0f)
-            {
-                Status selfStatus = null;
-                if (isAuto)
-                {
-                    selfStatus = normalAttack.SelfStatus;
-
-                    if (selfStatus)
-                        selfStatus = player.StatusManager.AddStatus(normalAttack.SelfStatus, stats);
-                }
-                else
-                {
-                    selfStatus = specialSkill.SelfStatus;
-
-                    if (selfStatus)
-                        selfStatus = player.StatusManager.AddStatus(specialSkill.SelfStatus, stats);
-
-                }
-
-                if (skill.MultiDamageColliders.Count > 0 && multiInitPos.Count > 0) // 该技能会生成多个伤害块。
-                {
-                    for (int i = 0; i < skill.MultiDamageColliders.Count; i++)
-                    {
-                        DamageCollider damageCollider = skill.MultiDamageColliders[i];
-                        Transform transform = multiInitPos[i];
-                        // 有需要的话还可以扩展不同角度的散射。
-                        var finalDamageCollider = AttackHelper.InitDamageCollider(damageCollider, transform, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, damageColliderSpeed, player);
-                        if (selfStatus != null)
-                        {
-                            finalDamageCollider.ownerStatus = selfStatus;
-                        }
-                    }
-                }
-                else
-                {
-                    if (skill.DamageCollider)
-                    {
-                        var finalDamageCollider = AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle, player);
-
-                        if (selfStatus != null)
-                        {
-                            finalDamageCollider.ownerStatus = selfStatus;
-                        }
-                    }
-                }
-
-                player.BlowForceVelocity = aimDirection * skill.SelfBlowForce; //for now, 负数可以做向后退的技能。
-
-                currentReloadingTimer = reloadingTime;
-
-                if (isAuto)
-                    currentReloadingTimer = reloadingTime * stats.Calculate_AttackSpeed();
-                else
-                    currentReloadingTimer = reloadingTime * stats.Calculate_SpecialCooldown();
-
-                if (skill.MaxClip > 0) //最大弹夹数大于0的技能，才应用弹夹机制。
-                {
-                    clip -= 1;
-                    if (clip <= 0)// 重置弹夹。
-                    {
-                        clip = skill.MaxClip;
-                        DamagePopupManager.Instance.Popup(PopupType.ReloadingClip, transform.position, 0, false);
-                        currentReloadingTimer = skill.ClipReloadingTime;
-                    }
-                }
-            }
+            case SkillCreateType.DamageCollider:
+                SpawnDamageCollider(skill, ref currentReloadingTimer, initPos, holding, isAuto, ref clip, multiInitPos, chargingRate);
+                break;
+            case SkillCreateType.Turret:
+                SpawnTurret(skill, ref currentReloadingTimer, initPos, holding, isAuto);
+                break;
+            default:
+                break;
         }
-
-        //currentReloadingTimer -= Time.deltaTime;
     }
 
     protected virtual void UltimateSkillUpdate()
@@ -389,33 +313,22 @@ public class Personality : MonoBehaviour
 
     private void HandleSkillTypeAndControlScheme(Skill skill, ref float currentReloadingTimer, Transform initPos, bool input, bool isAuto, ref int clip, List<Transform> multiInitPos)
     {
-        switch (skill.SkillType)
+        switch (skill.ControlScheme)
         {
-            case SkillCreateType.DamageCollider:
-
-                switch (skill.ControlScheme)
-                {
-                    case SkillControlScheme.Continuous:
-                        SkillUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref clip, multiInitPos);
-                        break;
-                    case SkillControlScheme.ChargeRelease:
-                        if (isAuto)
-                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer1, ref chargingRate1, ref isNormalAttackCharging, ref clip, multiInitPos);
-                        else
-                            ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer2, ref chargingRate2, ref isSpecialSkillCharging, ref clip, multiInitPos);
-                        break;
-                    case SkillControlScheme.Toggle:
-                        if (input && currentReloadingTimer <= 0.0f)
-                        {
-                            SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, ref clip, multiInitPos);
-                        }
-                        break;
-                    default:
-                        break;
-                }
+            case SkillControlScheme.Continuous:
+                SkillUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref clip, multiInitPos);
                 break;
-            case SkillCreateType.Turret:
-                SpawnTurret(skill, ref currentReloadingTimer, initPos, input, isAuto);
+            case SkillControlScheme.ChargeRelease:
+                if (isAuto)
+                    ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer1, ref chargingRate1, ref isNormalAttackCharging, ref clip, multiInitPos);
+                else
+                    ChargeReleaseUpdate(skill, ref currentReloadingTimer, initPos, input, isAuto, ref chargingTimer2, ref chargingRate2, ref isSpecialSkillCharging, ref clip, multiInitPos);
+                break;
+            case SkillControlScheme.Toggle:
+                if (input && currentReloadingTimer <= 0.0f)
+                {
+                    SkillUpdate(skill, ref currentReloadingTimer, initPos, true, isAuto, ref clip, multiInitPos);
+                }
                 break;
             default:
                 break;
@@ -486,8 +399,98 @@ public class Personality : MonoBehaviour
         else if (isCharging)
         {
             chargingTimer += Time.deltaTime;
-            chargingRate = Mathf.Clamp(chargingTimer / skill.MaxChargingTime, 0.1f, 1.0f); // 0.1f是最低充能比率，1.0f是最高充能比率。
+            chargingRate = Mathf.Clamp(chargingTimer / skill.MaxChargingTime, skill.LowestChargingRateCap, 1.0f);
         }
+    }
+    protected void SpawnDamageCollider(Skill skill, ref float currentReloadingTimer, Transform initPos, bool holding, bool isAuto, ref int clip, List<Transform> multiInitPos, float chargingRate = 1.0f)
+    {
+        Vector3 mousePos = UnityEngine.Input.mousePosition;
+        var mouseWorldPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
+        mouseWorldPos.z = 0.0f;
+        Vector3 aimDirection = aim.aimDirection;
+
+        Transform playerTransform = player.transform;
+        Transform playerArtTransform = player.playerArtTransform;
+        Transform weaponArtTransform = player.weaponArtTransform;
+
+        // 后续的天赋/buff修正，或许可以在这里结算。
+        float scatterAngle = skill.ScatterAngle;
+        float damageColliderSpeed = skill.DamageColliderSpeed;
+        float reloadingTime = skill.ReloadingTime;
+
+        if (holding) // 在后面改为绑定按键
+        {
+            player.IsActioning = true;
+
+            if (currentReloadingTimer <= 0.0f)
+            {
+                Status selfStatus = null;
+                if (isAuto)
+                {
+                    selfStatus = normalAttack.SelfStatus;
+
+                    if (selfStatus)
+                        selfStatus = player.StatusManager.AddStatus(normalAttack.SelfStatus, stats);
+                }
+                else
+                {
+                    selfStatus = specialSkill.SelfStatus;
+
+                    if (selfStatus)
+                        selfStatus = player.StatusManager.AddStatus(specialSkill.SelfStatus, stats);
+
+                }
+
+                if (skill.MultiDamageColliders.Count > 0 && multiInitPos.Count > 0) // 该技能会生成多个伤害块。
+                {
+                    for (int i = 0; i < skill.MultiDamageColliders.Count; i++)
+                    {
+                        DamageCollider damageCollider = skill.MultiDamageColliders[i];
+                        Transform transform = multiInitPos[i];
+                        // 有需要的话还可以扩展不同角度的散射。
+                        var finalDamageCollider = AttackHelper.InitDamageCollider(damageCollider, transform, adjustBackOffset, aimDirection, scatterAngle, skill.ControlScheme, skill.FixPos, chargingRate, skill.GetRenderMode, player, damageColliderSpeed, player);
+                        if (selfStatus != null)
+                        {
+                            finalDamageCollider.ownerStatus = selfStatus;
+                        }
+                    }
+                }
+                else
+                {
+                    if (skill.DamageCollider)
+                    {
+                        var finalDamageCollider = AttackHelper.InitSkillDamageCollider(skill, initPos, chargingRate, player, adjustBackOffset, aimDirection, scatterAngle, player);
+
+                        if (selfStatus != null)
+                        {
+                            finalDamageCollider.ownerStatus = selfStatus;
+                        }
+                    }
+                }
+
+                player.BlowForceVelocity = aimDirection * skill.SelfBlowForce; //for now, 负数可以做向后退的技能。
+
+                currentReloadingTimer = reloadingTime;
+
+                if (isAuto)
+                    currentReloadingTimer = reloadingTime * stats.Calculate_AttackSpeed();
+                else
+                    currentReloadingTimer = reloadingTime * stats.Calculate_SpecialCooldown();
+
+                if (skill.MaxClip > 0) //最大弹夹数大于0的技能，才应用弹夹机制。
+                {
+                    clip -= 1;
+                    if (clip <= 0)// 重置弹夹。
+                    {
+                        clip = skill.MaxClip;
+                        DamagePopupManager.Instance.Popup(PopupType.ReloadingClip, transform.position, 0, false);
+                        currentReloadingTimer = skill.ClipReloadingTime;
+                    }
+                }
+            }
+        }
+
+        //currentReloadingTimer -= Time.deltaTime;
     }
 
     private void SpawnTurret(Skill skill, ref float currReloadingTimer, Transform initPos, bool input, bool isAuto)

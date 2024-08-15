@@ -10,6 +10,7 @@ TagManager:
   - Bond
   - DamageCollider
   - ISTP_Robot
+  - ESFP_Note
   layers:
   - Default
   - TransparentFX
@@ -58,4 +59,7 @@ TagManager:
     locked: 0
   - name: Effects
     uniqueID: 1138872041
+    locked: 0
+  - name: Note
+    uniqueID: 470305879
     locked: 0

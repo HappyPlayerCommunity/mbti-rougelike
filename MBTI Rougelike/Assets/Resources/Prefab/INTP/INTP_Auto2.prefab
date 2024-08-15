@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
-  maxTimer: 1
+  maxTimer: 0.5
   collideTags:
   - Enemy
   effectTags:
@@ -75,6 +75,8 @@ MonoBehaviour:
   isHealingMode: 0
   penetrability: 1
   surface: {fileID: 0}
+  randomSurfaces: []
+  boosts: []
   damageHitType: 0
   damageTriggerTime: 100
   timer: 0
