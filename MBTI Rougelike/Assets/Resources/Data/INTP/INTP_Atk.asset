@@ -18,7 +18,7 @@ MonoBehaviour:
   - {fileID: 1025805040178021070, guid: a8c6e3499101c0c438de4add68ac3dc9, type: 3}
   reloadingTime: 0.25
   scatterAngle: 0
-  damageColliderSpeed: 10
+  damageColliderSpeed: 20
   maxChargeCount: 0
   selfBlowForce: 0
   maxClip: 6
@@ -28,5 +28,7 @@ MonoBehaviour:
   selfStatus: {fileID: 0}
   maxChargingTime: 0
   fixPos: 0
+  airdropSpawn: 0
   turret: {fileID: 0}
   skillType: 0
+  lowestChargingRateCap: 0

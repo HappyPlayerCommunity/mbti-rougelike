@@ -21,11 +21,12 @@ MonoBehaviour:
   selfBlowForce: 0
   maxClip: 0
   clipReloadingTime: 1
-  controlScheme: 0
+  controlScheme: 1
   renderMode: 0
   selfStatus: {fileID: 0}
-  maxChargingTime: 0
+  maxChargingTime: 0.1
   fixPos: 0
   airdropSpawn: 1
   turret: {fileID: 4092889443537231010, guid: d323a061ccb205d4eb101cd9298f5ff9, type: 3}
   skillType: 1
+  lowestChargingRateCap: 0

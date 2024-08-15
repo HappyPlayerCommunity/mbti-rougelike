@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0982b1d45c1a1af40a875949f5969b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 30
+  damage: 20
   maxTimer: 0.5
   collideTags:
   - Enemy
@@ -63,9 +63,9 @@ MonoBehaviour:
   damageType: 0
   damageElementType: 0
   canvasTransform: {fileID: 0}
-  chargingDamage: 0
+  chargingDamage: 20
   chargingBlowForceSpeed: 0
-  chargingLocalScale: {x: 0, y: 0, z: 0}
+  chargingLocalScale: {x: 2, y: 2, z: 0}
   chargingStaggerTime: 0
   chargingMaxTimer: 0
   chargingSpeedBoost: 0
@@ -75,6 +75,8 @@ MonoBehaviour:
   isHealingMode: 0
   penetrability: 1
   surface: {fileID: 0}
+  randomSurfaces: []
+  boosts: []
   damageHitType: 2
   damageTriggerTime: 100
   timer: 0
@@ -93,7 +95,7 @@ MonoBehaviour:
   damageMovementType: 0
   spriteRenderer: {fileID: 0}
   ownerStatus: {fileID: 0}
-  applyStatus: {fileID: 0}
+  applyStatus: {fileID: 11400000, guid: 8541194a27f293e47bba0775b25f1a37, type: 2}
   damagePopupPrefab: {fileID: 0}
 --- !u!50 &6142253094544922911
 Rigidbody2D:

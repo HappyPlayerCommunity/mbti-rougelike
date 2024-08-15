@@ -13,8 +13,19 @@ MonoBehaviour:
   m_Name: ENTP_Sp
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 7725243208693076154, guid: 8bc5e81a340a7dc48b236868fe702724, type: 3}
+  multiDamageColliders: []
   reloadingTime: 3
   scatterAngle: 0
   damageColliderSpeed: 0
   maxChargeCount: 0
+  selfBlowForce: 0
+  maxClip: 0
+  clipReloadingTime: 1
+  controlScheme: 1
   renderMode: 1
+  selfStatus: {fileID: 0}
+  maxChargingTime: 1
+  fixPos: 0
+  airdropSpawn: 0
+  turret: {fileID: 0}
+  skillType: 0
