@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0982b1d45c1a1af40a875949f5969b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 2
   maxTimer: 0.5
   collideTags:
   - Enemy
@@ -205,6 +205,8 @@ MonoBehaviour:
   isHealingMode: 0
   penetrability: 1
   surface: {fileID: 0}
+  randomSurfaces: []
+  boosts: []
   damageHitType: 0
   damageTriggerTime: 100
   timer: 0
