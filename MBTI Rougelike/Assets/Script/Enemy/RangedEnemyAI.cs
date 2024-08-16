@@ -30,12 +30,10 @@ public class RangedEnemyAI : UnitAI
     {
         if (Vector3.Distance(transform.position, playerTrans.position) > attackRange)
         {
-            Debug.Log("Attack to Chase");
             currentState = State.Chase;
         }
         else if (Vector3.Distance(transform.position, playerTrans.position) < fleeDistance)
         {
-            Debug.Log("Attack to Flee");
             currentState = State.Flee;
         }
     }
@@ -48,14 +46,7 @@ public class RangedEnemyAI : UnitAI
     {
         if (Vector3.Distance(transform.position, playerTrans.position) > fleeDistance)
         {
-            Debug.Log("Flee to Attack");
             currentState = State.Attack;
         }
     }
-
-    protected override void Charge()
-    {
-        // 远程敌人不需要实现冲锋逻辑
-    }
-
 }

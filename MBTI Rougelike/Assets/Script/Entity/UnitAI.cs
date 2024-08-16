@@ -24,10 +24,10 @@ public abstract class UnitAI : MonoBehaviour
     protected Transform currentTarget;
 
     [SerializeField, Tooltip("检测到玩家的范围。")]
-    protected float detectionRange = 10.0f; //视野
+    protected float detectionRange = 10.0f;
 
     [SerializeField, Tooltip("攻击范围。")]
-    protected float attackRange = 10.0f; //视野
+    protected float attackRange = 10.0f;
 
     public State CurrentState
     {
@@ -54,11 +54,6 @@ public abstract class UnitAI : MonoBehaviour
         {
             case State.Idle:
                 Idle();
-
-                if (Vector3.Distance(transform.position, playerTrans.position) < detectionRange)
-                {
-                    currentState = State.Chase;
-                }
                 break;
 
             case State.Chase:
@@ -79,10 +74,9 @@ public abstract class UnitAI : MonoBehaviour
         }
     }
 
-    protected abstract void Idle();
-    protected abstract void Chase();
-    protected abstract void Attack();
-    protected abstract void Retreat();
-    protected abstract void Flee();
-    protected abstract void Charge();
+    protected virtual void Idle() { }
+    protected virtual void Chase() { }
+    protected virtual void Attack() { }
+    protected virtual void Retreat() { }
+    protected virtual void Flee() { }
 }

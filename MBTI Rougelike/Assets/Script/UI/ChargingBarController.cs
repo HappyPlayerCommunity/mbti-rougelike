@@ -25,8 +25,6 @@ public class ChargingBarController : MonoBehaviour
         if (rectTransform == null) { 
            rectTransform = GetComponent<RectTransform>();
         }
-
-        transparent.a = 0.0f;
     }
 
     void Update()

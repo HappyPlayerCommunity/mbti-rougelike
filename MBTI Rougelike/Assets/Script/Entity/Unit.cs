@@ -37,8 +37,21 @@ public class Unit : BaseEntity
     [SerializeField, Tooltip("此单位生成攻击的渲染方法。")]
     protected Skill.RenderMode damageColliderRenderMode = Skill.RenderMode.NoneFlip;
 
-
     //或许应该攻击技能动作剥离出去，单开一个类。
+
+    public float AttackRange { get { return attackRange; } set { attackRange = value; } }
+
+    public float AttackTimer { get { return attackTimer; } set { attackTimer = value; } }
+
+    public float AttackTime { get { return attackTime; } set { attackTime = value; } }
+
+    public DamageCollider DamageCollider { get { return damageCollider; } set { damageCollider = value; } }
+
+    public float DamageColliderInitDistance { get { return damageColliderInitDistance; } set { damageColliderInitDistance = value; } }
+
+    public float DamageColliderMovementSpeed { get { return damageColliderMovementSpeed; } set { damageColliderMovementSpeed = value; } }
+
+    public Skill.RenderMode DamageColliderRenderMode { get { return damageColliderRenderMode; } set { damageColliderRenderMode = value; } }
 
     public float DodgeRate
     {

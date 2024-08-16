@@ -9,6 +9,10 @@ public class MeleeEnemyAI : UnitAI
 {
     protected override void Idle()
     {
+        if (Vector3.Distance(transform.position, playerTrans.position) < detectionRange)
+        {
+            currentState = State.Chase;
+        }
     }
 
     protected override void Chase()
@@ -29,5 +33,4 @@ public class MeleeEnemyAI : UnitAI
 
     protected override void Retreat() { }
     protected override void Flee() { }
-    protected override void Charge() { }
 }
