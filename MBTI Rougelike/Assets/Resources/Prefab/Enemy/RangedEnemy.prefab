@@ -73,7 +73,7 @@ MonoBehaviour:
   hpControllerPrefab: {fileID: 2220783199701096411, guid: 406edd46bad6d7f489138580566801e4, type: 3}
   canvasTransform: {fileID: 0}
   hpController: {fileID: 0}
-  attackRange: 10
+  attackRange: 15
   attackTimer: 0
   attackTime: 1
   castTime: 0
@@ -87,10 +87,10 @@ MonoBehaviour:
   artTransform: {fileID: 3229879455344238940}
   idelImpl: {fileID: 0}
   atkImpl: {fileID: 0}
-  attackPreparationTime: 1
+  preparationTime: 1
   isPreparingAttack: 0
   preparationTimer: 0
-  attackChargingBarPrefab: {fileID: 0}
+  attackChargingBarPrefab: {fileID: 412325898594596340, guid: 4fe5e58f4c3e41f4586b664e7a62f6bf, type: 3}
   attackChargingBar: {fileID: 0}
 --- !u!114 &7623393708852772497
 MonoBehaviour:

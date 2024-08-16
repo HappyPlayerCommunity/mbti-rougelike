@@ -87,6 +87,19 @@ public class AnimationController2D : MonoBehaviour, IPoolable
         //Destroy(gameObject);
     }
 
+    public float GetRemainingAnimationTime()
+    {
+        AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0); // 0代表动画层索引
+
+        // 计算动画剩余时间
+        float animationDuration = animatorStateInfo.length;
+        float normalizedTime = animatorStateInfo.normalizedTime % 1; // 取小数部分
+        float remainingTime = animationDuration * (1 - normalizedTime);
+        
+        return remainingTime;
+    }
+
+
     /// <summary>
     /// 继承自IPoolable接口的方法。用于对象池物体的初始化。
     /// </summary>
