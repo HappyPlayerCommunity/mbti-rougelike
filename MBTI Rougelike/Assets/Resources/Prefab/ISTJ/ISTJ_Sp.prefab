@@ -184,7 +184,7 @@ MonoBehaviour:
   - Enemy
   reflectTags: []
   isAttachedPos: 0
-  staggerTime: 1
+  staggerTime: 0.25
   isLifeTimeBindingWithState: 0
   blowForceSpeed: 1
   hitEffectPrefab: {fileID: 2915652847545302958, guid: 18a8717cd588c59419e2ac4647a6b0ab, type: 3}
