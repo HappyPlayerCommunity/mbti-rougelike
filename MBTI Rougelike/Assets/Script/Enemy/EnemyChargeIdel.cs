@@ -15,22 +15,17 @@ public class EnemyChargeIdle : EnemySpecialImpl
 
     public override void ExecuteSpecialImplementation(Enemy enemy)
     {
-        // 如果计时器已经到达方向改变的时间间隔，或者敌人撞到了物体，则重新生成方向
         if (timer <= 0.0f || IsColliding(enemy))
         {
-            // 随机生成一个新的方向
             currentDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0.0f).normalized;
             timer = directionChangeInterval;  // 重置计时器
         }
 
-        // 使敌人沿着当前方向移动
         enemy.Velocity = currentDirection * idleSpeed;
 
-        // 更新计时器
         timer -= Time.deltaTime;
     }
 
-    // 检测敌人是否撞到了任何物体
     private bool IsColliding(Enemy enemy)
     {
         RaycastHit2D[] hits = Physics2D.RaycastAll(enemy.transform.position, currentDirection, detectCollisionRadius);
@@ -40,7 +35,7 @@ public class EnemyChargeIdle : EnemySpecialImpl
             // 检查检测到的碰撞体是否是敌人自身或其子对象
             if (hit.collider != null && hit.collider.gameObject != enemy.gameObject)
             {
-                return true;  // 检测到碰撞，且不是敌人自身
+                return true;
             }
         }
 
