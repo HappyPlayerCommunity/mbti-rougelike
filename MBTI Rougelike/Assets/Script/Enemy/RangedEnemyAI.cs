@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 这种敌人AI在见到玩家后，会不断追击玩家并发起攻击。
+/// 远程敌人AI类。用来管理远程敌人的行为逻辑。
 /// </summary>
-public class MeleeEnemyAI : UnitAI
+public class RangedEnemyAI : UnitAI
 {
+    [SerializeField, Tooltip("逃离玩家的距离。")]
+    private float fleeDistance = 5.0f;
+
     protected override void Idle()
     {
         if (Vector3.Distance(transform.position, playerTrans.position) < detectionRange)
@@ -29,8 +32,21 @@ public class MeleeEnemyAI : UnitAI
         {
             currentState = State.Chase;
         }
+        else if (Vector3.Distance(transform.position, playerTrans.position) < fleeDistance)
+        {
+            currentState = State.Flee;
+        }
     }
 
-    protected override void Retreat() { }
-    protected override void Flee() { }
+    protected override void Retreat()
+    {
+    }
+
+    protected override void Flee()
+    {
+        if (Vector3.Distance(transform.position, playerTrans.position) > fleeDistance)
+        {
+            currentState = State.Attack;
+        }
+    }
 }

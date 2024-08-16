@@ -504,15 +504,13 @@ public abstract class BaseEntity : MonoBehaviour, IEntity
     protected void CreateHealthBar()
     {
         GameObject healthBarObj = PoolManager.Instance.GetObject(hpControllerPrefab.name, hpControllerPrefab.gameObject);
-        HPController healthBar = healthBarObj.GetComponent<HPController>();
-        healthBar.transform.SetParent(canvasTransform, false);
-        healthBar.baseEntity = this;
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position + healthBar.offset);
-        healthBar.GetComponent<RectTransform>().position = screenPosition;
+        hpController = healthBarObj.GetComponent<HPController>();
+        hpController.transform.SetParent(canvasTransform, false);
+        hpController.baseEntity = this;
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position + hpController.offset);
+        hpController.GetComponent<RectTransform>().position = screenPosition;
 
-        healthBar.Activate(Vector3.zero, Quaternion.identity);
-
-        hpController = healthBar;
+        hpController.Activate(Vector3.zero, Quaternion.identity);
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)

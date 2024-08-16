@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-/// <summary>
-/// 敌人的基类。在这里实现了大部分敌人的共同行为；特殊的敌人可以另开子类实现。
-/// </summary>
 public class Enemy : Unit, IPoolable
 {
     [SerializeField, Tooltip("用于追踪，检测玩家的索引。")]
@@ -21,10 +16,54 @@ public class Enemy : Unit, IPoolable
 
     bool firstTimeCreated = true;
 
+    [SerializeField, Tooltip("敌人的特殊待机实现。")]
+    private EnemySpecialImpl idelImpl;
+
+    [SerializeField, Tooltip("敌人的特殊攻击实现。")]
+    private EnemySpecialImpl atkImpl;
+
+    [SerializeField, Tooltip("攻击前的抬手时间。")]
+    private float preparationTime = 1.0f;
+
+    [SerializeField, Tooltip("是否正在准备攻击？")]
+    private bool isPreparingAttack = false;
+
+    [SerializeField, Tooltip("准备攻击计时器。")]
+    private float preparationTimer = 0.0f;
+
+    [Header("互动组件")]
+    public EnemyAttackChargingBar attackChargingBarPrefab;
+    public EnemyAttackChargingBar attackChargingBar;
+
+
     public string PoolKey
     {
         get { return poolKey; }
         set { poolKey = value; }
+    }
+
+    public Player Player
+    {
+        get { return player; }
+        set { player = value; }
+    }
+
+    public float PreparationTime
+    {
+        get { return preparationTime; }
+        set { preparationTime = value; }
+    }
+
+    public bool IsPreparingAttack
+    {
+        get { return isPreparingAttack; }
+        set { isPreparingAttack = value; }
+    }
+
+    public float PreparationTimer
+    {
+        get { return preparationTimer; }
+        set { preparationTimer = value; }
     }
 
     protected override void Awake()
@@ -36,19 +75,13 @@ public class Enemy : Unit, IPoolable
     protected override void Start()
     {
         base.Start();
-
         player = FindObjectOfType<Player>(); // EnemyManager Later.
         unitAi = GetComponent<UnitAI>();
+        CreatePreparedAttackBar();
     }
 
     protected override void OnUpdate()
     {
-        //if (hp <= 0)
-        //{
-        //    //gameObject.SetActive(false);
-        //    Deactivate();
-        //}
-
         if (player == null) // 临时
             return;
 
@@ -59,7 +92,11 @@ public class Enemy : Unit, IPoolable
 
         attackTimer -= Time.deltaTime;
 
-        
+        if (IsStaggered()) // 后续添加霸体逻辑跳过。
+        {
+            preparationTimer = preparationTime;
+            return;
+        }
 
         switch (unitAi.CurrentState)
         {
@@ -75,6 +112,7 @@ public class Enemy : Unit, IPoolable
             case UnitAI.State.Retreat:
                 break;
             case UnitAI.State.Flee:
+                Flee();
                 break;
             default:
                 break;
@@ -83,16 +121,41 @@ public class Enemy : Unit, IPoolable
 
     public void Idle()
     {
+        ResetAttack();
 
+        if (idelImpl)
+        {
+            idelImpl.ExecuteSpecialImplementation(this);
+        }
     }
 
     public void Chase()
     {
+        ResetAttack();
+
         var distanceVec = player.transform.position - transform.position;
         Vector3 direction = Vector3.Normalize(distanceVec);
         float distance = Vector3.Distance(player.transform.position, transform.position);
 
-        if(statusManager.IsRooted())
+        if (statusManager.IsRooted())
+        {
+            velocity = Vector3.zero;
+        }
+        else
+        {
+            velocity = movementSpeed * direction;
+        }
+        VelocityUpdate();
+    }
+
+    public void Flee()
+    {
+        ResetAttack();
+
+        var distanceVec = transform.position - player.transform.position;
+        Vector3 direction = Vector3.Normalize(distanceVec);
+
+        if (statusManager.IsRooted())
         {
             velocity = Vector3.zero;
         }
@@ -105,35 +168,91 @@ public class Enemy : Unit, IPoolable
 
     public void Attack()
     {
-
         if (statusManager.IsSlienced())
         {
             return;
         }
 
-            var distanceVec = player.transform.position - transform.position;
+        var distanceVec = player.transform.position - transform.position;
         Vector3 direction = Vector3.Normalize(distanceVec);
         float distance = Vector3.Distance(player.transform.position, transform.position);
 
-        velocity = Vector3.zero;
-
-        if (distance <= attackRange)
+        // 如果处于攻击准备阶段
+        if (isPreparingAttack)
         {
-            if (attackTimer <= 0.0f)
+            preparationTimer -= Time.deltaTime;
+            if (preparationTimer <= 0.0f)
             {
-                string poolKey = damageCollider.name;
-                GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, damageCollider.gameObject);
-                DamageCollider collider = damageColliderObj.GetComponent<DamageCollider>();
-                collider.Activate(transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
-                collider.owner = transform.GetComponent<Unit>();
-
-                //DamageCollider attackBox = Instantiate(damageCollider, transform.position + (distanceVec.normalized * attackInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
-                //attackBox.owner = transform.GetComponent<Unit>();
-
-                collider.Velocity = (distanceVec.normalized * initAttackMovementSpeed);
-
-                attackTimer = attackTime;
+                // 攻击准备完成，进入攻击阶段
+                isPreparingAttack = false;
+                PerformAttack(direction, distanceVec);
             }
+        }
+        else if (distance <= attackRange && attackTimer <= 0.0f)
+        {
+            // 进入攻击准备阶段
+            isPreparingAttack = true;
+            preparationTimer = preparationTime;
+        }
+    }
+
+    private void PerformAttack(Vector3 direction, Vector3 distanceVec)
+    {
+        if (atkImpl)
+        {
+            atkImpl.ExecuteSpecialImplementation(this);
+        }
+        else
+        {
+            // 实际攻击逻辑
+            velocity = Vector3.zero;
+
+            string poolKey = damageCollider.name;
+            GameObject damageColliderObj = PoolManager.Instance.GetObject(poolKey, damageCollider.gameObject);
+            DamageCollider collider = damageColliderObj.GetComponent<DamageCollider>();
+            collider.Activate(transform.position + (distanceVec.normalized * damageColliderInitDistance), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+            collider.owner = transform.GetComponent<Unit>();
+            collider.Velocity = (distanceVec.normalized * damageColliderMovementSpeed);
+
+            var sprite = collider.GetComponentInChildren<SpriteRenderer>();
+            if (sprite != null)
+            {
+                float angle = Vector2.SignedAngle(new Vector2(1.0f, 0.0f), direction);
+
+                switch (damageColliderRenderMode)
+                {
+                    case Skill.RenderMode.HorizontalFlip:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+
+                        if (direction.x < 0.0f)
+                        {
+                            sprite.transform.localScale = new Vector3(sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
+                        }
+                        break;
+                    case Skill.RenderMode.AllFlip:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+
+                        if (direction.x < 0.0f)
+                        {
+                            sprite.transform.localScale = new Vector3(-sprite.transform.localScale.x, -sprite.transform.localScale.y, sprite.transform.localScale.z);
+                        }
+                        break;
+                    case Skill.RenderMode.Lock:
+                        sprite.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+                        break;
+                    default:
+                        break;
+                }
+
+                var collider2d = damageCollider.GetComponentInChildren<Collider2D>();
+                if (collider2d != null)
+                {
+                    collider2d.transform.localEulerAngles = sprite.transform.localEulerAngles;
+                }
+            }
+
+            attackTimer = attackTime;
+            preparationTimer = PreparationTime;
         }
     }
 
@@ -156,12 +275,29 @@ public class Enemy : Unit, IPoolable
             OnEnemyDeath.Invoke();
         }
         Deactivate();
+        attackChargingBar.Deactivate();
         base.Die();
     }
 
-    /// <summary>
-    /// 继承自IPoolable接口的方法。用于对象池物体的初始化。
-    /// </summary>
+    public void ResetAttack()
+    {
+        attackTimer = 0.0f;
+        preparationTimer = PreparationTime;
+        isPreparingAttack = false;
+    }
+
+    protected void CreatePreparedAttackBar()
+    {
+        GameObject attackChargingBarObj = PoolManager.Instance.GetObject(attackChargingBarPrefab.name, attackChargingBarPrefab.gameObject);
+        attackChargingBar = attackChargingBarObj.GetComponent<EnemyAttackChargingBar>();
+        attackChargingBar.transform.SetParent(canvasTransform, false);
+        attackChargingBar.enemy = this;
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position + attackChargingBar.offset);
+        attackChargingBar.GetComponent<RectTransform>().position = screenPosition;
+
+        attackChargingBar.Activate(Vector3.zero, Quaternion.identity);
+    }
+
     public void ResetObjectState()
     {
         hp = maxHp;
@@ -172,13 +308,8 @@ public class Enemy : Unit, IPoolable
         spriteRenderer.color = Color.white;
         staggerTimer = 0.0f;
         staggerRecordTime = 0.0f;
-
-        //Debug.Log("Enemy ResetObjectState?");
     }
 
-    /// <summary>
-    /// 当对象从对象池中取出时，调用这个方法来初始化
-    /// </summary>
     public void Activate(Vector3 position, Quaternion rotation)
     {
         transform.position = position;
@@ -191,18 +322,15 @@ public class Enemy : Unit, IPoolable
         else
         {
             CreateHealthBar();
+            CreatePreparedAttackBar();
         }
 
         gameObject.SetActive(true);
     }
 
-    /// <summary>
-    /// 调用这个方法将对象塞回对象池
-    /// </summary>
     public void Deactivate()
     {
         gameObject.SetActive(false);
-
         PoolManager.Instance.ReturnObject(poolKey, gameObject);
     }
 }
