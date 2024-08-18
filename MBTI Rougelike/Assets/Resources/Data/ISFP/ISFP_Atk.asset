@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 346288305262089208, guid: 9adbb9261a94e244b8402fe4531a9122, type: 3}
   multiDamageColliders: []
-  reloadingTime: 1
+  reloadingTime: 0.05
   scatterAngle: 0
   damageColliderSpeed: 0
   maxChargeCount: 0
@@ -29,3 +29,4 @@ MonoBehaviour:
   airdropSpawn: 0
   turret: {fileID: 0}
   skillType: 0
+  lowestChargingRateCap: 0
