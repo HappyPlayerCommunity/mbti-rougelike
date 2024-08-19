@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
+using TMPro;
+using Unity.VisualScripting;
 
 [CreateAssetMenu(fileName = "NewTalent", menuName = "Talent System/Talent")]
 public class Talent : ScriptableObject
@@ -9,9 +12,17 @@ public class Talent : ScriptableObject
     public TalentRarity rarity;
     public StatModifier[] statModifiers;
     public bool isEnchantment;
+    public Color color;
 
     public void ApplyTalent(Stats stats)
     {
+        Debug.Log("Apply Talent?");
+
+        if (statModifiers == null || statModifiers.Length <= 0)
+        {
+            return;
+        }
+
         foreach (var modifier in statModifiers)
         {
             switch (modifier.statType)
@@ -247,6 +258,28 @@ public class Talent : ScriptableObject
 
         }
     }
+
+    private Talent CreateFusedTalent(TalentType fusedType)
+    {
+        // 根据融合后的类型创建一个新的天赋对象
+        Talent fusedTalent = ScriptableObject.CreateInstance<Talent>();
+        fusedTalent.type = fusedType;
+        fusedTalent.rarity = TalentRarity.Advanced; // 默认设置为基础天赋
+
+        return fusedTalent;
+    }
+
+    //private Talent CreateAdvancedTalent(TalentType type)
+    //{
+    //    // 根据类型生成进阶天赋
+    //    Talent advancedTalent = ScriptableObject.CreateInstance<Talent>();
+    //    advancedTalent.type = type;
+    //    advancedTalent.rarity = TalentRarity.Advanced;
+    //    // 你可以在这里添加其他逻辑来生成天赋的具体属性
+
+    //    return advancedTalent;
+    //}
+
 }
 
 public enum StatType
@@ -298,7 +331,44 @@ public enum TalentType
     T,
     F,
     J,
-    P
+    P,
+    EE,
+    EI,
+    ES,
+    EN,
+    ET,
+    EF,
+    EJ,
+    EP,
+    II,
+    IS,
+    IN,
+    IT,
+    IF,
+    IJ,
+    IP,
+    SS,
+    SN,
+    ST,
+    SF,
+    SJ,
+    SP,
+    NN,
+    NT,
+    NF,
+    NJ,
+    NP,
+    TT,
+    TF,
+    TJ,
+    TP,
+    FF,
+    FJ,
+    FP,
+    JJ,
+    JP,
+    PP,
+    Count
 }
 
 [System.Serializable]

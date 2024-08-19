@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47b21b31c57def74b8ad7222426f0c43, type: 3}
+  m_Name: P_Talent
+  m_EditorClassIdentifier: 
+  talentName: "\u7075\u6D3B"
+  description: "\u5F88\u7075\u6D3B\u554A\u3002"
+  type: 7
+  rarity: 0
+  statModifiers:
+  - statType: 32
+    value: 5
+  isEnchantment: 0
+  color: {r: 0.7634759, g: 0, b: 1, a: 1}

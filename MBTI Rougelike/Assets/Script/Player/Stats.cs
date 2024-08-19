@@ -481,13 +481,16 @@ public class Stats : ScriptableObject
     /// </summary>
     public void Initialize()
     {
+        Debug.Log("Hello?");
         fireDamage = fireDamageINIT;
         movementSpeed = movementSpeedINIT;
         toughness = toughnessINIT;
         bondMovementSpeed = bondMovementSpeedINIT;
         attackRange = attackRangeINIT;
         attackEnergeCharge = attackEnergeChargeINIT;
+        Debug.Log("Ice" + iceDamage);
         iceDamage = iceDamageINIT;
+        Debug.Log("Before Ice" + iceDamage);
         maxShield = maxShieldINIT;
         shieldReset = shieldResetINIT;
         buildingDurability = buildingDurabilityINIT;
@@ -500,7 +503,9 @@ public class Stats : ScriptableObject
         attackSpeed = attackSpeedINIT;
         physicalAttackPower = physicalAttackPowerINIT;
         windDamage = windDamageINIT;
+        Debug.Log("dodge" + dodge);
         dodge = dodgeINIT;
+        Debug.Log("After dodge" + dodge);
         autoEnergeCharge = autoEnergeChargeINIT;
         luck = luckINIT;
         specialCooldown = specialCooldownINIT;

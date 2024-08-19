@@ -18,7 +18,7 @@ MonoBehaviour:
   bondMovementSpeed: 0
   attackRange: 0
   attackEnergeCharge: 0
-  iceDamage: 0
+  iceDamage: 10
   maxShield: 0
   shieldReset: 0
   buildingDurability: 0
@@ -30,15 +30,15 @@ MonoBehaviour:
   experienceMultiplier: 0
   attackSpeed: 0
   physicalAttackPower: 0
-  windDamage: 0
+  windDamage: 5
   dodge: 0
   autoEnergeCharge: 0
   luck: 0
   specialCooldown: 0
   abstractAttackPower: 0
-  thunderDamage: 0
+  thunderDamage: 10
   globalAttackPower: 0
-  waterDamage: 0
+  waterDamage: 5
   healingPower: 0
   crit: 0
   critDamage: 0
@@ -70,7 +70,7 @@ MonoBehaviour:
   dodgeINIT: 0
   autoEnergeChargeINIT: 0
   luckINIT: 0
-  specialCooldownINIT: 1
+  specialCooldownINIT: 0
   abstractAttackPowerINIT: 0
   thunderDamageINIT: 0
   globalAttackPowerINIT: 0
