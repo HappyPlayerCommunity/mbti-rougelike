@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f056e92d952d5034499dbff97b261d9a, type: 3}
+  m_Name: Stats_TalentTest
+  m_EditorClassIdentifier: 
+  fireDamage: 0
+  movementSpeed: 0
+  toughness: 0
+  bondMovementSpeed: 0
+  attackRange: 0
+  attackEnergeCharge: 0
+  iceDamage: 0
+  maxShield: 0
+  shieldReset: 0
+  buildingDurability: 0
+  knockback: 0
+  injuryEnergeCharge: 0
+  earthDamage: 0
+  maxHealth: 0
+  healthRegen: 0
+  experienceMultiplier: 0
+  attackSpeed: 0
+  physicalAttackPower: 0
+  windDamage: 0
+  dodge: 0
+  autoEnergeCharge: 0
+  luck: 0
+  specialCooldown: 0
+  abstractAttackPower: 0
+  thunderDamage: 0
+  globalAttackPower: 0
+  waterDamage: 0
+  healingPower: 0
+  crit: 0
+  critDamage: 0
+  buildingPower: 0
+  bondPower: 0
+  statusPower: 0
+  statusDuration: 0
+  statusImpact: 0
+  anomalyResistance: 0
+  fireDamageINIT: 0
+  movementSpeedINIT: 0
+  toughnessINIT: 0
+  bondMovementSpeedINIT: 0
+  attackRangeINIT: 0
+  attackEnergeChargeINIT: 0
+  iceDamageINIT: 0
+  maxShieldINIT: 0
+  shieldResetINIT: 0
+  buildingDurabilityINIT: 0
+  knockbackINIT: 0
+  injuryEnergeChargeINIT: 0
+  earthDamageINIT: 0
+  maxHealthINIT: 0
+  healthRegenINIT: 0
+  experienceMultiplierINIT: 0
+  attackSpeedINIT: 0
+  physicalAttackPowerINIT: 0
+  windDamageINIT: 0
+  dodgeINIT: 0
+  autoEnergeChargeINIT: 0
+  luckINIT: 0
+  specialCooldownINIT: 1
+  abstractAttackPowerINIT: 0
+  thunderDamageINIT: 0
+  globalAttackPowerINIT: 0
+  waterDamageINIT: 0
+  healingPowerINIT: 0
+  critINIT: 0
+  critDamageINIT: 0
+  buildingPowerINIT: 0
+  bondPowerINIT: 0
+  statusPowerINIT: 0
+  statusDurationINIT: 0
+  statusImpactINIT: 0
+  anomalyResistanceINIT: 0

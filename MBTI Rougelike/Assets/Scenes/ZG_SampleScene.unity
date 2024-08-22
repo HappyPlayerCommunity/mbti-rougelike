@@ -1431,7 +1431,7 @@ MonoBehaviour:
     - {fileID: 4946500578960829672, guid: 7c48188f4ae30ff4fb9a1702edc16c69, type: 3}
     - {fileID: 1814897381023821758, guid: 66de7130b1285ab45a06679ac796f02d, type: 3}
     - {fileID: 1814897381023821758, guid: 66de7130b1285ab45a06679ac796f02d, type: 3}
-  betweenWavesInterval: 5
+  betweenWavesInterval: 2
   spawnInterval: 0.25
   currentWave: 0
   resetTestingButton: {fileID: 138940784}
@@ -2600,7 +2600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5077613681311548413, guid: 5c8f4233aff5cfb468e166c253837920, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5302128484348877649, guid: 5c8f4233aff5cfb468e166c253837920, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4197,7 +4197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2369772076105642680, guid: f5c93faefafe3b94b80f8ccec24ace0a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2651482856539840845, guid: f5c93faefafe3b94b80f8ccec24ace0a, type: 3}
       propertyPath: m_LocalPosition.x
