@@ -23,31 +23,8 @@ public class TalentManager : MonoBehaviour
         stats.Initialize();
     }
 
-    public void EquipTalent(Talent newTalent, int slotIndex)
-    {
-        if (slotIndex < 0 || slotIndex >= maxSlots)
-            return;
-
-        if (equippedTalents[slotIndex] == null)
-        {
-            equippedTalents[slotIndex] = newTalent;
-        }
-        else
-        {
-            // 处理融合逻辑
-            FuseTalents(equippedTalents[slotIndex], newTalent);
-        }
-    }
-
-    private void FuseTalents(Talent existingTalent, Talent newTalent)
-    {
-        // 你可以在这里调用TalentSlot类的FuseTalents方法来进行融合逻辑
-        // 比如：调用现有槽位的FuseTalents方法
-    }
-
     public void ApplyTalentEffects()
     {
-        // 遍历所有装备的天赋并应用它们的效果
         foreach (var talent in equippedTalents)
         {
             if (talent != null)

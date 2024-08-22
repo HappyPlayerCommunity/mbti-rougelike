@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   talentName: "\u7A33\u91CD"
   description: "\u5F88\u7A33\u91CD\u554A\u3002"
-  type: 1
+  type: 2
   rarity: 0
   statModifiers:
   - statType: 12

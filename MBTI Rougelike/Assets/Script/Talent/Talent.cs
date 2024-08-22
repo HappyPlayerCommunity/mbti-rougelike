@@ -16,8 +16,6 @@ public class Talent : ScriptableObject
 
     public void ApplyTalent(Stats stats)
     {
-        Debug.Log("Apply Talent?");
-
         if (statModifiers == null || statModifiers.Length <= 0)
         {
             return;
@@ -275,7 +273,6 @@ public class Talent : ScriptableObject
     //    Talent advancedTalent = ScriptableObject.CreateInstance<Talent>();
     //    advancedTalent.type = type;
     //    advancedTalent.rarity = TalentRarity.Advanced;
-    //    // 你可以在这里添加其他逻辑来生成天赋的具体属性
 
     //    return advancedTalent;
     //}

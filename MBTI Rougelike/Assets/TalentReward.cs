@@ -34,13 +34,10 @@ public class TalentReward : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private void Start()
     {
         parentTransform = transform.parent;
-        // 记录原始大小
         originalSize = rectTransform.sizeDelta;
         originalAnchorPosition = rectTransform.anchoredPosition;
 
-        // 计算半径（距离中心点的距离）
         radius = Vector3.Distance(transform.position, parentTransform.position);
-        // 计算初始角度
         angle = Mathf.Atan2(transform.position.y - parentTransform.position.y, transform.position.x - parentTransform.position.x);
 
         GetComponent<Image>().color = talent.color;
@@ -52,28 +49,24 @@ public class TalentReward : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public void OnBeginDrag(PointerEventData eventData)
     {
         isDragging = true;
-        canvasGroup.blocksRaycasts = false; // 允许拖动穿透
-        canvasGroup.alpha = 0.6f; // 拖动时降低透明度
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0.6f;
 
-        // 停止正在进行的放大缩小动画
         if (sizeCoroutine != null)
             StopCoroutine(sizeCoroutine);
 
-        // 启动缩小到圆形的渐变动画
         sizeCoroutine = StartCoroutine(ScaleOverTime(rectTransform.sizeDelta, new Vector2(50f, 50f), 0.2f)); // 变为小圆形
         textMesh.text = talent.type.ToString();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // 使用屏幕坐标更新位置，确保拖动操作在UI中正确显示
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             transform.parent as RectTransform,
             Input.mousePosition,
             eventData.pressEventCamera,
             out Vector2 localPoint);
 
-        // 更新位置
         GetComponent<RectTransform>().anchoredPosition = localPoint;
     }
 
@@ -83,14 +76,11 @@ public class TalentReward : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup.blocksRaycasts = true;
         canvasGroup.alpha = 1.0f;
 
-        // 停止正在进行的放大缩小动画
         if (sizeCoroutine != null)
             StopCoroutine(sizeCoroutine);
 
-        // 启动恢复到原始大小的渐变动画
         sizeCoroutine = StartCoroutine(ScaleOverTime(rectTransform.sizeDelta, originalSize, 0.2f));
 
-        // 检查是否放置到天赋槽内
         TalentSlot slot = CheckForSlot();
         if (slot != null)
         {

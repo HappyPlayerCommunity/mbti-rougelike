@@ -11,23 +11,21 @@ public class TalentSlot : MonoBehaviour
 
     public Talent currentTalent;
 
-    // 初始化槽位为空状态
     public void InitializeEmptySlot()
     {
         slotButton.image.sprite = emptySlotSprite;
         currentTalent = null;
     }
 
-    // 当放入天赋时更新槽位状态并应用天赋效果
     public void FillSlotWithTalent(Talent talent)
     {
         if (currentTalent == null)
         {
             currentTalent = talent;
-            //slotButton.image.sprite = filledSlotSprite; // 使用天赋图片或专属图片
-            slotButton.image.color = talent.color; // 使用天赋颜色
+            //slotButton.image.sprite = filledSlotSprite; // 使用天赋图片或专属图片（to do）
+            slotButton.image.color = talent.color; // 使用天赋颜色（for now）
             slotButton.transform.GetComponentInChildren<TextMeshProUGUI>().text = talent.type.ToString(); // 显示天赋类型
-            talent.ApplyTalent(playerStats); // 应用天赋效果到玩家Stats上
+            talent.ApplyTalent(playerStats);
         }
         else
         {
@@ -90,14 +88,13 @@ public class TalentSlot : MonoBehaviour
             }
         }
 
-        // 更新槽位中的天赋
         currentTalent = fusedTalent;
         //slotButton.image.sprite = filledSlotSprite; // 更新槽位图片
         //slotButton.image.sprite = filledSlotSprite; // 使用天赋图片或专属图片
         slotButton.image.color = currentTalent.color; // 使用天赋颜色
         slotButton.transform.GetComponentInChildren<TextMeshProUGUI>().text = currentTalent.type.ToString(); // 显示天赋类型
 
-        currentTalent.ApplyTalent(playerStats); // 应用新的天赋效果
+        currentTalent.ApplyTalent(playerStats);
     }
 
     private TalentType GetDoubleLetterTalentType(TalentType type1, TalentType type2)
@@ -112,6 +109,7 @@ public class TalentSlot : MonoBehaviour
             combinedType = type2.ToString() + type1.ToString();
 
         // 检查顺序并返回正确的TalentType
+        // 后续应该优化成从对应的双字母池选择一个天赋返回。
         switch (combinedType)
         {
             case "EI": return TalentType.EI;
